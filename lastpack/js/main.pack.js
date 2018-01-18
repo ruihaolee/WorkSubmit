@@ -91,6 +91,12 @@ __webpack_require__(0);
 
 __webpack_require__(1);
 
+var _router = __webpack_require__(3);
+
+var _router2 = _interopRequireDefault(_router);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var abc = 123;
@@ -117,6 +123,78 @@ var Point = function () {
 
   return Point;
 }();
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _routerView = __webpack_require__(4);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Router = function () {
+	function Router(rootHash) {
+		_classCallCheck(this, Router);
+
+		this.rootHash = rootHash;
+	}
+
+	_createClass(Router, [{
+		key: 'changeHash',
+		value: function changeHash(nowHash) {
+			document.location.hash = this.rootHash + '/' + nowHash;
+			this.changeView(nowHash);
+		}
+	}, {
+		key: 'changeView',
+		value: function changeView(nowHash) {
+			if (this.rootHash == 'student') {
+				switch (nowHash) {
+					case 'abc':
+						break;
+				}
+			} else if (this.rootHash == 'teacher') {
+				switch (nowHash) {
+					case 'abc':
+						break;
+				}
+			}
+		}
+	}]);
+
+	return Router;
+}();
+
+exports.default = Router;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var routerView = {
+	student: {
+		abc: function abc() {}
+	},
+	teacher: {
+		abc: function abc() {}
+	}
+};
+exports.routerView = routerView;
 
 /***/ })
 /******/ ]);

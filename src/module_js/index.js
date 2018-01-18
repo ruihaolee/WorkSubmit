@@ -1,5 +1,6 @@
 import '../less/index.less';
 import './student.js';
+import Router from '../pub_funcs/router.js';
 var abc = 123;
 console.log(123);
 

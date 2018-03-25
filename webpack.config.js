@@ -32,15 +32,15 @@ module.exports = {
                 test: /\.less$/,
                 use: extractLESS.extract({
                     fallback: 'style-loader',
-                    use: ['css-loader', 'autoprefixer-loader?browsers=last 2 version', 'less-loader']
+                    use: ['css-loader', 'autoprefixer-loader', 'less-loader']
                 })
             },
             {
                 test: /\.css$/,
                 use: extractCSS.extract({
                     fallback: "style-loader",
-                    use: ['css-loader', 'autoprefixer-loader?browsers=last 2 version']
-                }),
+                    use: ['css-loader', 'autoprefixer-loader']
+                })
             }            
 			// {
 			// 	test : /\.(css|less)/,

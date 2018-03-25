@@ -60,15 +60,17 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 2:
-/***/ (function(module, exports) {
+/***/ 5:
+/***/ (function(module, exports, __webpack_require__) {
 
-throw new Error("Module build failed: Error: Couldn't find preset \"es2015\" relative to directory \"/Users/rockielee/src/WorkSubmit/src/module_js\"\n    at /Users/rockielee/src/WorkSubmit/node_modules/babel-core/lib/transformation/file/options/option-manager.js:293:19\n    at Array.map (<anonymous>)\n    at OptionManager.resolvePresets (/Users/rockielee/src/WorkSubmit/node_modules/babel-core/lib/transformation/file/options/option-manager.js:275:20)\n    at OptionManager.mergePresets (/Users/rockielee/src/WorkSubmit/node_modules/babel-core/lib/transformation/file/options/option-manager.js:264:10)\n    at OptionManager.mergeOptions (/Users/rockielee/src/WorkSubmit/node_modules/babel-core/lib/transformation/file/options/option-manager.js:249:14)\n    at OptionManager.init (/Users/rockielee/src/WorkSubmit/node_modules/babel-core/lib/transformation/file/options/option-manager.js:368:12)\n    at File.initOptions (/Users/rockielee/src/WorkSubmit/node_modules/babel-core/lib/transformation/file/index.js:212:65)\n    at new File (/Users/rockielee/src/WorkSubmit/node_modules/babel-core/lib/transformation/file/index.js:135:24)\n    at Pipeline.transform (/Users/rockielee/src/WorkSubmit/node_modules/babel-core/lib/transformation/pipeline.js:46:16)\n    at transpile (/Users/rockielee/src/WorkSubmit/node_modules/babel-loader/lib/index.js:50:20)\n    at Object.module.exports (/Users/rockielee/src/WorkSubmit/node_modules/babel-loader/lib/index.js:173:20)");
+"use strict";
+// import '../less/index.less';
+
 
 /***/ })
 

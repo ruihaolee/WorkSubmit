@@ -1,20 +1,26 @@
 import '../less/index.less';
-import './student.js';
 import Router from '../pub_funcs/router.js';
-var abc = 123;
-console.log(123);
+import './login.js'
 
-let name = "Bob", time = "today";
-console.log(`Hello ${name}, how are you ${time}?`);
-
-
-class Point {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
- 
-  toString() {
-    return '(' + this.x + ', ' + this.y + ')';
+const indexCheckFunc = {
+  login: () => {
+    $('.container-body').css({
+      display: 'none'
+    });
+    $('.login').css({
+      display: 'block'
+    })
   }
 }
+
+const init = () => {
+  $(document.body).css({
+    height: `${$(window).height()}px`
+  });
+
+  const indexRoute = new Router('login');
+  indexRoute.init();
+  indexRoute.route('/', indexCheckFunc.login);
+  indexRoute.changeRoute('/');
+}
+init();

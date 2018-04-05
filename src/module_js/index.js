@@ -1,26 +1,27 @@
 import '../less/index.less';
 import Router from '../pub_funcs/router.js';
+import {
+  indexCheckFunc
+} from '../pub_funcs/routerView.js';
 import './login.js'
 
-const indexCheckFunc = {
-  login: () => {
-    $('.container-body').css({
-      display: 'none'
-    });
-    $('.login').css({
-      display: 'block'
-    })
-  }
-}
-
 const init = () => {
+  if (!$.cookie('per')) {
+    $.cookie('per', 'login');
+  }
+  let indexRoute = null;
   $(document.body).css({
     height: `${$(window).height()}px`
   });
-
-  const indexRoute = new Router('login');
+  if (!$.cookie('token')) {
+    indexRoute = new Router('login');
+  } else if ($.cookie('token') && $.cookie('per') === 'teacher') {
+    indexRoute = new Router('teacher');
+  } else if ($.cookie('token') && $.cookie('per') === 'student') {
+    indexRoute = new Router('student');
+  }
   indexRoute.init();
-  indexRoute.route('/', indexCheckFunc.login);
+  indexRoute.route('/', indexCheckFunc[$.cookie('per')]);
   indexRoute.changeRoute('/');
 }
 init();

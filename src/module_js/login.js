@@ -6,6 +6,14 @@
  */
 import '../less/login.less';
 import backAnamite from './login-background.js';
+import Router from '../pub_funcs/router.js';
+import {
+  fetchAPI
+} from '../pub_funcs/fetchApi.js'
+import {
+  indexCheckFunc
+} from '../pub_funcs/routerView.js';
+
 const elstyleChange = {
   errortextBlock: (text) => {
     $('.error-text').html(text);
@@ -33,7 +41,6 @@ class Login {
       this.inputChangehandle();
     })
     $('.remimg').bind('click', () => {
-      console.log(this.remeberState);
       this.remeberClickhandle();
     })
   }
@@ -43,11 +50,29 @@ class Login {
       id: $('.login-username').val(),
       pass: $('.login-password').val()
     };
-    const checkre = /^0\d{7}$/;
-    if (!checkre.test(signObj.id)) {
-      elstyleChange.errortextBlock('学号格式不正确')
-    }
+    // const checkre = /^0\d{7}$/;
+    // if (!checkre.test(signObj.id)) {
+    //   elstyleChange.errortextBlock('学号格式不正确')
+    // }
+    fetchAPI('http://222.24.63.100:9138/cms/login', signObj)
+      .then(data => {
+        this.token = data;
 
+        const per = data.toString().slice(0, 1);
+        if (per === '2') {
+          console.log(222);
+          this.route = new Router('teacher');
+          this.route.init();
+          this.route.route('/', indexCheckFunc.teacher);
+          this.route.changeRoute('/');
+        } else if (per === '1') {
+          this.route = new Router('student');
+          this.route.init();
+          this.route.route('/', indexCheckFunc.student);
+          this.route.changeRoute('/');
+        }
+        console.log(per);
+      })
   }
 
   static inputChangehandle() {
@@ -65,7 +90,6 @@ class Login {
     } else {
       $('.login-reimg').attr('src', './image/rempass_off.png');
     }
-    // this.remeberState = !this.remeberState;
   }
 }
 Login.init();

@@ -1,17 +1,9 @@
 import '../less/index.less';
 import Router from '../pub_funcs/router.js';
+import {
+  indexCheckFunc
+} from '../pub_funcs/routerView.js';
 import './login.js'
-
-const indexCheckFunc = {
-  login: () => {
-    $('.container-body').css({
-      display: 'none'
-    });
-    $('.login').css({
-      display: 'block'
-    })
-  }
-}
 
 const init = () => {
   $(document.body).css({

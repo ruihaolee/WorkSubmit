@@ -199,6 +199,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var elstyleChange = {
+  errortextBlock: function errortextBlock(text) {
+    $('.error-text').html(text);
+    $('.error-text')[0].id = 'error-active';
+  },
+  errortextNone: function errortextNone() {
+    $('.error-text').html('');
+    $('.error-text')[0].id = '';
+  }
+};
+
 var Login = function () {
   function Login() {
     _classCallCheck(this, Login);
@@ -208,6 +219,56 @@ var Login = function () {
     key: 'init',
     value: function init() {
       (0, _loginBackground2.default)();
+      this.bindHandle();
+      this.remeberState = true;
+    }
+  }, {
+    key: 'bindHandle',
+    value: function bindHandle() {
+      var _this = this;
+
+      $('.login-submit').bind('click', function () {
+        _this.login();
+      });
+      $('.login-input').bind('input', function () {
+        _this.inputChangehandle();
+      });
+      $('.remimg').bind('click', function () {
+        console.log(_this.remeberState);
+        _this.remeberClickhandle();
+      });
+    }
+  }, {
+    key: 'login',
+    value: function login() {
+      var signObj = {
+        id: $('.login-username').val(),
+        pass: $('.login-password').val()
+      };
+      var checkre = /^0\d{7}$/;
+      if (!checkre.test(signObj.id)) {
+        elstyleChange.errortextBlock('学号格式不正确');
+      }
+    }
+  }, {
+    key: 'inputChangehandle',
+    value: function inputChangehandle() {
+      if (!$('.error-text')[0].id) {
+        return;
+      } else {
+        elstyleChange.errortextNone();
+      }
+    }
+  }, {
+    key: 'remeberClickhandle',
+    value: function remeberClickhandle() {
+      this.remeberState = !this.remeberState;
+      if (this.remeberState) {
+        $('.login-reimg').attr('src', './image/rempass_on.png');
+      } else {
+        $('.login-reimg').attr('src', './image/rempass_off.png');
+      }
+      // this.remeberState = !this.remeberState;
     }
   }]);
 

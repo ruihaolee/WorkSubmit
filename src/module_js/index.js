@@ -6,13 +6,22 @@ import {
 import './login.js'
 
 const init = () => {
+  if (!$.cookie('per')) {
+    $.cookie('per', 'login');
+  }
+  let indexRoute = null;
   $(document.body).css({
     height: `${$(window).height()}px`
   });
-
-  const indexRoute = new Router('login');
+  if (!$.cookie('token')) {
+    indexRoute = new Router('login');
+  } else if ($.cookie('token') && $.cookie('per') === 'teacher') {
+    indexRoute = new Router('teacher');
+  } else if ($.cookie('token') && $.cookie('per') === 'student') {
+    indexRoute = new Router('student');
+  }
   indexRoute.init();
-  indexRoute.route('/', indexCheckFunc.login);
+  indexRoute.route('/', indexCheckFunc[$.cookie('per')]);
   indexRoute.changeRoute('/');
 }
 init();

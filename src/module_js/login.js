@@ -65,12 +65,15 @@ class Login {
           this.route.init();
           this.route.route('/', indexCheckFunc.teacher);
           this.route.changeRoute('/');
+          $.cookie('per', 'teacher');
         } else if (per === '1') {
           this.route = new Router('student');
           this.route.init();
           this.route.route('/', indexCheckFunc.student);
           this.route.changeRoute('/');
+          $.cookie('per', 'student');
         }
+        $.cookie('token', this.token);
         console.log(per);
       })
   }

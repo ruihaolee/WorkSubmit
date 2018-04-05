@@ -186,13 +186,22 @@ __webpack_require__(4);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var init = function init() {
+  if (!$.cookie('per')) {
+    $.cookie('per', 'login');
+  }
+  var indexRoute = null;
   $(document.body).css({
     height: $(window).height() + 'px'
   });
-
-  var indexRoute = new _router2.default('login');
+  if (!$.cookie('token')) {
+    indexRoute = new _router2.default('login');
+  } else if ($.cookie('token') && $.cookie('per') === 'teacher') {
+    indexRoute = new _router2.default('teacher');
+  } else if ($.cookie('token') && $.cookie('per') === 'student') {
+    indexRoute = new _router2.default('student');
+  }
   indexRoute.init();
-  indexRoute.route('/', _routerView.indexCheckFunc.login);
+  indexRoute.route('/', _routerView.indexCheckFunc[$.cookie('per')]);
   indexRoute.changeRoute('/');
 };
 init();
@@ -297,12 +306,15 @@ var Login = function () {
           _this2.route.init();
           _this2.route.route('/', _routerView.indexCheckFunc.teacher);
           _this2.route.changeRoute('/');
+          $.cookie('per', 'teacher');
         } else if (per === '1') {
           _this2.route = new _router2.default('student');
           _this2.route.init();
           _this2.route.route('/', _routerView.indexCheckFunc.student);
           _this2.route.changeRoute('/');
+          $.cookie('per', 'student');
         }
+        $.cookie('token', _this2.token);
         console.log(per);
       });
     }

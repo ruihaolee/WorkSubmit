@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,59 +70,109 @@
 "use strict";
 
 
-console.log('student');
+__webpack_require__(1);
+
+var _router = __webpack_require__(2);
+
+var _router2 = _interopRequireDefault(_router);
+
+__webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var indexCheckFunc = {
+  login: function login() {
+    $('.container-body').css({
+      display: 'none'
+    });
+    $('.login').css({
+      display: 'block'
+    });
+  }
+};
+
+var init = function init() {
+  $(document.body).css({
+    height: $(window).height() + 'px'
+  });
+
+  var indexRoute = new _router2.default('login');
+  indexRoute.init();
+  indexRoute.route('/', indexCheckFunc.login);
+  indexRoute.changeRoute('/');
+};
+init();
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-__webpack_require__(2);
-
-__webpack_require__(0);
-
-var _router = __webpack_require__(3);
-
-var _router2 = _interopRequireDefault(_router);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var abc = 123;
-console.log(123);
+var Router = function () {
+  function Router(rootHash) {
+    _classCallCheck(this, Router);
 
-var name = "Bob",
-    time = "today";
-console.log('Hello ' + name + ', how are you ' + time + '?');
-
-var Point = function () {
-  function Point(x, y) {
-    _classCallCheck(this, Point);
-
-    this.x = x;
-    this.y = y;
+    this.rootHash = rootHash;
+    this.routeCall = {};
   }
 
-  _createClass(Point, [{
-    key: 'toString',
-    value: function toString() {
-      return '(' + this.x + ', ' + this.y + ')';
+  _createClass(Router, [{
+    key: 'route',
+    value: function route(nowHash, callback) {
+      if (nowHash === '/') {
+        nowHash = '';
+      }
+      var nowKey = '' + this.rootHash + nowHash;
+      this.routeCall[nowKey] = callback;
+    }
+  }, {
+    key: 'changeRoute',
+    value: function changeRoute(nowHash) {
+      if (nowHash === '/') {
+        nowHash = '';
+      }
+      var nowPath = '#' + this.rootHash + '/' + nowHash;
+      var nowKey = '' + this.rootHash + nowHash;
+      if (!this.routeCall[nowKey]) {
+        return;
+      }
+      document.location.hash = nowPath;
+      this.nowKey = nowKey;
+    }
+  }, {
+    key: 'refresh',
+    value: function refresh() {
+      console.log('refresh');
+      this.routeCall[this.nowKey] && this.routeCall[this.nowKey]();
+    }
+  }, {
+    key: 'init',
+    value: function init() {
+      window.addEventListener('load', this.refresh.bind(this), false);
+      window.addEventListener('hashchange', this.refresh.bind(this), false);
     }
   }]);
 
-  return Point;
+  return Router;
 }();
 
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
+exports.default = Router;
 
 /***/ }),
 /* 3 */
@@ -131,70 +181,98 @@ var Point = function () {
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Author: liruihao02
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Date:   2018-04-04
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Last Modified by:   liruihao02
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Last Modified time: 2018-04-05
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _routerView = __webpack_require__(4);
+__webpack_require__(4);
+
+var _loginBackground = __webpack_require__(5);
+
+var _loginBackground2 = _interopRequireDefault(_loginBackground);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Router = function () {
-	function Router(rootHash) {
-		_classCallCheck(this, Router);
+var Login = function () {
+  function Login() {
+    _classCallCheck(this, Login);
+  }
 
-		this.rootHash = rootHash;
-	}
+  _createClass(Login, null, [{
+    key: 'init',
+    value: function init() {
+      (0, _loginBackground2.default)();
+    }
+  }]);
 
-	_createClass(Router, [{
-		key: 'changeHash',
-		value: function changeHash(nowHash) {
-			document.location.hash = this.rootHash + '/' + nowHash;
-			this.changeView(nowHash);
-		}
-	}, {
-		key: 'changeView',
-		value: function changeView(nowHash) {
-			if (this.rootHash == 'student') {
-				switch (nowHash) {
-					case 'abc':
-						break;
-				}
-			} else if (this.rootHash == 'teacher') {
-				switch (nowHash) {
-					case 'abc':
-						break;
-				}
-			}
-		}
-	}]);
-
-	return Router;
+  return Login;
 }();
 
-exports.default = Router;
+Login.init();
 
 /***/ }),
 /* 4 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+  value: true
 });
-var routerView = {
-	student: {
-		abc: function abc() {}
-	},
-	teacher: {
-		abc: function abc() {}
-	}
+/*
+ * @Author: liruihao02
+ * @Date:   2018-04-05
+ * @Last Modified by:   liruihao02
+ * @Last Modified time: 2018-04-05
+ */
+
+var animateObj = {
+  init: function init() {
+    this.start();
+  },
+  start: function start() {
+    var imgIndex = $('.login-backgroud-img').length - 1;
+    this.slideImg(imgIndex);
+  },
+  slideImg: function slideImg(imgIndex) {
+    var _this = this;
+
+    if (imgIndex === 0) {
+      $($('.login-backgroud-img').get(4)).animate({
+        opacity: '1'
+      }, 4000);
+    }
+    $($('.login-backgroud-img').get(imgIndex)).animate({
+      opacity: '0'
+    }, 4000, function () {
+      imgIndex = imgIndex - 1;
+      if (imgIndex === -1) {
+        $('.login-backgroud-img').css({
+          opacity: '1'
+        });
+        imgIndex = 4;
+      }
+      _this.slideImg(imgIndex);
+    });
+  }
 };
-exports.routerView = routerView;
+
+exports.default = function () {
+  animateObj.init();
+};
 
 /***/ })
 /******/ ]);

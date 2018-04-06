@@ -14,7 +14,8 @@ const init = () => {
   $(document.body).css({
     height: `${$(window).height()}px`
   });
-  if (!$.cookie('token')) {
+
+  if (!$.cookie('token') || $.cookie('token') === 'null') {
     indexRoute = new Router('login');
     Login.init();
   } else if ($.cookie('token') && $.cookie('per') === 'teacher') {

@@ -13,6 +13,7 @@ import {
 import {
   indexCheckFunc
 } from '../pub_funcs/routerView.js';
+import Student from './student.js';
 
 const elstyleChange = {
   errortextBlock: (text) => {
@@ -76,6 +77,7 @@ export default class Login {
           $.cookie('per', 'student', {
             expires: 1
           });
+          Student.init();
         }
         $.cookie('token', this.token, {
           expires: 1

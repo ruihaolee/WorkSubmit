@@ -61,7 +61,6 @@ export default class Login {
 
         const per = data.toString().slice(0, 1);
         if (per === '2') {
-          console.log(222);
           this.route = new Router('teacher');
           this.route.init();
           this.route.route('/', indexCheckFunc.teacher);
@@ -80,6 +79,9 @@ export default class Login {
           Student.init();
         }
         $.cookie('token', this.token, {
+          expires: 1
+        });
+        $.cookie('id', signObj.id, {
           expires: 1
         });
         console.log(per);

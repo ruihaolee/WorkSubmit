@@ -138,6 +138,17 @@ exports.default = Router;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var studentCheckFunc = {
+  setting: function setting() {
+    $('.student-rightbox').css({
+      display: 'none'
+    });
+    $('.student-setting').css({
+      display: 'block'
+    });
+  }
+};
+
 var indexCheckFunc = {
   login: function login() {
     $('.container-body').css({
@@ -154,6 +165,7 @@ var indexCheckFunc = {
     $('.student').css({
       display: 'block'
     });
+    studentCheckFunc.setting();
   },
   teacher: function teacher() {
     $('.container-body').css({
@@ -164,10 +176,49 @@ var indexCheckFunc = {
     });
   }
 };
+
 exports.indexCheckFunc = indexCheckFunc;
+exports.studentCheckFunc = studentCheckFunc;
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fetchAPI = undefined;
+
+__webpack_require__(9);
+
+var fetchAPI = exports.fetchAPI = function fetchAPI(fetchUrl, fetchData) {
+  var fetchString = '';
+  for (var name in fetchData) {
+    fetchString += name + '=' + fetchData[name] + '&';
+  }
+  fetchString = fetchString.slice(0, fetchString.length - 1);
+  return fetch(fetchUrl, {
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    method: 'POST',
+    body: fetchString
+  }).then(function (response) {
+    return response.text();
+  });
+}; /*
+    * @Author: liruihao02
+    * @Date:   2018-04-05
+    * @Last Modified by:   liruihao02
+    * @Last Modified time: 2018-04-06
+    */
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -195,7 +246,7 @@ var _router = __webpack_require__(0);
 
 var _router2 = _interopRequireDefault(_router);
 
-var _fetchApi = __webpack_require__(3);
+var _fetchApi = __webpack_require__(2);
 
 var _routerView = __webpack_require__(1);
 
@@ -263,7 +314,6 @@ var Login = function () {
 
         var per = data.toString().slice(0, 1);
         if (per === '2') {
-          console.log(222);
           _this2.route = new _router2.default('teacher');
           _this2.route.init();
           _this2.route.route('/', _routerView.indexCheckFunc.teacher);
@@ -282,6 +332,9 @@ var Login = function () {
           _student2.default.init();
         }
         $.cookie('token', _this2.token, {
+          expires: 1
+        });
+        $.cookie('id', signObj.id, {
           expires: 1
         });
         console.log(per);
@@ -316,43 +369,6 @@ var Login = function () {
 exports.default = Login;
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.fetchAPI = undefined;
-
-__webpack_require__(9);
-
-var fetchAPI = exports.fetchAPI = function fetchAPI(fetchUrl, fetchData) {
-  var fetchString = '';
-  for (var name in fetchData) {
-    fetchString += name + '=' + fetchData[name] + '&';
-  }
-  fetchString = fetchString.slice(0, fetchString.length - 1);
-  return fetch(fetchUrl, {
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    method: 'POST',
-    body: fetchString
-  }).then(function (response) {
-    return response.json();
-  });
-}; /*
-    * @Author: liruihao02
-    * @Date:   2018-04-05
-    * @Last Modified by:   liruihao02
-    * @Last Modified time: 2018-04-05
-    */
-
-/***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -373,19 +389,21 @@ var _router = __webpack_require__(0);
 
 var _router2 = _interopRequireDefault(_router);
 
-var _fetchApi = __webpack_require__(3);
-
 var _exitlogin = __webpack_require__(12);
 
 var _exitlogin2 = _interopRequireDefault(_exitlogin);
 
+var _fetchApi = __webpack_require__(2);
+
+var _routerView = __webpack_require__(1);
+
+var _studentSetting = __webpack_require__(13);
+
+var _studentSetting2 = _interopRequireDefault(_studentSetting);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-// import {
-//   indexCheckFunc
-// } from '../pub_funcs/routerView.js';
 
 var LeftContainer = {
   menuClickHandle: function menuClickHandle() {
@@ -393,18 +411,21 @@ var LeftContainer = {
     if (!target.className.match('menu-li')) {
       target = this.findTargetli(target);
     }
-    var targetName = target.getAttribute('name');
     this.changeActive(target); //改变样式
     console.log(targetName);
+
+    var targetName = target.getAttribute('name');
     switch (targetName) {
       case 'exitlogin':
         (0, _exitlogin2.default)();
         break;
+      case 'setting':
+        Student.studentRoute.changeRoute('setting');
+        (0, _studentSetting2.default)();
+        break;
+      default:
+        break;
     }
-    // var routerName = 'admin' + targetName; //子路由跳转
-    // router.go({
-    //   name: routerName
-    // });
   },
 
   findTargetli: function findTargetli(target) {
@@ -432,21 +453,24 @@ var Student = function () {
     key: 'init',
     value: function init() {
       this.bindHandle();
-      this.styleBack();
       this.initRoute();
+      this.routeBack();
     }
   }, {
     key: 'initRoute',
     value: function initRoute() {
       this.studentRoute = new _router2.default('student');
       this.studentRoute.init();
-      // this.studentRoute.route('/', )
+      this.studentRoute.route('setting', _routerView.studentCheckFunc.setting);
     }
   }, {
-    key: 'styleBack',
-    value: function styleBack() {
+    key: 'routeBack',
+    value: function routeBack() {
       var firLi = $('.menu-li').get(0);
       LeftContainer.changeActive(firLi);
+
+      this.studentRoute.changeRoute('setting');
+      (0, _studentSetting2.default)();
     }
   }, {
     key: 'bindHandle',
@@ -477,7 +501,7 @@ var _router2 = _interopRequireDefault(_router);
 
 var _routerView = __webpack_require__(1);
 
-var _login = __webpack_require__(2);
+var _login = __webpack_require__(3);
 
 var _login2 = _interopRequireDefault(_login);
 
@@ -1076,7 +1100,7 @@ var _router2 = _interopRequireDefault(_router);
 
 var _routerView = __webpack_require__(1);
 
-var _login = __webpack_require__(2);
+var _login = __webpack_require__(3);
 
 var _login2 = _interopRequireDefault(_login);
 
@@ -1097,6 +1121,40 @@ exports.default = function () {
     * @Last Modified by:   liruihao02
     * @Last Modified time: 2018-04-06
     */
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _fetchApi = __webpack_require__(2);
+
+var Setting = {
+  getStudentInfo: function getStudentInfo() {
+    var stuObj = {
+      token: $.cookie('token'),
+      id: $.cookie('id')
+    };
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getprofile', stuObj).then(function (stuInfo) {
+      console.log(stuInfo);
+    });
+  }
+}; /*
+    * @Author: liruihao02
+    * @Date:   2018-04-06
+    * @Last Modified by:   liruihao02
+    * @Last Modified time: 2018-04-06
+    */
+
+exports.default = function () {
+  Setting.getStudentInfo();
+};
 
 /***/ })
 /******/ ]);

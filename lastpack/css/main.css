@@ -12,6 +12,8 @@ html .container {
 }
 .container-body {
   display: none;
+  height: 100%;
+  overflow: hidden;
 }
 * {
   padding: 0;
@@ -306,4 +308,83 @@ input:focus {
   background-color: #6BC30D !important;
   border-left: 5px solid #5AA10A !important;
   color: #ffffff !important;
+}
+.container-rightbody {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding-left: 256px;
+}
+.container-rightbody > div {
+  width: 100%;
+  height: 100%;
+}
+.student-setting .rightbody-title {
+  width: 100%;
+  height: 100px;
+  box-sizing: border-box;
+  padding: 25px 50px;
+  border-bottom: 1px solid #eee;
+  font-size: 28px;
+  color: #404040;
+  font-weight: 500;
+  line-height: 50px;
+}
+.student-setting-box {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 50px 100px 0 100px;
+  position: relative;
+}
+.student-setting-box .student-info-box {
+  width: 100%;
+  height: 100%;
+}
+.student-setting-box .student-info-box .student-info-li {
+  font-size: 24px;
+  color: #404040;
+  font-weight: 500;
+  line-height: 50px;
+}
+.student-setting-box .student-info-box .student-info-li span {
+  margin-left: 80px;
+}
+.student-setting-box .student-info-box .student-info-li span:nth-child(1) {
+  color: #999;
+}
+.student-setting-box .student-info-box .student-info-li span:nth-child(2) {
+  color: #404040;
+}
+.student-info-button {
+  position: absolute;
+  top: 90px;
+  right: 300px;
+  width: 200px;
+  height: 50px;
+  border-radius: 5px;
+  text-align: center;
+  border: 1px solid;
+  border-color: rgba(27, 31, 35, 0.2);
+  background-color: #eff3f6;
+  cursor: pointer;
+  color: #24292e;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all .5s;
+}
+.student-info-button img {
+  height: 30px;
+  padding: 10px 0;
+  display: inline-block;
+  float: left;
+  margin-left: 20px;
+}
+.student-info-button span {
+  display: inline-block;
+  height: 50px;
+  line-height: 50px;
+}
+.student-info-button:hover {
+  background-color: #E7ECF1;
 }

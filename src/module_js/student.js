@@ -1,13 +1,14 @@
 import '../less/left-container.less';
 import '../less/student.less';
 import Router from '../pub_funcs/router.js';
+import exitLogin from './exitlogin.js';
 import {
   fetchAPI
 } from '../pub_funcs/fetchApi.js'
-import exitLogin from './exitlogin.js';
-// import {
-//   indexCheckFunc
-// } from '../pub_funcs/routerView.js';
+import {
+  studentCheckFunc
+} from '../pub_funcs/routerView.js';
+import studentSetting from './student-setting.js';
 
 const LeftContainer = {
   menuClickHandle: function() {
@@ -15,18 +16,21 @@ const LeftContainer = {
     if (!target.className.match('menu-li')) {
       target = this.findTargetli(target);
     }
-    const targetName = target.getAttribute('name');
     this.changeActive(target); //改变样式
     console.log(targetName);
+
+    const targetName = target.getAttribute('name');
     switch (targetName) {
       case 'exitlogin':
         exitLogin();
         break;
+      case 'setting':
+        Student.studentRoute.changeRoute('setting');
+        studentSetting();
+        break;
+      default:
+        break;
     }
-    // var routerName = 'admin' + targetName; //子路由跳转
-    // router.go({
-    //   name: routerName
-    // });
   },
 
   findTargetli: function(target) {
@@ -48,20 +52,22 @@ const LeftContainer = {
 export default class Student {
   static init() {
     this.bindHandle();
-    this.styleBack();
     this.initRoute();
-
+    this.routeBack();
   }
 
   static initRoute() {
     this.studentRoute = new Router('student');
     this.studentRoute.init();
-    // this.studentRoute.route('/', )
+    this.studentRoute.route('setting', studentCheckFunc.setting);
   }
 
-  static styleBack() {
+  static routeBack() {
     const firLi = $('.menu-li').get(0);
     LeftContainer.changeActive(firLi);
+
+    this.studentRoute.changeRoute('setting');
+    studentSetting();
   }
 
   static bindHandle() {

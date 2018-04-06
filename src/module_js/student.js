@@ -1,1 +1,78 @@
-console.log('student');
+import '../less/left-container.less';
+import '../less/student.less';
+import Router from '../pub_funcs/router.js';
+import exitLogin from './exitlogin.js';
+import {
+  fetchAPI
+} from '../pub_funcs/fetchApi.js'
+import {
+  studentCheckFunc
+} from '../pub_funcs/routerView.js';
+import studentSetting from './student-setting.js';
+
+const LeftContainer = {
+  menuClickHandle: function() {
+    let target = event.target;
+    if (!target.className.match('menu-li')) {
+      target = this.findTargetli(target);
+    }
+    this.changeActive(target); //改变样式
+    console.log(targetName);
+
+    const targetName = target.getAttribute('name');
+    switch (targetName) {
+      case 'exitlogin':
+        exitLogin();
+        break;
+      case 'setting':
+        Student.studentRoute.changeRoute('setting');
+        studentSetting();
+        break;
+      default:
+        break;
+    }
+  },
+
+  findTargetli: function(target) {
+    while (!target.className.match('menu-li')) {
+      target = target.parentNode;
+    }
+    return target;
+  },
+
+  changeActive: function(target) {
+    let liArr = $('.menu-li');
+    for (let i = 0; i < liArr.length; i++) {
+      liArr[i].className = 'menu-li';
+    }
+    target.className = 'menu-li active-li';
+  }
+}
+
+export default class Student {
+  static init() {
+    this.bindHandle();
+    this.initRoute();
+    this.routeBack();
+  }
+
+  static initRoute() {
+    this.studentRoute = new Router('student');
+    this.studentRoute.init();
+    this.studentRoute.route('setting', studentCheckFunc.setting);
+  }
+
+  static routeBack() {
+    const firLi = $('.menu-li').get(0);
+    LeftContainer.changeActive(firLi);
+
+    this.studentRoute.changeRoute('setting');
+    studentSetting();
+  }
+
+  static bindHandle() {
+    $('.menu-ul').bind('click', event => {
+      LeftContainer.menuClickHandle(event);
+    })
+  }
+}

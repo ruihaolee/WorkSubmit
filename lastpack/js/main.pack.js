@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -138,6 +138,17 @@ exports.default = Router;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var studentCheckFunc = {
+  setting: function setting() {
+    $('.student-rightbox').css({
+      display: 'none'
+    });
+    $('.student-setting').css({
+      display: 'block'
+    });
+  }
+};
+
 var indexCheckFunc = {
   login: function login() {
     $('.container-body').css({
@@ -154,6 +165,7 @@ var indexCheckFunc = {
     $('.student').css({
       display: 'block'
     });
+    studentCheckFunc.setting();
   },
   teacher: function teacher() {
     $('.container-body').css({
@@ -164,7 +176,9 @@ var indexCheckFunc = {
     });
   }
 };
+
 exports.indexCheckFunc = indexCheckFunc;
+exports.studentCheckFunc = studentCheckFunc;
 
 /***/ }),
 /* 2 */
@@ -173,63 +187,58 @@ exports.indexCheckFunc = indexCheckFunc;
 "use strict";
 
 
-__webpack_require__(3);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fetchAPI = undefined;
 
-var _router = __webpack_require__(0);
+__webpack_require__(9);
 
-var _router2 = _interopRequireDefault(_router);
-
-var _routerView = __webpack_require__(1);
-
-__webpack_require__(4);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var init = function init() {
-  if (!$.cookie('per')) {
-    $.cookie('per', 'login');
+var fetchAPI = exports.fetchAPI = function fetchAPI(fetchUrl, fetchData) {
+  var fetchString = '';
+  for (var name in fetchData) {
+    fetchString += name + '=' + fetchData[name] + '&';
   }
-  var indexRoute = null;
-  $(document.body).css({
-    height: $(window).height() + 'px'
+  fetchString = fetchString.slice(0, fetchString.length - 1);
+  return fetch(fetchUrl, {
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    method: 'POST',
+    body: fetchString
+  }).then(function (response) {
+    return response.text();
   });
-  if (!$.cookie('token')) {
-    indexRoute = new _router2.default('login');
-  } else if ($.cookie('token') && $.cookie('per') === 'teacher') {
-    indexRoute = new _router2.default('teacher');
-  } else if ($.cookie('token') && $.cookie('per') === 'student') {
-    indexRoute = new _router2.default('student');
-  }
-  indexRoute.init();
-  indexRoute.route('/', _routerView.indexCheckFunc[$.cookie('per')]);
-  indexRoute.changeRoute('/');
-};
-init();
+}; /*
+    * @Author: liruihao02
+    * @Date:   2018-04-05
+    * @Last Modified by:   liruihao02
+    * @Last Modified time: 2018-04-06
+    */
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Author: liruihao02
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Date:   2018-04-04
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Last Modified by:   liruihao02
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Last Modified time: 2018-04-05
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Last Modified time: 2018-04-06
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
-__webpack_require__(5);
+__webpack_require__(7);
 
-var _loginBackground = __webpack_require__(6);
+var _loginBackground = __webpack_require__(8);
 
 var _loginBackground2 = _interopRequireDefault(_loginBackground);
 
@@ -237,9 +246,13 @@ var _router = __webpack_require__(0);
 
 var _router2 = _interopRequireDefault(_router);
 
-var _fetchApi = __webpack_require__(7);
+var _fetchApi = __webpack_require__(2);
 
 var _routerView = __webpack_require__(1);
+
+var _student = __webpack_require__(4);
+
+var _student2 = _interopRequireDefault(_student);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -301,20 +314,29 @@ var Login = function () {
 
         var per = data.toString().slice(0, 1);
         if (per === '2') {
-          console.log(222);
           _this2.route = new _router2.default('teacher');
           _this2.route.init();
           _this2.route.route('/', _routerView.indexCheckFunc.teacher);
           _this2.route.changeRoute('/');
-          $.cookie('per', 'teacher');
+          $.cookie('per', 'teacher', {
+            expires: 1
+          });
         } else if (per === '1') {
           _this2.route = new _router2.default('student');
           _this2.route.init();
           _this2.route.route('/', _routerView.indexCheckFunc.student);
           _this2.route.changeRoute('/');
-          $.cookie('per', 'student');
+          $.cookie('per', 'student', {
+            expires: 1
+          });
+          _student2.default.init();
         }
-        $.cookie('token', _this2.token);
+        $.cookie('token', _this2.token, {
+          expires: 1
+        });
+        $.cookie('id', signObj.id, {
+          expires: 1
+        });
         console.log(per);
       });
     }
@@ -341,17 +363,192 @@ var Login = function () {
 
   return Login;
 }();
+// Login.init();
 
-Login.init();
+
+exports.default = Login;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+__webpack_require__(10);
+
+__webpack_require__(11);
+
+var _router = __webpack_require__(0);
+
+var _router2 = _interopRequireDefault(_router);
+
+var _exitlogin = __webpack_require__(12);
+
+var _exitlogin2 = _interopRequireDefault(_exitlogin);
+
+var _fetchApi = __webpack_require__(2);
+
+var _routerView = __webpack_require__(1);
+
+var _studentSetting = __webpack_require__(13);
+
+var _studentSetting2 = _interopRequireDefault(_studentSetting);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var LeftContainer = {
+  menuClickHandle: function menuClickHandle() {
+    var target = event.target;
+    if (!target.className.match('menu-li')) {
+      target = this.findTargetli(target);
+    }
+    this.changeActive(target); //改变样式
+    console.log(targetName);
+
+    var targetName = target.getAttribute('name');
+    switch (targetName) {
+      case 'exitlogin':
+        (0, _exitlogin2.default)();
+        break;
+      case 'setting':
+        Student.studentRoute.changeRoute('setting');
+        (0, _studentSetting2.default)();
+        break;
+      default:
+        break;
+    }
+  },
+
+  findTargetli: function findTargetli(target) {
+    while (!target.className.match('menu-li')) {
+      target = target.parentNode;
+    }
+    return target;
+  },
+
+  changeActive: function changeActive(target) {
+    var liArr = $('.menu-li');
+    for (var i = 0; i < liArr.length; i++) {
+      liArr[i].className = 'menu-li';
+    }
+    target.className = 'menu-li active-li';
+  }
+};
+
+var Student = function () {
+  function Student() {
+    _classCallCheck(this, Student);
+  }
+
+  _createClass(Student, null, [{
+    key: 'init',
+    value: function init() {
+      this.bindHandle();
+      this.initRoute();
+      this.routeBack();
+    }
+  }, {
+    key: 'initRoute',
+    value: function initRoute() {
+      this.studentRoute = new _router2.default('student');
+      this.studentRoute.init();
+      this.studentRoute.route('setting', _routerView.studentCheckFunc.setting);
+    }
+  }, {
+    key: 'routeBack',
+    value: function routeBack() {
+      var firLi = $('.menu-li').get(0);
+      LeftContainer.changeActive(firLi);
+
+      this.studentRoute.changeRoute('setting');
+      (0, _studentSetting2.default)();
+    }
+  }, {
+    key: 'bindHandle',
+    value: function bindHandle() {
+      $('.menu-ul').bind('click', function (event) {
+        LeftContainer.menuClickHandle(event);
+      });
+    }
+  }]);
+
+  return Student;
+}();
+
+exports.default = Student;
 
 /***/ }),
 /* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(6);
+
+var _router = __webpack_require__(0);
+
+var _router2 = _interopRequireDefault(_router);
+
+var _routerView = __webpack_require__(1);
+
+var _login = __webpack_require__(3);
+
+var _login2 = _interopRequireDefault(_login);
+
+var _student = __webpack_require__(4);
+
+var _student2 = _interopRequireDefault(_student);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var init = function init() {
+  if (!$.cookie('per')) {
+    $.cookie('per', 'login');
+  }
+  var indexRoute = null;
+  $(document.body).css({
+    height: $(window).height() + 'px'
+  });
+
+  if (!$.cookie('token') || $.cookie('token') === 'null') {
+    indexRoute = new _router2.default('login');
+    _login2.default.init();
+  } else if ($.cookie('token') && $.cookie('per') === 'teacher') {
+    indexRoute = new _router2.default('teacher');
+  } else if ($.cookie('token') && $.cookie('per') === 'student') {
+    indexRoute = new _router2.default('student');
+    _student2.default.init();
+  }
+  indexRoute.init();
+  indexRoute.route('/', _routerView.indexCheckFunc[$.cookie('per')]);
+  indexRoute.changeRoute('/');
+};
+init();
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 6 */
+/* 7 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -403,44 +600,7 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.fetchAPI = undefined;
-
-__webpack_require__(8);
-
-var fetchAPI = exports.fetchAPI = function fetchAPI(fetchUrl, fetchData) {
-  var fetchString = '';
-  for (var name in fetchData) {
-    fetchString += name + '=' + fetchData[name] + '&';
-  }
-  fetchString = fetchString.slice(0, fetchString.length - 1);
-  return fetch(fetchUrl, {
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    method: 'POST',
-    body: fetchString
-  }).then(function (response) {
-    return response.json();
-  });
-}; /*
-    * @Author: liruihao02
-    * @Date:   2018-04-05
-    * @Last Modified by:   liruihao02
-    * @Last Modified time: 2018-04-05
-    */
-
-/***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
 (function(self) {
@@ -910,6 +1070,91 @@ var fetchAPI = exports.fetchAPI = function fetchAPI(fetchUrl, fetchData) {
   self.fetch.polyfill = true
 })(typeof self !== 'undefined' ? self : this);
 
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _router = __webpack_require__(0);
+
+var _router2 = _interopRequireDefault(_router);
+
+var _routerView = __webpack_require__(1);
+
+var _login = __webpack_require__(3);
+
+var _login2 = _interopRequireDefault(_login);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  var route = new _router2.default('login');
+  route.init();
+  route.route('/', _routerView.indexCheckFunc.login);
+  route.changeRoute('/');
+
+  $.cookie('per', 'login');
+  $.cookie('token', null);
+  _login2.default.init();
+}; /*
+    * @Author: liruihao02
+    * @Date:   2018-04-06
+    * @Last Modified by:   liruihao02
+    * @Last Modified time: 2018-04-06
+    */
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _fetchApi = __webpack_require__(2);
+
+var Setting = {
+  getStudentInfo: function getStudentInfo() {
+    var stuObj = {
+      token: $.cookie('token'),
+      id: $.cookie('id')
+    };
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getprofile', stuObj).then(function (stuInfo) {
+      console.log(stuInfo);
+    });
+  }
+}; /*
+    * @Author: liruihao02
+    * @Date:   2018-04-06
+    * @Last Modified by:   liruihao02
+    * @Last Modified time: 2018-04-06
+    */
+
+exports.default = function () {
+  Setting.getStudentInfo();
+};
 
 /***/ })
 /******/ ]);

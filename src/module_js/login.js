@@ -2,7 +2,7 @@
  * @Author: liruihao02
  * @Date:   2018-04-04
  * @Last Modified by:   liruihao02
- * @Last Modified time: 2018-04-05
+ * @Last Modified time: 2018-04-06
  */
 import '../less/login.less';
 import backAnamite from './login-background.js';
@@ -13,6 +13,7 @@ import {
 import {
   indexCheckFunc
 } from '../pub_funcs/routerView.js';
+import Student from './student.js';
 
 const elstyleChange = {
   errortextBlock: (text) => {
@@ -24,7 +25,7 @@ const elstyleChange = {
     $('.error-text')[0].id = '';
   }
 }
-class Login {
+export default class Login {
   constructor() {}
 
   static init() {
@@ -60,20 +61,29 @@ class Login {
 
         const per = data.toString().slice(0, 1);
         if (per === '2') {
-          console.log(222);
           this.route = new Router('teacher');
           this.route.init();
           this.route.route('/', indexCheckFunc.teacher);
           this.route.changeRoute('/');
-          $.cookie('per', 'teacher');
+          $.cookie('per', 'teacher', {
+            expires: 1
+          });
         } else if (per === '1') {
           this.route = new Router('student');
           this.route.init();
           this.route.route('/', indexCheckFunc.student);
           this.route.changeRoute('/');
-          $.cookie('per', 'student');
+          $.cookie('per', 'student', {
+            expires: 1
+          });
+          Student.init();
         }
-        $.cookie('token', this.token);
+        $.cookie('token', this.token, {
+          expires: 1
+        });
+        $.cookie('id', signObj.id, {
+          expires: 1
+        });
         console.log(per);
       })
   }
@@ -95,4 +105,4 @@ class Login {
     }
   }
 }
-Login.init();
+// Login.init();

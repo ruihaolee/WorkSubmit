@@ -1,3 +1,14 @@
+const studentCheckFunc = {
+  setting: () => {
+    $('.student-rightbox').css({
+      display: 'none'
+    });
+    $('.student-setting').css({
+      display: 'block'
+    });
+  }
+}
+
 const indexCheckFunc = {
   login: () => {
     $('.container-body').css({
@@ -14,6 +25,7 @@ const indexCheckFunc = {
     $('.student').css({
       display: 'block'
     })
+    studentCheckFunc.setting();
   },
   teacher: () => {
     $('.container-body').css({
@@ -24,6 +36,8 @@ const indexCheckFunc = {
     })
   }
 }
+
 export {
-  indexCheckFunc
+  indexCheckFunc,
+  studentCheckFunc
 };

@@ -2,7 +2,7 @@
  * @Author: liruihao02
  * @Date:   2018-04-04
  * @Last Modified by:   liruihao02
- * @Last Modified time: 2018-04-05
+ * @Last Modified time: 2018-04-06
  */
 import '../less/login.less';
 import backAnamite from './login-background.js';
@@ -24,7 +24,7 @@ const elstyleChange = {
     $('.error-text')[0].id = '';
   }
 }
-class Login {
+export default class Login {
   constructor() {}
 
   static init() {
@@ -65,15 +65,21 @@ class Login {
           this.route.init();
           this.route.route('/', indexCheckFunc.teacher);
           this.route.changeRoute('/');
-          $.cookie('per', 'teacher');
+          $.cookie('per', 'teacher', {
+            expires: 1
+          });
         } else if (per === '1') {
           this.route = new Router('student');
           this.route.init();
           this.route.route('/', indexCheckFunc.student);
           this.route.changeRoute('/');
-          $.cookie('per', 'student');
+          $.cookie('per', 'student', {
+            expires: 1
+          });
         }
-        $.cookie('token', this.token);
+        $.cookie('token', this.token, {
+          expires: 1
+        });
         console.log(per);
       })
   }
@@ -95,4 +101,4 @@ class Login {
     }
   }
 }
-Login.init();
+// Login.init();

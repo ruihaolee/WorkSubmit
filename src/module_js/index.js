@@ -3,7 +3,8 @@ import Router from '../pub_funcs/router.js';
 import {
   indexCheckFunc
 } from '../pub_funcs/routerView.js';
-import './login.js'
+import Login from './login.js'
+import Student from './student.js'
 
 const init = () => {
   if (!$.cookie('per')) {
@@ -15,10 +16,12 @@ const init = () => {
   });
   if (!$.cookie('token')) {
     indexRoute = new Router('login');
+    Login.init();
   } else if ($.cookie('token') && $.cookie('per') === 'teacher') {
     indexRoute = new Router('teacher');
   } else if ($.cookie('token') && $.cookie('per') === 'student') {
     indexRoute = new Router('student');
+    Student.init();
   }
   indexRoute.init();
   indexRoute.route('/', indexCheckFunc[$.cookie('per')]);

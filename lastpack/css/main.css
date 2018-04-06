@@ -10,6 +10,9 @@ body .container,
 html .container {
   height: 100%;
 }
+.container-body {
+  display: none;
+}
 * {
   padding: 0;
   margin: 0;
@@ -245,4 +248,62 @@ input:focus {
 .login_container .login_content .QRcodeImg img {
   width: 100%;
   height: 100%;
+}
+.admin-leftbody {
+  width: 256px;
+  height: 100%;
+  background-color: #32323A;
+  position: fixed;
+  z-index: 999;
+}
+.admin-leftbody .admin-img .admin-imgbox {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  top: 80px;
+  left: 80px;
+  border: 5px #555555 solid;
+}
+.admin-leftbody .admin-img .admin-imgbox img {
+  width: 100%;
+}
+.admin-leftbody .admin-img .admin-imgtext {
+  width: 100%;
+  color: #ffffff;
+  font-size: 18px;
+  text-align: center;
+  position: relative;
+  top: 90px;
+}
+.admin-leftbody .admin-menu {
+  position: relative;
+  top: 120px;
+}
+.admin-leftbody .admin-menu .menu-ul .menu-li {
+  font-size: 15px;
+  height: 50px;
+  line-height: 50px;
+  color: #95A0AA;
+  cursor: pointer;
+  margin: 10px 0 0 0;
+  box-sizing: border-box;
+  padding: 0 10px 0 10px;
+  transition: all 0.5s;
+  border-left: 5px solid #32323A;
+}
+.admin-leftbody .admin-menu .menu-ul .menu-li i {
+  font-size: 20px;
+  padding: 0 20px 0 15px;
+}
+.admin-leftbody .admin-menu .menu-ul .menu-li:hover {
+  border-left: 5px solid #5AA10A;
+  color: #ffffff;
+  background-color: #29282E;
+}
+.admin-leftbody .admin-menu .menu-ul .active-li {
+  background-color: #6BC30D !important;
+  border-left: 5px solid #5AA10A !important;
+  color: #ffffff !important;
 }

@@ -1148,7 +1148,28 @@ var eventHandle = {
       opacity: '1'
     }, 1000);
   },
-  changeInfoClickHandle: function changeInfoClickHandle() {}
+  changeInfoClickHandle: function changeInfoClickHandle() {
+    var changeObj = {
+      name: $('.stu-change-name').find('input').val(),
+      oldpass: $('.stu-change-oldpass').find('input').val(),
+      newpass: $('.stu-change-newpass').find('input').val(),
+      id: Setting.tokenObj.id,
+      token: Setting.tokenObj.token
+    };
+
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/setprofile', changeObj).then(function (result) {
+      if (result === '1') {
+        Setting.getStudentInfo();
+        $('.stu-change-name').find('input').val('');
+        $('.stu-change-oldpass').find('input').val('');
+        $('.stu-change-newpass').find('input').val('');
+
+        alert('修改成功');
+      } else if (result === '0') {
+        alert('修改失败，请检查旧密码是否正确');
+      }
+    });
+  }
 }; /*
     * @Author: liruihao02
     * @Date:   2018-04-06
@@ -1159,18 +1180,23 @@ var eventHandle = {
 
 var Setting = {
   init: function init(tokenObj) {
-    this.getStudentInfo(tokenObj);
+    this.tokenObj = tokenObj;
+    this.getStudentInfo();
     this.bindHandle();
   },
   bindHandle: function bindHandle() {
     $('.student-info-button').bind('click', function () {
       eventHandle.infoClickHandle();
     });
+    $('.stu-change-button').bind('click', function () {
+      eventHandle.changeInfoClickHandle();
+    });
   },
-  getStudentInfo: function getStudentInfo(tokenObj) {
+  getStudentInfo: function getStudentInfo() {
     var _this = this;
 
-    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getprofile', tokenObj).then(function (stuInfo) {
+    //获取学生个人信息
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getprofile', this.tokenObj).then(function (stuInfo) {
       console.log(stuInfo);
       if (stuInfo.toString().slice(0, 1) === '0') {
         return {

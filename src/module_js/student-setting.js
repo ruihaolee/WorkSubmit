@@ -16,22 +16,46 @@ const eventHandle = {
     }, 1000);
   },
   changeInfoClickHandle: function() {
-    
+    const changeObj = {
+      name: $('.stu-change-name').find('input').val(),
+      oldpass: $('.stu-change-oldpass').find('input').val(),
+      newpass: $('.stu-change-newpass').find('input').val(),
+      id: Setting.tokenObj.id,
+      token: Setting.tokenObj.token
+    }
+
+    fetchAPI('http://222.24.63.100:9138/cms/setprofile', changeObj)
+      .then(result => {
+        if (result === '1') {
+          Setting.getStudentInfo();
+          $('.stu-change-name').find('input').val('');
+          $('.stu-change-oldpass').find('input').val('');
+          $('.stu-change-newpass').find('input').val('');
+
+          alert('修改成功');
+        } else if (result === '0') {
+          alert('修改失败，请检查旧密码是否正确');
+        }
+      })
   }
 }
 
 const Setting = {
   init: function(tokenObj) {
-    this.getStudentInfo(tokenObj);
+    this.tokenObj = tokenObj;
+    this.getStudentInfo();
     this.bindHandle();
   },
   bindHandle: function() {
     $('.student-info-button').bind('click', () => {
       eventHandle.infoClickHandle();
-    })
+    });
+    $('.stu-change-button').bind('click', () => {
+      eventHandle.changeInfoClickHandle();
+    });
   },
-  getStudentInfo: function(tokenObj) {
-    fetchAPI('http://222.24.63.100:9138/cms/getprofile', tokenObj)
+  getStudentInfo: function() { //获取学生个人信息
+    fetchAPI('http://222.24.63.100:9138/cms/getprofile', this.tokenObj)
       .then(stuInfo => {
         console.log(stuInfo);
         if (stuInfo.toString().slice(0, 1) === '0') {

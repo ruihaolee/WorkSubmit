@@ -11,22 +11,22 @@ import {
 import studentSetting from './student-setting.js';
 
 const LeftContainer = {
-  menuClickHandle: function() {
+  menuClickHandle: function(event, tokenObj) {
     let target = event.target;
     if (!target.className.match('menu-li')) {
       target = this.findTargetli(target);
     }
     this.changeActive(target); //改变样式
-    console.log(targetName);
 
     const targetName = target.getAttribute('name');
+    console.log(targetName);
     switch (targetName) {
       case 'exitlogin':
         exitLogin();
         break;
       case 'setting':
         Student.studentRoute.changeRoute('setting');
-        studentSetting();
+        studentSetting(tokenObj);
         break;
       default:
         break;
@@ -50,10 +50,10 @@ const LeftContainer = {
 }
 
 export default class Student {
-  static init() {
-    this.bindHandle();
+  static init(tokenObj) {
+    this.bindHandle(tokenObj);
     this.initRoute();
-    this.routeBack();
+    this.routeBack(tokenObj);
   }
 
   static initRoute() {
@@ -62,17 +62,17 @@ export default class Student {
     this.studentRoute.route('setting', studentCheckFunc.setting);
   }
 
-  static routeBack() {
+  static routeBack(tokenObj) {
     const firLi = $('.menu-li').get(0);
     LeftContainer.changeActive(firLi);
 
     this.studentRoute.changeRoute('setting');
-    studentSetting();
+    studentSetting(tokenObj);
   }
 
-  static bindHandle() {
+  static bindHandle(tokenObj) {
     $('.menu-ul').bind('click', event => {
-      LeftContainer.menuClickHandle(event);
+      LeftContainer.menuClickHandle(event, tokenObj);
     })
   }
 }

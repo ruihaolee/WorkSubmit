@@ -214,7 +214,7 @@ var fetchAPI = exports.fetchAPI = function fetchAPI(fetchUrl, fetchData) {
     * @Author: liruihao02
     * @Date:   2018-04-05
     * @Last Modified by:   liruihao02
-    * @Last Modified time: 2018-04-06
+    * @Last Modified time: 2018-04-07
     */
 
 /***/ }),
@@ -232,7 +232,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Author: liruihao02
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Date:   2018-04-04
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Last Modified by:   liruihao02
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Last Modified time: 2018-04-06
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Last Modified time: 2018-04-07
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -305,15 +305,16 @@ var Login = function () {
         id: $('.login-username').val(),
         pass: $('.login-password').val()
       };
-      // const checkre = /^0\d{7}$/;
-      // if (!checkre.test(signObj.id)) {
-      //   elstyleChange.errortextBlock('学号格式不正确')
-      // }
+
       (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/login', signObj).then(function (data) {
         _this2.token = data;
 
         var per = data.toString().slice(0, 1);
-        if (per === '2') {
+        console.log(per);
+        if (per === '0') {
+          elstyleChange.errortextBlock('账号或密码错误，请检查');
+          return;
+        } else if (per === '2') {
           _this2.route = new _router2.default('teacher');
           _this2.route.init();
           _this2.route.route('/', _routerView.indexCheckFunc.teacher);
@@ -329,7 +330,10 @@ var Login = function () {
           $.cookie('per', 'student', {
             expires: 1
           });
-          _student2.default.init();
+          _student2.default.init({
+            id: signObj.id,
+            token: _this2.token
+          });
         }
         $.cookie('token', _this2.token, {
           expires: 1
@@ -337,7 +341,6 @@ var Login = function () {
         $.cookie('id', signObj.id, {
           expires: 1
         });
-        console.log(per);
       });
     }
   }, {
@@ -406,22 +409,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var LeftContainer = {
-  menuClickHandle: function menuClickHandle() {
+  menuClickHandle: function menuClickHandle(event, tokenObj) {
     var target = event.target;
     if (!target.className.match('menu-li')) {
       target = this.findTargetli(target);
     }
     this.changeActive(target); //改变样式
-    console.log(targetName);
 
     var targetName = target.getAttribute('name');
+    console.log(targetName);
     switch (targetName) {
       case 'exitlogin':
         (0, _exitlogin2.default)();
         break;
       case 'setting':
         Student.studentRoute.changeRoute('setting');
-        (0, _studentSetting2.default)();
+        (0, _studentSetting2.default)(tokenObj);
         break;
       default:
         break;
@@ -451,10 +454,10 @@ var Student = function () {
 
   _createClass(Student, null, [{
     key: 'init',
-    value: function init() {
-      this.bindHandle();
+    value: function init(tokenObj) {
+      this.bindHandle(tokenObj);
       this.initRoute();
-      this.routeBack();
+      this.routeBack(tokenObj);
     }
   }, {
     key: 'initRoute',
@@ -465,18 +468,18 @@ var Student = function () {
     }
   }, {
     key: 'routeBack',
-    value: function routeBack() {
+    value: function routeBack(tokenObj) {
       var firLi = $('.menu-li').get(0);
       LeftContainer.changeActive(firLi);
 
       this.studentRoute.changeRoute('setting');
-      (0, _studentSetting2.default)();
+      (0, _studentSetting2.default)(tokenObj);
     }
   }, {
     key: 'bindHandle',
-    value: function bindHandle() {
+    value: function bindHandle(tokenObj) {
       $('.menu-ul').bind('click', function (event) {
-        LeftContainer.menuClickHandle(event);
+        LeftContainer.menuClickHandle(event, tokenObj);
       });
     }
   }]);
@@ -527,7 +530,10 @@ var init = function init() {
     indexRoute = new _router2.default('teacher');
   } else if ($.cookie('token') && $.cookie('per') === 'student') {
     indexRoute = new _router2.default('student');
-    _student2.default.init();
+    _student2.default.init({
+      id: $.cookie('id'),
+      token: $.cookie('token')
+    });
   }
   indexRoute.init();
   indexRoute.route('/', _routerView.indexCheckFunc[$.cookie('per')]);
@@ -1135,25 +1141,63 @@ Object.defineProperty(exports, "__esModule", {
 
 var _fetchApi = __webpack_require__(2);
 
-var Setting = {
-  getStudentInfo: function getStudentInfo() {
-    var stuObj = {
-      token: $.cookie('token'),
-      id: $.cookie('id')
-    };
-    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getprofile', stuObj).then(function (stuInfo) {
-      console.log(stuInfo);
-    });
-  }
+var eventHandle = {
+  infoClickHandle: function infoClickHandle() {
+    $('.student-change-info').css('display', 'block');
+    $('.student-change-info').animate({
+      opacity: '1'
+    }, 1000);
+  },
+  changeInfoClickHandle: function changeInfoClickHandle() {}
 }; /*
     * @Author: liruihao02
     * @Date:   2018-04-06
     * @Last Modified by:   liruihao02
-    * @Last Modified time: 2018-04-06
+    * @Last Modified time: 2018-04-07
     */
 
-exports.default = function () {
-  Setting.getStudentInfo();
+
+var Setting = {
+  init: function init(tokenObj) {
+    this.getStudentInfo(tokenObj);
+    this.bindHandle();
+  },
+  bindHandle: function bindHandle() {
+    $('.student-info-button').bind('click', function () {
+      eventHandle.infoClickHandle();
+    });
+  },
+  getStudentInfo: function getStudentInfo(tokenObj) {
+    var _this = this;
+
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getprofile', tokenObj).then(function (stuInfo) {
+      console.log(stuInfo);
+      if (stuInfo.toString().slice(0, 1) === '0') {
+        return {
+          id: '获取信息失败',
+          class: '获取信息失败',
+          name: '获取信息失败'
+        };
+      } else {
+        return {
+          id: stuInfo.split(' ')[0],
+          class: stuInfo.split(' ')[1].split('`')[0],
+          name: stuInfo.split(' ')[1].split('`')[1]
+        };
+      }
+    }).then(function (infoJson) {
+      _this.setData(infoJson);
+    });
+  },
+  setData: function setData(infoJson) {
+    $($('.student-info-li').get(0)).find('span').get(1).innerHTML = infoJson.id;
+    $($('.student-info-li').get(1)).find('span').get(1).innerHTML = infoJson.name;
+    $($('.student-info-li').get(2)).find('span').get(1).innerHTML = infoJson.class;
+  }
+};
+
+exports.default = function (tokenObj) {
+  Setting.init(tokenObj);
 };
 
 /***/ })

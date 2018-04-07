@@ -424,7 +424,7 @@ var LeftContainer = {
         break;
       case 'setting':
         Student.studentRoute.changeRoute('setting');
-        (0, _studentSetting2.default)(tokenObj);
+        // studentSetting(tokenObj);
         break;
       default:
         break;

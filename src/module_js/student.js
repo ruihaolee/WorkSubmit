@@ -26,7 +26,7 @@ const LeftContainer = {
         break;
       case 'setting':
         Student.studentRoute.changeRoute('setting');
-        studentSetting(tokenObj);
+        // studentSetting(tokenObj);
         break;
       default:
         break;

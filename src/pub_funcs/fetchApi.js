@@ -2,7 +2,7 @@
  * @Author: liruihao02
  * @Date:   2018-04-05
  * @Last Modified by:   liruihao02
- * @Last Modified time: 2018-04-06
+ * @Last Modified time: 2018-04-07
  */
 import 'whatwg-fetch';
 export const fetchAPI = (fetchUrl, fetchData) => {
@@ -19,5 +19,7 @@ export const fetchAPI = (fetchUrl, fetchData) => {
       method: 'POST',
       body: fetchString
     })
-    .then(response => response.text())
+    .then(response => {
+      return response.text();
+    })
 }

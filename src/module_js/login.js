@@ -2,7 +2,7 @@
  * @Author: liruihao02
  * @Date:   2018-04-04
  * @Last Modified by:   liruihao02
- * @Last Modified time: 2018-04-06
+ * @Last Modified time: 2018-04-07
  */
 import '../less/login.less';
 import backAnamite from './login-background.js';
@@ -51,16 +51,17 @@ export default class Login {
       id: $('.login-username').val(),
       pass: $('.login-password').val()
     };
-    // const checkre = /^0\d{7}$/;
-    // if (!checkre.test(signObj.id)) {
-    //   elstyleChange.errortextBlock('学号格式不正确')
-    // }
+
     fetchAPI('http://222.24.63.100:9138/cms/login', signObj)
       .then(data => {
         this.token = data;
 
         const per = data.toString().slice(0, 1);
-        if (per === '2') {
+        console.log(per);
+        if (per === '0') {
+          elstyleChange.errortextBlock('账号或密码错误，请检查');
+          return;
+        } else if (per === '2') {
           this.route = new Router('teacher');
           this.route.init();
           this.route.route('/', indexCheckFunc.teacher);
@@ -76,7 +77,10 @@ export default class Login {
           $.cookie('per', 'student', {
             expires: 1
           });
-          Student.init();
+          Student.init({
+            id: signObj.id,
+            token: this.token
+          });
         }
         $.cookie('token', this.token, {
           expires: 1
@@ -84,7 +88,6 @@ export default class Login {
         $.cookie('id', signObj.id, {
           expires: 1
         });
-        console.log(per);
       })
   }
 

@@ -22,7 +22,10 @@ const init = () => {
     indexRoute = new Router('teacher');
   } else if ($.cookie('token') && $.cookie('per') === 'student') {
     indexRoute = new Router('student');
-    Student.init();
+    Student.init({
+      id: $.cookie('id'),
+      token: $.cookie('token')
+    });
   }
   indexRoute.init();
   indexRoute.route('/', indexCheckFunc[$.cookie('per')]);

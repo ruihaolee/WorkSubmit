@@ -9,6 +9,7 @@ import {
   studentCheckFunc
 } from '../pub_funcs/routerView.js';
 import studentSetting from './student-setting.js';
+import studentCourse from './student-course.js';
 
 const LeftContainer = {
   menuClickHandle: function(event, tokenObj) {
@@ -27,6 +28,10 @@ const LeftContainer = {
       case 'setting':
         Student.studentRoute.changeRoute('setting');
         // studentSetting(tokenObj);
+        break;
+      case 'course':
+        Student.studentRoute.changeRoute('course');
+        studentCourse(tokenObj);
         break;
       default:
         break;
@@ -60,6 +65,7 @@ export default class Student {
     this.studentRoute = new Router('student');
     this.studentRoute.init();
     this.studentRoute.route('setting', studentCheckFunc.setting);
+    this.studentRoute.route('course', studentCheckFunc.course);
   }
 
   static routeBack(tokenObj) {

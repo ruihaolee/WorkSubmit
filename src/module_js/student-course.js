@@ -10,6 +10,43 @@ import {
 
 const eventHandle = {}
 
+const setView = async viewData => {
+  console.log(viewData);
+  const workTypes = viewData.types.map(type => {
+    return `
+      <tr className="list-table-row">
+        <td>${type.typeName}</td>
+        <td>${type.typeId}</td>
+        <td>${viewData.isShare === '1' ? '是' : '否'}</td>
+        <td>
+          <a href=‘#’ target="_blank">
+            进入
+          </a>
+        </td>
+      </tr>
+    `
+  });
+  const workTypesHTML = workTypes.join('');
+  console.log(workTypesHTML);
+  $('.student-worktype-list').html(workTypesHTML);
+
+  const yearsClass = viewData.years.map(async yearsClass => {
+    yearsClass = await yearsClass;
+    const classes = yearsClass.classArr.map(oneClass =>
+      `<tr className="list-table-row">
+          <td>${yearsClass.yearId}</td>
+          <td>${oneClass}</td>
+       </tr>`);
+    return classes.join('');
+  });
+  let yearsClassTolHTML = '';
+  for (const yearClassHTML of yearsClass) {
+    yearsClassTolHTML += await yearClassHTML;
+  }
+  console.log(yearsClassTolHTML);
+  $('.student-yearsclass-list').html(yearsClassTolHTML);
+}
+
 const Course = {
   init: function(tokenObj) {
     this.tokenObj = tokenObj;
@@ -44,7 +81,7 @@ const Course = {
           years: []
         };
       });
-    fetchAPI('http://222.24.63.100:9138/cms/getworktype', this.courtokenObj)
+    await fetchAPI('http://222.24.63.100:9138/cms/getworktype', this.courtokenObj)
       .then(typeData => {
         const typeTemp = typeData.split('`');
         for (let i = 0; i < typeTemp.length; i = i + 2) {
@@ -66,8 +103,7 @@ const Course = {
         }
       });
     await this.viewData.years.length === this.yearClassLength;
-    console.log(this.viewData);
-    console.log(await this.viewData.years[1]);
+    setView(this.viewData);
   },
   bindHandle: function() {
 

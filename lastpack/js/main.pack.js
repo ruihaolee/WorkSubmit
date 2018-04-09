@@ -1272,6 +1272,128 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 var eventHandle = {};
 
+var setView = function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2(viewData) {
+    var workTypes, workTypesHTML, yearsClass, yearsClassTolHTML, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, yearClassHTML;
+
+    return _regenerator2.default.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            console.log(viewData);
+            workTypes = viewData.types.map(function (type) {
+              return '\n      <tr className="list-table-row">\n        <td>' + type.typeName + '</td>\n        <td>' + type.typeId + '</td>\n        <td>' + (viewData.isShare === '1' ? '是' : '否') + '</td>\n        <td>\n          <a href=\u2018#\u2019 target="_blank">\n            \u8FDB\u5165\n          </a>\n        </td>\n      </tr>\n    ';
+            });
+            workTypesHTML = workTypes.join('');
+
+            console.log(workTypesHTML);
+            $('.student-worktype-list').html(workTypesHTML);
+
+            yearsClass = viewData.years.map(function () {
+              var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee(yearsClass) {
+                var classes;
+                return _regenerator2.default.wrap(function _callee$(_context) {
+                  while (1) {
+                    switch (_context.prev = _context.next) {
+                      case 0:
+                        _context.next = 2;
+                        return yearsClass;
+
+                      case 2:
+                        yearsClass = _context.sent;
+                        classes = yearsClass.classArr.map(function (oneClass) {
+                          return '<tr className="list-table-row">\n          <td>' + yearsClass.yearId + '</td>\n          <td>' + oneClass + '</td>\n       </tr>';
+                        });
+                        return _context.abrupt('return', classes.join(''));
+
+                      case 5:
+                      case 'end':
+                        return _context.stop();
+                    }
+                  }
+                }, _callee, undefined);
+              }));
+
+              return function (_x2) {
+                return _ref2.apply(this, arguments);
+              };
+            }());
+            yearsClassTolHTML = '';
+            _iteratorNormalCompletion = true;
+            _didIteratorError = false;
+            _iteratorError = undefined;
+            _context2.prev = 10;
+            _iterator = yearsClass[Symbol.iterator]();
+
+          case 12:
+            if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
+              _context2.next = 20;
+              break;
+            }
+
+            yearClassHTML = _step.value;
+            _context2.next = 16;
+            return yearClassHTML;
+
+          case 16:
+            yearsClassTolHTML += _context2.sent;
+
+          case 17:
+            _iteratorNormalCompletion = true;
+            _context2.next = 12;
+            break;
+
+          case 20:
+            _context2.next = 26;
+            break;
+
+          case 22:
+            _context2.prev = 22;
+            _context2.t0 = _context2['catch'](10);
+            _didIteratorError = true;
+            _iteratorError = _context2.t0;
+
+          case 26:
+            _context2.prev = 26;
+            _context2.prev = 27;
+
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+
+          case 29:
+            _context2.prev = 29;
+
+            if (!_didIteratorError) {
+              _context2.next = 32;
+              break;
+            }
+
+            throw _iteratorError;
+
+          case 32:
+            return _context2.finish(29);
+
+          case 33:
+            return _context2.finish(26);
+
+          case 34:
+            console.log(yearsClassTolHTML);
+            $('.student-yearsclass-list').html(yearsClassTolHTML);
+
+          case 36:
+          case 'end':
+            return _context2.stop();
+        }
+      }
+    }, _callee2, undefined, [[10, 22, 26, 34], [27,, 29, 33]]);
+  }));
+
+  return function setView(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
 var Course = {
   init: function init(tokenObj) {
     this.tokenObj = tokenObj;
@@ -1280,12 +1402,12 @@ var Course = {
     this.bindHandle();
   },
   getCourseYearClass: function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee(yeartokenObj, yearId) {
-      return _regenerator2.default.wrap(function _callee$(_context) {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee3(yeartokenObj, yearId) {
+      return _regenerator2.default.wrap(function _callee3$(_context3) {
         while (1) {
-          switch (_context.prev = _context.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
-              _context.next = 2;
+              _context3.next = 2;
               return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getcourseyearclass', yeartokenObj).then(function (yearclass) {
                 var yearclassTemp = yearclass.split('`');
                 var yearClass = {
@@ -1296,31 +1418,31 @@ var Course = {
               });
 
             case 2:
-              return _context.abrupt('return', _context.sent);
+              return _context3.abrupt('return', _context3.sent);
 
             case 3:
             case 'end':
-              return _context.stop();
+              return _context3.stop();
           }
         }
-      }, _callee, this);
+      }, _callee3, this);
     }));
 
-    function getCourseYearClass(_x, _x2) {
-      return _ref.apply(this, arguments);
+    function getCourseYearClass(_x3, _x4) {
+      return _ref3.apply(this, arguments);
     }
 
     return getCourseYearClass;
   }(),
   getCourse: function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee4() {
       var _this = this;
 
-      return _regenerator2.default.wrap(function _callee2$(_context2) {
+      return _regenerator2.default.wrap(function _callee4$(_context4) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
-              _context2.next = 2;
+              _context4.next = 2;
               return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/searchmycourse', this.tokenObj).then(function (courseData) {
                 var courseTemp = courseData.split('`');
                 Object.assign(_this.courtokenObj, _this.tokenObj, {
@@ -1335,7 +1457,8 @@ var Course = {
               });
 
             case 2:
-              (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworktype', this.courtokenObj).then(function (typeData) {
+              _context4.next = 4;
+              return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworktype', this.courtokenObj).then(function (typeData) {
                 var typeTemp = typeData.split('`');
                 for (var i = 0; i < typeTemp.length; i = i + 2) {
                   _this.viewData.types.push({
@@ -1344,7 +1467,9 @@ var Course = {
                   });
                 }
               });
-              _context2.next = 5;
+
+            case 4:
+              _context4.next = 6;
               return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getcourseyear', this.courtokenObj).then(function (yearData) {
                 var yearTemp = yearData.split('`');
                 _this.yearClassLength = yearTemp.length;
@@ -1356,35 +1481,27 @@ var Course = {
                 }
               });
 
-            case 5:
-              _context2.next = 7;
+            case 6:
+              _context4.next = 8;
               return this.viewData.years.length;
 
-            case 7:
-              _context2.t0 = _context2.sent;
-              _context2.t1 = this.yearClassLength;
-              _context2.t0 === _context2.t1;
+            case 8:
+              _context4.t0 = _context4.sent;
+              _context4.t1 = this.yearClassLength;
+              _context4.t0 === _context4.t1;
 
-              console.log(this.viewData);
-              _context2.t2 = console;
-              _context2.next = 14;
-              return this.viewData.years[1];
+              setView(this.viewData);
 
-            case 14:
-              _context2.t3 = _context2.sent;
-
-              _context2.t2.log.call(_context2.t2, _context2.t3);
-
-            case 16:
+            case 12:
             case 'end':
-              return _context2.stop();
+              return _context4.stop();
           }
         }
-      }, _callee2, this);
+      }, _callee4, this);
     }));
 
     function getCourse() {
-      return _ref2.apply(this, arguments);
+      return _ref4.apply(this, arguments);
     }
 
     return getCourse;

@@ -9,8 +9,9 @@ import {
 } from '../pub_funcs/fetchApi.js';
 import writingWork from './student-writework.js'
 
+let firDO = true;
+
 const setView = async viewData => {
-  // console.log(viewData);
   const workTypes = viewData.types.map(type => {
     return `
       <tr class="list-table-row">
@@ -24,7 +25,6 @@ const setView = async viewData => {
     `
   });
   const workTypesHTML = workTypes.join('');
-  // console.log(workTypesHTML);
   $('.student-worktype-list').html(workTypesHTML);
 
   const yearsClass = viewData.years.map(async yearsClass => {
@@ -40,7 +40,6 @@ const setView = async viewData => {
   for (const yearClassHTML of yearsClass) {
     yearsClassTolHTML += await yearClassHTML;
   }
-  // console.log(yearsClassTolHTML);
   $('.student-yearsclass-list').html(yearsClassTolHTML);
 }
 
@@ -49,8 +48,14 @@ const Course = {
     this.tokenObj = tokenObj;
     this.studentRoute = studentRoute;
     this.courtokenObj = {};
-    this.getCourse();
-    this.bindHandle();
+    if (firDO) {
+      firDO = !firDO;
+      this.getCourse();
+      this.bindHandle();
+    } else {
+      this.getCourse();
+      return;
+    }
   },
 
   getCourseYearClass: async function(yeartokenObj, yearId) {
@@ -109,8 +114,9 @@ const Course = {
   writeworkHandle: function(target) {
     const typeID = $(target).attr('typeid');
     this.studentRoute.changeRoute('writework');
-    writingWork(Object.assign({}, this.tokenObj, { typeid: typeID }));
-    // console.log(target, typeID);
+    writingWork(Object.assign({}, this.tokenObj, {
+      typeid: typeID
+    }));
   },
   bindHandle: function() {
     $('.student-worktype-list').click((event) => {

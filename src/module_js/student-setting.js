@@ -2,7 +2,7 @@
  * @Author: liruihao02
  * @Date:   2018-04-06
  * @Last Modified by:   liruihao02
- * @Last Modified time: 2018-04-07
+ * @Last Modified time: 2018-04-13
  */
 import {
   fetchAPI
@@ -57,7 +57,7 @@ const Setting = {
   getStudentInfo: function() { //获取学生个人信息
     fetchAPI('http://222.24.63.100:9138/cms/getprofile', this.tokenObj)
       .then(stuInfo => {
-        console.log(stuInfo);
+        // console.log(stuInfo);
         if (stuInfo.toString().slice(0, 1) === '0') {
           return {
             id: '获取信息失败',

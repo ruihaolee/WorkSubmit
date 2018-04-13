@@ -247,7 +247,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Author: liruihao02
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Date:   2018-04-04
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Last Modified by:   liruihao02
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Last Modified time: 2018-04-07
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Last Modified time: 2018-04-13
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -325,7 +325,7 @@ var Login = function () {
         _this2.token = data;
 
         var per = data.toString().slice(0, 1);
-        console.log(per);
+        // console.log(per);
         if (per === '0') {
           elstyleChange.errortextBlock('账号或密码错误，请检查');
           return;
@@ -443,7 +443,6 @@ var LeftContainer = {
         break;
       case 'setting':
         Student.studentRoute.changeRoute('setting');
-        // studentSetting(tokenObj);
         break;
       case 'course':
         Student.studentRoute.changeRoute('course');
@@ -1199,7 +1198,7 @@ var eventHandle = {
     * @Author: liruihao02
     * @Date:   2018-04-06
     * @Last Modified by:   liruihao02
-    * @Last Modified time: 2018-04-07
+    * @Last Modified time: 2018-04-13
     */
 
 
@@ -1222,7 +1221,7 @@ var Setting = {
 
     //获取学生个人信息
     (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getprofile', this.tokenObj).then(function (stuInfo) {
-      console.log(stuInfo);
+      // console.log(stuInfo);
       if (stuInfo.toString().slice(0, 1) === '0') {
         return {
           id: '获取信息失败',
@@ -1282,6 +1281,8 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             */
 
 
+var firDO = true;
+
 var setView = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2(viewData) {
     var workTypes, workTypesHTML, yearsClass, yearsClassTolHTML, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, yearClassHTML;
@@ -1290,12 +1291,10 @@ var setView = function () {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            // console.log(viewData);
             workTypes = viewData.types.map(function (type) {
               return '\n      <tr class="list-table-row">\n        <td>' + type.typeName + '</td>\n        <td>' + type.typeId + '</td>\n        <td>' + (viewData.isShare === '1' ? '是' : '否') + '</td>\n        <td>\n          <span class=\'list-table-writebutton\' typeid=' + type.typeId + '>\u8FDB\u5165</span>\n        </td>\n      </tr>\n    ';
             });
             workTypesHTML = workTypes.join('');
-            // console.log(workTypesHTML);
 
             $('.student-worktype-list').html(workTypesHTML);
 
@@ -1388,7 +1387,6 @@ var setView = function () {
             return _context2.finish(24);
 
           case 32:
-            // console.log(yearsClassTolHTML);
             $('.student-yearsclass-list').html(yearsClassTolHTML);
 
           case 33:
@@ -1409,8 +1407,14 @@ var Course = {
     this.tokenObj = tokenObj;
     this.studentRoute = studentRoute;
     this.courtokenObj = {};
-    this.getCourse();
-    this.bindHandle();
+    if (firDO) {
+      firDO = !firDO;
+      this.getCourse();
+      this.bindHandle();
+    } else {
+      this.getCourse();
+      return;
+    }
   },
 
   getCourseYearClass: function () {
@@ -1523,8 +1527,9 @@ var Course = {
   writeworkHandle: function writeworkHandle(target) {
     var typeID = $(target).attr('typeid');
     this.studentRoute.changeRoute('writework');
-    (0, _studentWritework2.default)(Object.assign({}, this.tokenObj, { typeid: typeID }));
-    // console.log(target, typeID);
+    (0, _studentWritework2.default)(Object.assign({}, this.tokenObj, {
+      typeid: typeID
+    }));
   },
   bindHandle: function bindHandle() {
     var _this2 = this;
@@ -2337,31 +2342,51 @@ Object.defineProperty(exports, "__esModule", {
 
 var _fetchApi = __webpack_require__(0);
 
+var firDO = true; /*
+                   * @Author: liruihao02
+                   * @Date:   2018-04-13
+                   * @Last Modified by:   liruihao02
+                   * @Last Modified time: 2018-04-13
+                   */
+
+
 var submitworkHandle = function submitworkHandle() {
   var workInfo = Object.assign({}, WritingWork.typeToken, {
     title: $('.student-worktitle-value').val(),
     work: WritingWork.ue.getContent()
   });
+  (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/submitwork', workInfo).then(function (result) {
+    if (result === '0') {
+      alert('提交失败');
+    } else if (result === '1') {
+      alert('提交成功');
+    }
+  });
   console.log(workInfo);
-}; /*
-   * @Author: liruihao02
-   * @Date:   2018-04-13
-   * @Last Modified by:   liruihao02
-   * @Last Modified time: 2018-04-13
-   */
-
+};
 
 var WritingWork = {
   init: function init(typeToken) {
+    if (firDO) {
+      firDO = !firDO;
+    } else {
+      this.viewBack();
+      //除了第一次加载其余都清空内容
+      return;
+    }
     this.typeToken = typeToken;
     this.ue = UE.getEditor('editor-container');
     this.bindHandle();
-    console.log(typeToken);
   },
   bindHandle: function bindHandle() {
     $('.student-work-submit').click(function () {
       submitworkHandle();
     });
+  },
+  viewBack: function viewBack() {
+    console.log('viewBack');
+    this.ue.execCommand('cleardoc');
+    $('.student-worktitle-value').val('');
   }
 };
 

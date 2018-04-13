@@ -199,6 +199,14 @@ var studentCheckFunc = {
     $('.student-writework').css({
       display: 'block'
     });
+  },
+  works: function works() {
+    $('.student-rightbox').css({
+      display: 'none'
+    });
+    $('.student-workinfo').css({
+      display: 'block'
+    });
   }
 };
 
@@ -423,6 +431,10 @@ var _studentCourse = __webpack_require__(14);
 
 var _studentCourse2 = _interopRequireDefault(_studentCourse);
 
+var _studentWorkinfo = __webpack_require__(19);
+
+var _studentWorkinfo2 = _interopRequireDefault(_studentWorkinfo);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -447,6 +459,10 @@ var LeftContainer = {
       case 'course':
         Student.studentRoute.changeRoute('course');
         (0, _studentCourse2.default)(tokenObj, Student.studentRoute);
+        break;
+      case 'works':
+        Student.studentRoute.changeRoute('works');
+        (0, _studentWorkinfo2.default)();
         break;
       default:
         break;
@@ -489,6 +505,7 @@ var Student = function () {
       this.studentRoute.route('setting', _routerView.studentCheckFunc.setting);
       this.studentRoute.route('course', _routerView.studentCheckFunc.course);
       this.studentRoute.route('writework', _routerView.studentCheckFunc.writework);
+      this.studentRoute.route('works', _routerView.studentCheckFunc.works);
     }
   }, {
     key: 'routeBack',
@@ -2388,6 +2405,44 @@ var WritingWork = {
     this.ue.execCommand('cleardoc');
     $('.student-worktitle-value').val('');
   }
+};
+
+exports.default = function (typeToken) {
+  WritingWork.init(typeToken);
+};
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _fetchApi = __webpack_require__(0);
+
+var firDO = true; /*
+                   * @Author: liruihao02
+                   * @Date:   2018-04-13
+                   * @Last Modified by:   liruihao02
+                   * @Last Modified time: 2018-04-13
+                   */
+
+
+var WritingWork = {
+  init: function init(typeToken) {
+    if (firDO) {
+      firDO = !firDO;
+    } else {
+      return;
+    }
+    this.typeToken = typeToken;
+    this.bindHandle();
+  },
+  bindHandle: function bindHandle() {}
 };
 
 exports.default = function (typeToken) {

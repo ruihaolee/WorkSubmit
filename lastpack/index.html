@@ -9,6 +9,7 @@
     <!-- 比如这个登录页面，你要引用这个页面编译后的css,参考下面的方式 -->
     <link rel="stylesheet" type="text/css" href="./css/iconfont.css">
     <link rel="stylesheet" type="text/css" href="./css/main.css">
+    <link rel="stylesheet" type="text/css" href="./public/editormd/css/editormd.css">
 </head>
 <body>
 <div class="dashboard">
@@ -62,9 +63,9 @@
                 <i class='iconfont icon-iconfontjixieqimo'></i>
                 <span>个人信息管理</span>
               </li>
-              <li class="menu-li" name='activity'>
-                <i class='iconfont icon-category'></i>
-                <span>动态管理</span>
+              <li class="menu-li" name='course'>
+                <i class='iconfont icon-similarproduct'></i>
+                <span>课程信息管理</span>
               </li>
               <li class="menu-li" name='members'>
                 <i class='iconfont icon-category'></i>
@@ -124,8 +125,51 @@
                 </div>
               </div>
             </div>
-            <div class="student-rightbox"></div>
-            <div class="student-rightbox"></div>
+            <div class="student-rightbox student-course">
+              <div class="rightbody-title">课程信息管理</div>
+              <div>
+                <table class="list-table">
+                  <thead class="list-table-thead">
+                    <tr>
+                      <th>
+                        <span>作业名称</span>
+                      </th>
+                      <th>
+                        <span>作业ID</span>
+                      </th>
+                      <th>
+                        <span>作业是否分享</span>
+                      </th>
+                      <th>
+                        <span>提交链接</span>
+                      </th>
+                    </tr>
+                  </thead>
+                <tbody class="list-table-tbody student-worktype-list"></tbody>
+              </table>
+               <table class="list-table">
+                  <thead class="list-table-thead">
+                    <tr>
+                      <th>
+                        <span>年纪ID</span>
+                      </th>
+                      <th>
+                        <span>班级ID</span>
+                      </th>
+                    </tr>
+                  </thead>
+                <tbody class="list-table-tbody student-yearsclass-list"></tbody>
+              </table>
+              </div>
+            </div>
+            <div class="student-rightbox student-writework">
+              <div class="rightbody-title">作业编辑</div>
+              <div class="student-writework-box">
+                <div class="student-worktitle"><input type="text" name="worktitle" placeholder="作业标题" class="student-worktitle-value"></div>
+                <div class="student-work-submit">点我提交</div>
+              </div>
+              <script id="editor-container" name="content" type="text/plain"></script>
+            </div>
             <div class="student-rightbox"></div>
             <div class="student-rightbox"></div>
         </div>
@@ -135,6 +179,9 @@
   </div>
 </div>
 <script type="text/javascript" src="./js/lib.min.js"></script>
+<script type="text/javascript" src="./public/editormd/src/editormd.js"></script>
+<script type="text/javascript" src='./editor/ueditor.config.js'></script>
+<script type="text/javascript" src='./editor/ueditor.all.js'></script>
 <script type="text/javascript" src="./js/main.pack.js"></script>
 </body>
 </html>

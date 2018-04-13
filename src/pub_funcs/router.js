@@ -26,7 +26,6 @@ export default class Router {
   }
 
   refresh() {
-    console.log('refresh');
     this.routeCall[this.nowKey] && this.routeCall[this.nowKey]();
   }
 

@@ -6,6 +6,23 @@ const studentCheckFunc = {
     $('.student-setting').css({
       display: 'block'
     });
+  },
+  course: () => {
+    console.log('course view');
+    $('.student-rightbox').css({
+      display: 'none'
+    });
+    $('.student-course').css({
+      display: 'block'
+    });
+  },
+  writework: () => {
+    $('.student-rightbox').css({
+      display: 'none'
+    });
+    $('.student-writework').css({
+      display: 'block'
+    });
   }
 }
 
@@ -25,7 +42,6 @@ const indexCheckFunc = {
     $('.student').css({
       display: 'block'
     })
-    studentCheckFunc.setting();
   },
   teacher: () => {
     $('.container-body').css({

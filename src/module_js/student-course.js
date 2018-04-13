@@ -2,38 +2,35 @@
  * @Author: liruihao02
  * @Date:   2018-04-07
  * @Last Modified by:   liruihao02
- * @Last Modified time: 2018-04-09
+ * @Last Modified time: 2018-04-13
  */
 import {
   fetchAPI
 } from '../pub_funcs/fetchApi.js';
-
-const eventHandle = {}
+import writingWork from './student-writework.js'
 
 const setView = async viewData => {
-  console.log(viewData);
+  // console.log(viewData);
   const workTypes = viewData.types.map(type => {
     return `
-      <tr className="list-table-row">
+      <tr class="list-table-row">
         <td>${type.typeName}</td>
         <td>${type.typeId}</td>
         <td>${viewData.isShare === '1' ? '是' : '否'}</td>
         <td>
-          <a href=‘#’ target="_blank">
-            进入
-          </a>
+          <span class='list-table-writebutton' typeid=${type.typeId}>进入</span>
         </td>
       </tr>
     `
   });
   const workTypesHTML = workTypes.join('');
-  console.log(workTypesHTML);
+  // console.log(workTypesHTML);
   $('.student-worktype-list').html(workTypesHTML);
 
   const yearsClass = viewData.years.map(async yearsClass => {
     yearsClass = await yearsClass;
     const classes = yearsClass.classArr.map(oneClass =>
-      `<tr className="list-table-row">
+      `<tr class="list-table-row">
           <td>${yearsClass.yearId}</td>
           <td>${oneClass}</td>
        </tr>`);
@@ -43,17 +40,19 @@ const setView = async viewData => {
   for (const yearClassHTML of yearsClass) {
     yearsClassTolHTML += await yearClassHTML;
   }
-  console.log(yearsClassTolHTML);
+  // console.log(yearsClassTolHTML);
   $('.student-yearsclass-list').html(yearsClassTolHTML);
 }
 
 const Course = {
-  init: function(tokenObj) {
+  init: function(tokenObj, studentRoute) {
     this.tokenObj = tokenObj;
+    this.studentRoute = studentRoute;
     this.courtokenObj = {};
     this.getCourse();
     this.bindHandle();
   },
+
   getCourseYearClass: async function(yeartokenObj, yearId) {
     return await fetchAPI('http://222.24.63.100:9138/cms/getcourseyearclass', yeartokenObj)
       .then(yearclass => {
@@ -65,6 +64,7 @@ const Course = {
         return yearClass;
       });
   },
+
   getCourse: async function() {
     await fetchAPI('http://222.24.63.100:9138/cms/searchmycourse', this.tokenObj)
       .then(courseData => {
@@ -105,11 +105,24 @@ const Course = {
     await this.viewData.years.length === this.yearClassLength;
     setView(this.viewData);
   },
-  bindHandle: function() {
 
+  writeworkHandle: function(target) {
+    const typeID = $(target).attr('typeid');
+    this.studentRoute.changeRoute('writework');
+    writingWork(Object.assign({}, this.tokenObj, { typeid: typeID }));
+    // console.log(target, typeID);
+  },
+  bindHandle: function() {
+    $('.student-worktype-list').click((event) => {
+      const target = event.target || event.srcElement;
+      if (target.className !== 'list-table-writebutton') {
+        return;
+      }
+      this.writeworkHandle(target);
+    })
   }
 }
 
-export default (tokenObj) => {
-  Course.init(tokenObj);
+export default (tokenObj, studentRoute) => {
+  Course.init(tokenObj, studentRoute);
 }

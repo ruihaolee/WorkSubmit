@@ -73,6 +73,43 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.fetchAPI = undefined;
+
+__webpack_require__(9);
+
+var fetchAPI = exports.fetchAPI = function fetchAPI(fetchUrl, fetchData) {
+  var fetchString = '';
+  for (var name in fetchData) {
+    fetchString += name + '=' + fetchData[name] + '&';
+  }
+  fetchString = fetchString.slice(0, fetchString.length - 1);
+  return fetch(fetchUrl, {
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    method: 'POST',
+    body: fetchString
+  }).then(function (response) {
+    return response.text();
+  });
+}; /*
+    * @Author: liruihao02
+    * @Date:   2018-04-05
+    * @Last Modified by:   liruihao02
+    * @Last Modified time: 2018-04-07
+    */
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -112,7 +149,6 @@ var Router = function () {
   }, {
     key: 'refresh',
     value: function refresh() {
-      // console.log('refresh');
       this.routeCall[this.nowKey] && this.routeCall[this.nowKey]();
     }
   }, {
@@ -129,7 +165,7 @@ var Router = function () {
 exports.default = Router;
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -153,6 +189,14 @@ var studentCheckFunc = {
       display: 'none'
     });
     $('.student-course').css({
+      display: 'block'
+    });
+  },
+  writework: function writework() {
+    $('.student-rightbox').css({
+      display: 'none'
+    });
+    $('.student-writework').css({
       display: 'block'
     });
   }
@@ -189,43 +233,6 @@ exports.indexCheckFunc = indexCheckFunc;
 exports.studentCheckFunc = studentCheckFunc;
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.fetchAPI = undefined;
-
-__webpack_require__(9);
-
-var fetchAPI = exports.fetchAPI = function fetchAPI(fetchUrl, fetchData) {
-  var fetchString = '';
-  for (var name in fetchData) {
-    fetchString += name + '=' + fetchData[name] + '&';
-  }
-  fetchString = fetchString.slice(0, fetchString.length - 1);
-  return fetch(fetchUrl, {
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    method: 'POST',
-    body: fetchString
-  }).then(function (response) {
-    return response.text();
-  });
-}; /*
-    * @Author: liruihao02
-    * @Date:   2018-04-05
-    * @Last Modified by:   liruihao02
-    * @Last Modified time: 2018-04-07
-    */
-
-/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -250,13 +257,13 @@ var _loginBackground = __webpack_require__(8);
 
 var _loginBackground2 = _interopRequireDefault(_loginBackground);
 
-var _router = __webpack_require__(0);
+var _router = __webpack_require__(1);
 
 var _router2 = _interopRequireDefault(_router);
 
-var _fetchApi = __webpack_require__(2);
+var _fetchApi = __webpack_require__(0);
 
-var _routerView = __webpack_require__(1);
+var _routerView = __webpack_require__(2);
 
 var _student = __webpack_require__(4);
 
@@ -396,7 +403,7 @@ __webpack_require__(10);
 
 __webpack_require__(11);
 
-var _router = __webpack_require__(0);
+var _router = __webpack_require__(1);
 
 var _router2 = _interopRequireDefault(_router);
 
@@ -404,9 +411,9 @@ var _exitlogin = __webpack_require__(12);
 
 var _exitlogin2 = _interopRequireDefault(_exitlogin);
 
-var _fetchApi = __webpack_require__(2);
+var _fetchApi = __webpack_require__(0);
 
-var _routerView = __webpack_require__(1);
+var _routerView = __webpack_require__(2);
 
 var _studentSetting = __webpack_require__(13);
 
@@ -440,7 +447,7 @@ var LeftContainer = {
         break;
       case 'course':
         Student.studentRoute.changeRoute('course');
-        (0, _studentCourse2.default)(tokenObj);
+        (0, _studentCourse2.default)(tokenObj, Student.studentRoute);
         break;
       default:
         break;
@@ -482,6 +489,7 @@ var Student = function () {
       this.studentRoute.init();
       this.studentRoute.route('setting', _routerView.studentCheckFunc.setting);
       this.studentRoute.route('course', _routerView.studentCheckFunc.course);
+      this.studentRoute.route('writework', _routerView.studentCheckFunc.writework);
     }
   }, {
     key: 'routeBack',
@@ -515,11 +523,11 @@ exports.default = Student;
 
 __webpack_require__(6);
 
-var _router = __webpack_require__(0);
+var _router = __webpack_require__(1);
 
 var _router2 = _interopRequireDefault(_router);
 
-var _routerView = __webpack_require__(1);
+var _routerView = __webpack_require__(2);
 
 var _login = __webpack_require__(3);
 
@@ -1117,11 +1125,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _router = __webpack_require__(0);
+var _router = __webpack_require__(1);
 
 var _router2 = _interopRequireDefault(_router);
 
-var _routerView = __webpack_require__(1);
+var _routerView = __webpack_require__(2);
 
 var _login = __webpack_require__(3);
 
@@ -1156,7 +1164,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _fetchApi = __webpack_require__(2);
+var _fetchApi = __webpack_require__(0);
 
 var eventHandle = {
   infoClickHandle: function infoClickHandle() {
@@ -1258,7 +1266,11 @@ var _regenerator = __webpack_require__(15);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _fetchApi = __webpack_require__(2);
+var _fetchApi = __webpack_require__(0);
+
+var _studentWritework = __webpack_require__(18);
+
+var _studentWritework2 = _interopRequireDefault(_studentWritework);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1266,11 +1278,9 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Author: liruihao02
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Date:   2018-04-07
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Last Modified by:   liruihao02
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-04-09
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-04-13
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             */
 
-
-var eventHandle = {};
 
 var setView = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2(viewData) {
@@ -1280,13 +1290,13 @@ var setView = function () {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            console.log(viewData);
+            // console.log(viewData);
             workTypes = viewData.types.map(function (type) {
-              return '\n      <tr className="list-table-row">\n        <td>' + type.typeName + '</td>\n        <td>' + type.typeId + '</td>\n        <td>' + (viewData.isShare === '1' ? '是' : '否') + '</td>\n        <td>\n          <a href=\u2018#\u2019 target="_blank">\n            \u8FDB\u5165\n          </a>\n        </td>\n      </tr>\n    ';
+              return '\n      <tr class="list-table-row">\n        <td>' + type.typeName + '</td>\n        <td>' + type.typeId + '</td>\n        <td>' + (viewData.isShare === '1' ? '是' : '否') + '</td>\n        <td>\n          <span class=\'list-table-writebutton\' typeid=' + type.typeId + '>\u8FDB\u5165</span>\n        </td>\n      </tr>\n    ';
             });
             workTypesHTML = workTypes.join('');
+            // console.log(workTypesHTML);
 
-            console.log(workTypesHTML);
             $('.student-worktype-list').html(workTypesHTML);
 
             yearsClass = viewData.years.map(function () {
@@ -1302,7 +1312,7 @@ var setView = function () {
                       case 2:
                         yearsClass = _context.sent;
                         classes = yearsClass.classArr.map(function (oneClass) {
-                          return '<tr className="list-table-row">\n          <td>' + yearsClass.yearId + '</td>\n          <td>' + oneClass + '</td>\n       </tr>';
+                          return '<tr class="list-table-row">\n          <td>' + yearsClass.yearId + '</td>\n          <td>' + oneClass + '</td>\n       </tr>';
                         });
                         return _context.abrupt('return', classes.join(''));
 
@@ -1322,71 +1332,71 @@ var setView = function () {
             _iteratorNormalCompletion = true;
             _didIteratorError = false;
             _iteratorError = undefined;
-            _context2.prev = 10;
+            _context2.prev = 8;
             _iterator = yearsClass[Symbol.iterator]();
 
-          case 12:
+          case 10:
             if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-              _context2.next = 20;
+              _context2.next = 18;
               break;
             }
 
             yearClassHTML = _step.value;
-            _context2.next = 16;
+            _context2.next = 14;
             return yearClassHTML;
 
-          case 16:
+          case 14:
             yearsClassTolHTML += _context2.sent;
 
-          case 17:
+          case 15:
             _iteratorNormalCompletion = true;
-            _context2.next = 12;
+            _context2.next = 10;
+            break;
+
+          case 18:
+            _context2.next = 24;
             break;
 
           case 20:
-            _context2.next = 26;
-            break;
-
-          case 22:
-            _context2.prev = 22;
-            _context2.t0 = _context2['catch'](10);
+            _context2.prev = 20;
+            _context2.t0 = _context2['catch'](8);
             _didIteratorError = true;
             _iteratorError = _context2.t0;
 
-          case 26:
-            _context2.prev = 26;
-            _context2.prev = 27;
+          case 24:
+            _context2.prev = 24;
+            _context2.prev = 25;
 
             if (!_iteratorNormalCompletion && _iterator.return) {
               _iterator.return();
             }
 
-          case 29:
-            _context2.prev = 29;
+          case 27:
+            _context2.prev = 27;
 
             if (!_didIteratorError) {
-              _context2.next = 32;
+              _context2.next = 30;
               break;
             }
 
             throw _iteratorError;
 
+          case 30:
+            return _context2.finish(27);
+
+          case 31:
+            return _context2.finish(24);
+
           case 32:
-            return _context2.finish(29);
-
-          case 33:
-            return _context2.finish(26);
-
-          case 34:
-            console.log(yearsClassTolHTML);
+            // console.log(yearsClassTolHTML);
             $('.student-yearsclass-list').html(yearsClassTolHTML);
 
-          case 36:
+          case 33:
           case 'end':
             return _context2.stop();
         }
       }
-    }, _callee2, undefined, [[10, 22, 26, 34], [27,, 29, 33]]);
+    }, _callee2, undefined, [[8, 20, 24, 32], [25,, 27, 31]]);
   }));
 
   return function setView(_x) {
@@ -1395,12 +1405,14 @@ var setView = function () {
 }();
 
 var Course = {
-  init: function init(tokenObj) {
+  init: function init(tokenObj, studentRoute) {
     this.tokenObj = tokenObj;
+    this.studentRoute = studentRoute;
     this.courtokenObj = {};
     this.getCourse();
     this.bindHandle();
   },
+
   getCourseYearClass: function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee3(yeartokenObj, yearId) {
       return _regenerator2.default.wrap(function _callee3$(_context3) {
@@ -1434,6 +1446,7 @@ var Course = {
 
     return getCourseYearClass;
   }(),
+
   getCourse: function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee4() {
       var _this = this;
@@ -1506,11 +1519,28 @@ var Course = {
 
     return getCourse;
   }(),
-  bindHandle: function bindHandle() {}
+
+  writeworkHandle: function writeworkHandle(target) {
+    var typeID = $(target).attr('typeid');
+    this.studentRoute.changeRoute('writework');
+    (0, _studentWritework2.default)(Object.assign({}, this.tokenObj, { typeid: typeID }));
+    // console.log(target, typeID);
+  },
+  bindHandle: function bindHandle() {
+    var _this2 = this;
+
+    $('.student-worktype-list').click(function (event) {
+      var target = event.target || event.srcElement;
+      if (target.className !== 'list-table-writebutton') {
+        return;
+      }
+      _this2.writeworkHandle(target);
+    });
+  }
 };
 
-exports.default = function (tokenObj) {
-  Course.init(tokenObj);
+exports.default = function (tokenObj, studentRoute) {
+  Course.init(tokenObj, studentRoute);
 };
 
 /***/ }),
@@ -2293,6 +2323,51 @@ if (hadRuntime) {
   (function() { return this })() || Function("return this")()
 );
 
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _fetchApi = __webpack_require__(0);
+
+var submitworkHandle = function submitworkHandle() {
+  var workInfo = Object.assign({}, WritingWork.typeToken, {
+    title: $('.student-worktitle-value').val(),
+    work: WritingWork.ue.getContent()
+  });
+  console.log(workInfo);
+}; /*
+   * @Author: liruihao02
+   * @Date:   2018-04-13
+   * @Last Modified by:   liruihao02
+   * @Last Modified time: 2018-04-13
+   */
+
+
+var WritingWork = {
+  init: function init(typeToken) {
+    this.typeToken = typeToken;
+    this.ue = UE.getEditor('editor-container');
+    this.bindHandle();
+    console.log(typeToken);
+  },
+  bindHandle: function bindHandle() {
+    $('.student-work-submit').click(function () {
+      submitworkHandle();
+    });
+  }
+};
+
+exports.default = function (typeToken) {
+  WritingWork.init(typeToken);
+};
 
 /***/ })
 /******/ ]);

@@ -31,7 +31,7 @@ const LeftContainer = {
         break;
       case 'course':
         Student.studentRoute.changeRoute('course');
-        studentCourse(tokenObj);
+        studentCourse(tokenObj, Student.studentRoute);
         break;
       default:
         break;
@@ -66,6 +66,7 @@ export default class Student {
     this.studentRoute.init();
     this.studentRoute.route('setting', studentCheckFunc.setting);
     this.studentRoute.route('course', studentCheckFunc.course);
+    this.studentRoute.route('writework', studentCheckFunc.writework);
   }
 
   static routeBack(tokenObj) {

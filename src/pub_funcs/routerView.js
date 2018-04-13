@@ -15,6 +15,14 @@ const studentCheckFunc = {
     $('.student-course').css({
       display: 'block'
     });
+  },
+  writework: () => {
+    $('.student-rightbox').css({
+      display: 'none'
+    });
+    $('.student-writework').css({
+      display: 'block'
+    });
   }
 }
 

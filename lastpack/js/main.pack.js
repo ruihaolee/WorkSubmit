@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -75,7 +75,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.fetchAPI = undefined;
 
-__webpack_require__(9);
+__webpack_require__(11);
 
 var fetchAPI = exports.fetchAPI = function fetchAPI(fetchUrl, fetchData) {
   var fetchString = '';
@@ -97,7 +97,7 @@ var fetchAPI = exports.fetchAPI = function fetchAPI(fetchUrl, fetchData) {
     * @Author: liruihao02
     * @Date:   2018-04-05
     * @Last Modified by:   liruihao02
-    * @Last Modified time: 2018-04-07
+    * @Last Modified time: 2018-04-14
     */
 
 /***/ }),
@@ -259,9 +259,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
-__webpack_require__(7);
+__webpack_require__(9);
 
-var _loginBackground = __webpack_require__(8);
+var _loginBackground = __webpack_require__(10);
 
 var _loginBackground2 = _interopRequireDefault(_loginBackground);
 
@@ -407,15 +407,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-__webpack_require__(10);
+__webpack_require__(12);
 
-__webpack_require__(11);
+__webpack_require__(13);
 
 var _router = __webpack_require__(1);
 
 var _router2 = _interopRequireDefault(_router);
 
-var _exitlogin = __webpack_require__(12);
+var _exitlogin = __webpack_require__(14);
 
 var _exitlogin2 = _interopRequireDefault(_exitlogin);
 
@@ -423,15 +423,15 @@ var _fetchApi = __webpack_require__(0);
 
 var _routerView = __webpack_require__(2);
 
-var _studentSetting = __webpack_require__(13);
+var _studentSetting = __webpack_require__(15);
 
 var _studentSetting2 = _interopRequireDefault(_studentSetting);
 
-var _studentCourse = __webpack_require__(14);
+var _studentCourse = __webpack_require__(16);
 
 var _studentCourse2 = _interopRequireDefault(_studentCourse);
 
-var _studentWorkinfo = __webpack_require__(19);
+var _studentWorkinfo = __webpack_require__(20);
 
 var _studentWorkinfo2 = _interopRequireDefault(_studentWorkinfo);
 
@@ -462,7 +462,7 @@ var LeftContainer = {
         break;
       case 'works':
         Student.studentRoute.changeRoute('works');
-        (0, _studentWorkinfo2.default)();
+        (0, _studentWorkinfo2.default)(tokenObj, Student.studentRoute);
         break;
       default:
         break;
@@ -534,10 +534,19 @@ exports.default = Student;
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
+module.exports = __webpack_require__(17);
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
-__webpack_require__(6);
+__webpack_require__(7);
+
+__webpack_require__(8);
 
 var _router = __webpack_require__(1);
 
@@ -583,12 +592,6 @@ var init = function init() {
 init();
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
 /* 7 */
 /***/ (function(module, exports) {
 
@@ -596,6 +599,451 @@ init();
 
 /***/ }),
 /* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var __WEBPACK_AMD_DEFINE_RESULT__;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/*
+ * @Author: liruihao02
+ * @Date:   2018-04-14
+ * @Last Modified by:   liruihao02
+ * @Last Modified time: 2018-04-14
+ */
+(function () {
+  'use strict';
+
+  var DatePicker = function () {
+    function DatePicker(el, params) {
+      _classCallCheck(this, DatePicker);
+
+      this.el = el;
+      this.$el = $(document.createElement('div'));
+      //Append calendar after input elemnt
+      this.el.after(this.$el);
+
+      //default params
+      this.dateChangeHandle = params.dateChange;
+      this.params = $.extend({
+        type: 'date', // || rangedate
+        startDate: moment(), //startDate
+        endDate: moment(), //endDate
+        locale: 'ru',
+        format: 'YYYY.MM.DD', //Display date format
+        delimiter: '-', // display visual delimiters for rangedate type picker
+        ranges: [], //defualt rasnges is empty
+        firstDayOfWeek: 1 //for rus weekday fix)
+      }, params);
+
+      moment.locale(this.params.locale);
+
+      //Current view date in calendar
+      this.viewStartDate = this.params.startDate;
+      this.viewEndDate = this.params.endDate;
+
+      //Selected date - view on top
+      this.dateStart = this.params.startDate.clone();
+      this.dateEnd = this.params.endDate.clone();
+
+      this.render.call(this);
+
+      this.initEvents();
+
+      this.setValue();
+
+      return this;
+    }
+    /**
+     * Set active date after click on day in calendar
+     * @param {Object} event jquery event
+     * @param {String} type  end or start date type
+     */
+
+
+    _createClass(DatePicker, [{
+      key: 'setActiveDate',
+      value: function setActiveDate(event) {
+        var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'start';
+
+        var el = event.currentTarget,
+            dayNum = parseInt(el.innerHTML, 10),
+            vd = type === 'start' ? this.viewStartDate : this.viewEndDate;
+
+        if (String(dayNum).length === 1) dayNum = '0' + dayNum;
+
+        var date = moment(vd.format('YYYY MM') + ' ' + dayNum);
+
+        if (type === 'start') {
+          if (date.isAfter(this.dateEnd, 'day') && this.params.type === 'rangedate') {
+            this.dateEnd = date;
+          } else {
+            this.dateStart = date;
+          }
+        } else {
+          if (date.isBefore(this.dateStart, 'day') && this.params.type === 'rangedate') {
+            this.dateStart = date;
+          } else {
+            this.dateEnd = date;
+          }
+        }
+        event.stopPropagation();
+        this.render();
+        this.setValue();
+      }
+      /**
+       * Set start date
+       * @param {Date} date Javascript date object or string date
+       */
+
+    }, {
+      key: 'setStartDate',
+      value: function setStartDate(date) {
+        this.viewStartDate = moment(date);
+        this.dateStart = moment(date);
+        this.render();
+      }
+      /**
+       * Set end date
+       * @param {Date} date Javascript date object or string date
+       */
+
+    }, {
+      key: 'setEndDate',
+      value: function setEndDate(date) {
+        this.viewEndDate = moment(date);
+        this.dateEnd = moment(date);
+        this.render();
+      }
+      /**
+       * Set next date by params
+       * @param  {Object} event    jQuery event
+       * @param  {String} calendar end or start type 
+       * @param  {String} dateType day or week or month or year
+       * @return {void}          
+       */
+
+    }, {
+      key: 'nextDate',
+      value: function nextDate(event) {
+        var calendar = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'start';
+        var dateType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'day';
+
+        if (calendar === 'start') {
+          var newDate = new Date(this.viewStartDate.add(1, dateType).format('YYYY MM DD'));
+          this.setStartDate(newDate);
+        } else {
+          var _newDate = new Date(this.viewEndDate.add(1, dateType).format('YYYY MM DD'));
+          this.setEndDate(_newDate);
+        }
+        event.stopPropagation();
+      }
+      /**
+       * Set prev date by params
+       * @param  {Object} event    jQuery event
+       * @param  {String} calendar end or start type 
+       * @param  {String} dateType day or week or month or year
+       * @return {void}          
+       */
+
+    }, {
+      key: 'prevDate',
+      value: function prevDate(event) {
+        var calendar = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'start';
+        var dateType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'day';
+
+        if (calendar === 'start') {
+          var newDate = new Date(this.viewStartDate.subtract(1, dateType).format('YYYY MM DD'));
+          this.setStartDate(newDate);
+        } else {
+          var _newDate2 = new Date(this.viewEndDate.subtract(1, dateType).format('YYYY MM DD'));
+          this.setEndDate(_newDate2);
+        }
+        event.stopPropagation();
+      }
+      /**
+       * Set active range date
+       * @param {Object} event jQuery event
+       */
+
+    }, {
+      key: 'setActiveRange',
+      value: function setActiveRange(event) {
+        var range = parseInt(event.currentTarget.getAttribute('data-range'), 10),
+            rangeParam = this.params.ranges[range];
+        if (rangeParam) {
+          this.dateStart = rangeParam.startDate;
+          this.viewStartDate = rangeParam.startDate;
+          this.dateEnd = rangeParam.endDate;
+          this.viewEndDate = rangeParam.endDate;
+          this.render();
+        }
+      }
+      /**
+       * Init all events
+       */
+
+    }, {
+      key: 'initEvents',
+      value: function initEvents() {
+        var _this = this;
+
+        this.$el.on('click', '.dt__calendar_start .dt__calendar_m_d', function (event) {
+          return _this.setActiveDate(event, 'start');
+        }).on('click', '.dt__calendar_end .dt__calendar_m_d', function (event) {
+          return _this.setActiveDate(event, 'end');
+        }).on('click', '.dt__start .dt__calendar_head_month .next', function (event) {
+          return _this.nextDate(event, 'start', 'month');
+        }).on('click', '.dt__start .dt__calendar_head_month .prev', function (event) {
+          return _this.prevDate(event, 'start', 'month');
+        }).on('click', '.dt__end .dt__calendar_head_month .next', function (event) {
+          return _this.nextDate(event, 'end', 'month');
+        }).on('click', '.dt__end .dt__calendar_head_month .prev', function (event) {
+          return _this.prevDate(event, 'end', 'month');
+        }).on('click', '.dt__start .dt__calendar_head_year .next', function (event) {
+          return _this.nextDate(event, 'start', 'year');
+        }).on('click', '.dt__start .dt__calendar_head_year .prev', function (event) {
+          return _this.prevDate(event, 'start', 'year');
+        }).on('click', '.dt__end .dt__calendar_head_year .next', function (event) {
+          return _this.nextDate(event, 'end', 'year');
+        }).on('click', '.dt__end .dt__calendar_head_year .prev', function (event) {
+          return _this.prevDate(event, 'end', 'year');
+        }).on('click', '.dt__rages_item', function (event) {
+          return _this.setActiveRange(event);
+        }).on('click', '.dt__wrapper', function (event) {
+          return false;
+        });
+
+        this.el.on('click', function (event) {
+          return event.stopPropagation();
+        }).on('focus', function (event) {
+          _this.showCalendar();
+          event.stopPropagation();
+        });
+
+        $(document).on('click', function (event) {
+          return _this.hideCalendar();
+        });
+      }
+    }, {
+      key: 'showCalendar',
+      value: function showCalendar() {
+        this.$el.addClass('show');
+      }
+    }, {
+      key: 'hideCalendar',
+      value: function hideCalendar() {
+        this.$el.removeClass('show');
+      }
+      /**
+       * Render month
+       * @param  {momentdate} date
+       * @param  {type} type start || end 
+       * @return {string}  html month template
+       */
+
+    }, {
+      key: 'renderMonth',
+      value: function renderMonth(date) {
+        var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'start';
+
+        var html = '',
+            daysInMonth = date.daysInMonth(),
+            sameDate = type === 'start' ? this.dateStart : this.dateEnd,
+            dayClass = '';
+
+        for (var i = 0; i < daysInMonth; i++) {
+          var forDate = moment(new Date(date.format('YYYY MM') + ' ' + (i + 1)));
+
+          if (forDate.isSame(this.dateStart, 'day')) {
+            dayClass = 'active';
+          } else if (forDate.isSame(this.dateEnd, 'day') && this.params.type === 'rangedate') {
+            dayClass = 'active';
+          } else {
+            dayClass = '';
+          }
+
+          //Add class for between dates
+          if (this.params.type === 'rangedate' && forDate.isAfter(this.dateStart, 'day') && forDate.isBefore(this.dateEnd, 'day')) {
+            dayClass += 'between';
+          }
+          html += '<div class="dt__calendar_m_d ' + dayClass + '">' + (i + 1) + '</div>';
+        };
+
+        return html;
+      }
+    }, {
+      key: 'renderCalendar',
+      value: function renderCalendar(date) {
+        var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'start';
+
+        var html = '',
+            navClass = type,
+            selectDate = type === 'start' ? this.dateStart : this.dateEnd,
+            weekShortDays = moment.weekdaysShort(),
+            firstDayOfWeek = date.clone().startOf('month').weekday();
+
+        //FIXME грязный хак для русских) если кто-то найдет вариант элегантнее и быстрее по cpu. Буду рад поправить) 
+        if (this.params.firstDayOfWeek === 1) {
+          weekShortDays = ['一', '二', '三', '四', '五', '六', '七'];
+          //Su Mo Tu We Th FrSa
+        }
+
+        html += '<div class="dt__calendar dt__' + type + '">';
+        html += '<div class="dt__calendar_head">';
+        html += '<div class="dt__calendar_head_wday">' + selectDate.format('dddd') + '</div>';
+        html += '<div class="dt__calendar_head_month"><span class="prev"><</span>' + selectDate.format('MMMM') + '<span class="next">></span></div>';
+        html += '<div class="dt__calendar_head_day">' + selectDate.format('D') + '</div>';
+        html += '<div class="dt__calendar_head_year"><span class="prev"><</span>' + selectDate.format('Y') + '<span class="next">></span></div>';
+        html += '</div>';
+        html += '<div class="dt__calendar_nav">';
+        html += '<div class="dt__calendar_nav_title">' + date.format('MMM YYYY') + '</div>';
+        html += '</div>';
+
+        html += '<div class="dt__calendar_' + navClass + '"><div class="dt__calendar_m">';
+        html += '<div class="dt__calendar_m_w">';
+        for (var wi = 0; wi < weekShortDays.length; wi++) {
+          html += '<div class="dt__calendar_m_w_n">' + weekShortDays[wi] + '</div>';
+        };
+        html += '</div>';
+
+        for (var fi = 0; fi < firstDayOfWeek; fi++) {
+          html += '<div class="dt__calendar_m_d_e"></div>';
+        };
+
+        html += this.renderMonth(date, type);
+
+        html += '</div></div>';
+        html += '</div>';
+
+        return html;
+      }
+      /**
+       * Render selector date ranges
+       * @return {html} template rangesitem
+       */
+
+    }, {
+      key: 'renderRanges',
+      value: function renderRanges() {
+        var html = '',
+            ranges = this.params.ranges;
+
+        html += '<div class="dt__rages">';
+        for (var i = 0, l = ranges.length; i < l; i++) {
+          html += '<div class="dt__rages_item" data-range="' + i + '"">' + ranges[i].label + '</div>';
+        }
+        html += '</div>';
+        return html;
+      }
+      /**
+       * Render calendar
+       * @return {String} html template
+       */
+
+    }, {
+      key: 'render',
+      value: function render() {
+        var html = '';
+
+        html += '<div class="dt__wrapper">';
+
+        html += this.renderCalendar(this.viewStartDate, 'start');
+
+        if (this.params.type === 'rangedate') {
+          html += this.renderCalendar(this.viewEndDate, 'end');
+
+          if (this.params.ranges.length) {
+            html += this.renderRanges();
+          }
+        }
+
+        html += '</div>';
+        this.$el.html(html);
+
+        //afer render
+        this.onAfterRender();
+      }
+      /**
+       * Set input value
+       */
+
+    }, {
+      key: 'setValue',
+      value: function setValue() {
+        if (this.params.type === 'date') {
+          this.el.val(this.dateStart.format(this.params.format));
+        } else {
+          //range with delimiter
+          this.dateChangeHandle(this.dateStart.format(this.params.format), this.dateEnd.format(this.params.format));
+          this.el.val(this.dateStart.format(this.params.format) + this.params.delimiter + this.dateEnd.format(this.params.format));
+        }
+      }
+    }, {
+      key: 'onAfterRender',
+      value: function onAfterRender() {
+        this.$el.addClass('dt');
+        if (this.params.type == 'rangedate') {
+          this.$el.find('.dt__wrapper').addClass('rangedate');
+        }
+      }
+    }]);
+
+    return DatePicker;
+  }();
+
+  //Register for jQuery Plgin
+
+
+  if (window.jQuery) {
+    //Small warpper for jQuery plugin support
+    jQuery.fn.DatePicker = function (params) {
+      //this === inited plugin element
+      return new DatePicker(this, params);
+    };
+  }
+
+  //Register for requirejs
+  if (true) {
+    !(__WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+      return DatePicker;
+    }).call(exports, __webpack_require__, exports, module),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  }
+})();
+Date.getBeforeDate = function (n) {
+  var n = n;
+  var d = new Date();
+  var year = d.getFullYear();
+  var mon = d.getMonth() + 1;
+  var day = d.getDate();
+  if (day <= n) {
+    if (mon > 1) {
+      mon = mon - 1;
+    } else {
+      year = year - 1;
+      mon = 12;
+    }
+  }
+  d.setDate(d.getDate() - n);
+  year = d.getFullYear();
+  mon = d.getMonth() + 1;
+  day = d.getDate();
+  var s = year + "-" + (mon < 10 ? '0' + mon : mon) + "-" + (day < 10 ? '0' + day : day);
+  return s;
+};
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -647,7 +1095,7 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports) {
 
 (function(self) {
@@ -1119,19 +1567,19 @@ exports.default = function () {
 
 
 /***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
 /* 12 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1170,7 +1618,7 @@ exports.default = function () {
     */
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1268,7 +1716,7 @@ exports.default = function (tokenObj) {
 };
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1278,13 +1726,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _regenerator = __webpack_require__(15);
+var _regenerator = __webpack_require__(5);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
 var _fetchApi = __webpack_require__(0);
 
-var _studentWritework = __webpack_require__(18);
+var _studentWritework = __webpack_require__(19);
 
 var _studentWritework2 = _interopRequireDefault(_studentWritework);
 
@@ -1566,14 +2014,7 @@ exports.default = function (tokenObj, studentRoute) {
 };
 
 /***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(16);
-
-
-/***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -1598,7 +2039,7 @@ var oldRuntime = hadRuntime && g.regeneratorRuntime;
 // Force reevalutation of runtime.js.
 g.regeneratorRuntime = undefined;
 
-module.exports = __webpack_require__(17);
+module.exports = __webpack_require__(18);
 
 if (hadRuntime) {
   // Restore the original runtime.
@@ -1614,7 +2055,7 @@ if (hadRuntime) {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 /**
@@ -2347,7 +2788,7 @@ if (hadRuntime) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2363,20 +2804,35 @@ var firDO = true; /*
                    * @Author: liruihao02
                    * @Date:   2018-04-13
                    * @Last Modified by:   liruihao02
-                   * @Last Modified time: 2018-04-13
+                   * @Last Modified time: 2018-04-14
                    */
 
 
 var submitworkHandle = function submitworkHandle() {
   var workInfo = Object.assign({}, WritingWork.typeToken, {
     title: $('.student-worktitle-value').val(),
-    work: WritingWork.ue.getContent()
+    work: WritingWork.ue.getContent(),
+    zip: ''
   });
-  (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/submitwork', workInfo).then(function (result) {
-    if (result === '0') {
-      alert('提交失败');
-    } else if (result === '1') {
-      alert('提交成功');
+  var myformData = new FormData();
+  for (var name in workInfo) {
+    myformData.append(name, workInfo[name]);
+  }
+  $.ajax({
+    url: 'http://222.24.63.100:9138/cms/submitwork',
+    data: myformData,
+    type: 'POST',
+    cache: false,
+    async: true,
+    processData: false,
+    contentType: false,
+    success: function success(result) {
+      if (result === '0') {
+        alert('提交失败');
+      } else if (result === '1') {
+        alert('提交成功');
+        undefined.viewBack();
+      }
     }
   });
   console.log(workInfo);
@@ -2412,7 +2868,7 @@ exports.default = function (typeToken) {
 };
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2422,31 +2878,137 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _regenerator = __webpack_require__(5);
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 var _fetchApi = __webpack_require__(0);
 
-var firDO = true; /*
-                   * @Author: liruihao02
-                   * @Date:   2018-04-13
-                   * @Last Modified by:   liruihao02
-                   * @Last Modified time: 2018-04-13
-                   */
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Author: liruihao02
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Date:   2018-04-13
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified by:   liruihao02
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-04-14
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            */
+
+
+var firDO = true;
 
 var WritingWork = {
-  init: function init(typeToken) {
+  init: function init(tokenObj) {
     if (firDO) {
       firDO = !firDO;
     } else {
       return;
     }
-    this.typeToken = typeToken;
-    this.bindHandle();
+    this.tokenObj = tokenObj;
+    this.initDate();
+    this.defaultSearch();
+    this.startDate = Date.getBeforeDate(7);
+    this.endDate = Date.getBeforeDate(0);
   },
-  bindHandle: function bindHandle() {}
+  initDate: function initDate() {
+    $('#rangedate').DatePicker({
+      type: 'rangedate',
+      startDate: moment().subtract(1, 'week'),
+      endDate: moment(),
+      dateChange: function dateChange(startDate, endDate) {
+        // console.log(startDate, endDate);
+      }
+    });
+  },
+  getWork: function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee(typeId) {
+      var workToken;
+      return _regenerator2.default.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              workToken = Object.assign({}, this.tokenObj, {
+                typeid: typeId,
+                datefrom: this.startDate,
+                dateto: this.endDate
+              });
+
+              console.log(workToken);
+              _context.next = 4;
+              return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/searchmywork', workToken).then(function (workdata) {
+                console.log(workdata);
+              });
+
+            case 4:
+              return _context.abrupt('return', _context.sent);
+
+            case 5:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    }));
+
+    function getWork(_x) {
+      return _ref.apply(this, arguments);
+    }
+
+    return getWork;
+  }(),
+  defaultSearch: function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
+      var _this = this;
+
+      return _regenerator2.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/searchmycourse', this.tokenObj).then(function (courseData) {
+                var courseTemp = courseData.split('`');
+                _this.courtokenObj = Object.assign({}, _this.tokenObj, {
+                  courseid: courseTemp[0]
+                });
+                _this.viewData = {
+                  courseName: courseTemp[1],
+                  isShare: courseTemp[2],
+                  types: [],
+                  works: []
+                };
+              });
+
+            case 2:
+              _context2.next = 4;
+              return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworktype', this.courtokenObj).then(function (typeData) {
+                var typeTemp = typeData.split('`');
+                for (var i = 0; i < typeTemp.length; i = i + 2) {
+                  console.log(typeTemp[i]);
+                  _this.getWork(typeTemp[i]);
+                  _this.viewData.types.push({
+                    typeId: typeTemp[i],
+                    typeName: typeTemp[i + 1]
+                  });
+                }
+              });
+
+            case 4:
+            case 'end':
+              return _context2.stop();
+          }
+        }
+      }, _callee2, this);
+    }));
+
+    function defaultSearch() {
+      return _ref2.apply(this, arguments);
+    }
+
+    return defaultSearch;
+  }()
 };
 
-exports.default = function (typeToken) {
-  WritingWork.init(typeToken);
+exports.default = function (tokenObj) {
+  WritingWork.init(tokenObj);
 };
 
 /***/ })

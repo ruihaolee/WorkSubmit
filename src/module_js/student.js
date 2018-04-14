@@ -35,7 +35,7 @@ const LeftContainer = {
         break;
       case 'works':
         Student.studentRoute.changeRoute('works');
-        studentWorkInfor();
+        studentWorkInfor(tokenObj, Student.studentRoute);
         break;
       default:
         break;

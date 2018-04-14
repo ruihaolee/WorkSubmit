@@ -2,7 +2,7 @@
  * @Author: liruihao02
  * @Date:   2018-04-13
  * @Last Modified by:   liruihao02
- * @Last Modified time: 2018-04-13
+ * @Last Modified time: 2018-04-14
  */
 import {
   fetchAPI
@@ -13,16 +13,30 @@ let firDO = true;
 const submitworkHandle = () => {
   const workInfo = Object.assign({}, WritingWork.typeToken, {
     title: $('.student-worktitle-value').val(),
-    work: WritingWork.ue.getContent()
+    work: WritingWork.ue.getContent(),
+    zip: ''
   });
-  fetchAPI('http://222.24.63.100:9138/cms/submitwork', workInfo)
-    .then(result => {
+  const myformData = new FormData();
+  for (let name in workInfo) {
+    myformData.append(name, workInfo[name]);
+  }
+  $.ajax({
+    url: 'http://222.24.63.100:9138/cms/submitwork',
+    data: myformData,
+    type: 'POST',
+    cache: false,
+    async: true,
+    processData: false,
+    contentType: false,
+    success: result => {
       if (result === '0') {
         alert('提交失败');
       } else if (result === '1') {
         alert('提交成功');
+        this.viewBack();
       }
-    })
+    }
+  });
   console.log(workInfo);
 }
 

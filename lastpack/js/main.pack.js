@@ -2804,7 +2804,7 @@ var firDO = true; /*
                    * @Author: liruihao02
                    * @Date:   2018-04-13
                    * @Last Modified by:   liruihao02
-                   * @Last Modified time: 2018-04-14
+                   * @Last Modified time: 2018-04-15
                    */
 
 
@@ -2831,7 +2831,7 @@ var submitworkHandle = function submitworkHandle() {
         alert('提交失败');
       } else if (result === '1') {
         alert('提交成功');
-        undefined.viewBack();
+        WritingWork.viewBack();
       }
     }
   });
@@ -2898,34 +2898,43 @@ var firDO = true;
 
 var setView = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee(viewData) {
-    var i;
+    var totalWorksArr, i, worksHTMLArr, worksHTML;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            totalWorksArr = [];
             i = 0;
 
-          case 1:
+          case 2:
             if (!(i < viewData.works.length)) {
-              _context.next = 10;
+              _context.next = 11;
               break;
             }
 
-            _context.t0 = console;
-            _context.next = 5;
+            _context.t0 = totalWorksArr;
+            _context.next = 6;
             return viewData.works[i];
 
-          case 5:
+          case 6:
             _context.t1 = _context.sent;
+            totalWorksArr = _context.t0.concat.call(_context.t0, _context.t1);
 
-            _context.t0.log.call(_context.t0, _context.t1);
-
-          case 7:
+          case 8:
             i++;
-            _context.next = 1;
+            _context.next = 2;
             break;
 
-          case 10:
+          case 11:
+            worksHTMLArr = totalWorksArr.map(function (work) {
+              return '\n      <tr class="list-table-row">\n        <td>' + work.title + '</td>\n        <td>' + work.workid + '</td>\n        <td>' + work.typename + '</td>\n        <td>' + work.time + '</td>\n        <td>' + work.size + '</td>\n        <td>' + (work.level === ' ' ? '暂无批阅' : work.level) + '</td>\n        <td>\n          <span class=\'list-table-studeletework\' workid=' + work.workid + '>\u5220\u9664</span>\n        </td>\n      </tr>\n    ';
+            });
+            worksHTML = worksHTMLArr.join('');
+
+            $('.student-works-list').html(worksHTML);
+            $('.student-works-coursname').html(viewData.courseName);
+
+          case 15:
           case 'end':
             return _context.stop();
         }
@@ -2940,24 +2949,29 @@ var setView = function () {
 
 var WritingWork = {
   init: function init(tokenObj) {
+    this.tokenObj = tokenObj;
+    // this.defaultSearch();
+    this.initDate();
+    this.startDate = Date.getBeforeDate(7);
+    this.endDate = Date.getBeforeDate(0);
     if (firDO) {
+      this.bindHandle();
       firDO = !firDO;
     } else {
       return;
     }
-    this.tokenObj = tokenObj;
-    this.initDate();
-    this.defaultSearch();
-    this.startDate = Date.getBeforeDate(7);
-    this.endDate = Date.getBeforeDate(0);
   },
   initDate: function initDate() {
+    var _this = this;
+
     $('#rangedate').DatePicker({
       type: 'rangedate',
       startDate: moment().subtract(1, 'week'),
       endDate: moment(),
       dateChange: function dateChange(startDate, endDate) {
-        // console.log(startDate, endDate);
+        _this.startDate = startDate.replace(/\./g, '-');
+        _this.endDate = endDate.replace(/\./g, '-');
+        _this.defaultSearch();
       }
     });
   },
@@ -3012,7 +3026,7 @@ var WritingWork = {
   }(),
   defaultSearch: function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee3() {
-      var _this = this;
+      var _this2 = this;
 
       return _regenerator2.default.wrap(function _callee3$(_context3) {
         while (1) {
@@ -3021,10 +3035,10 @@ var WritingWork = {
               _context3.next = 2;
               return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/searchmycourse', this.tokenObj).then(function (courseData) {
                 var courseTemp = courseData.split('`');
-                _this.courtokenObj = Object.assign({}, _this.tokenObj, {
+                _this2.courtokenObj = Object.assign({}, _this2.tokenObj, {
                   courseid: courseTemp[0]
                 });
-                _this.viewData = {
+                _this2.viewData = {
                   courseName: courseTemp[1],
                   isShare: courseTemp[2],
                   works: []
@@ -3036,8 +3050,8 @@ var WritingWork = {
               return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworktype', this.courtokenObj).then(function (typeData) {
                 var typeTemp = typeData.split('`');
                 for (var i = 0; i < typeTemp.length; i = i + 2) {
-                  var work = _this.getWork(typeTemp[i], typeTemp[i + 1]);
-                  _this.viewData.works.push(work);
+                  var work = _this2.getWork(typeTemp[i], typeTemp[i + 1]);
+                  _this2.viewData.works.push(work);
                 }
               });
 
@@ -3057,7 +3071,34 @@ var WritingWork = {
     }
 
     return defaultSearch;
-  }()
+  }(),
+  deleteWork: function deleteWork(workid) {
+    var _this3 = this;
+
+    var workToken = Object.assign({}, this.tokenObj, {
+      workid: workid
+    });
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/delwork', workToken).then(function (result) {
+      console.log(result);
+      if (result === '0') {
+        alert('删除失败');
+      } else if (result === '-1') {
+        alert('删除成功');
+        _this3.defaultSearch();
+      }
+    });
+    console.log(workToken);
+  },
+  bindHandle: function bindHandle() {
+    var _this4 = this;
+
+    $('.student-works-list').bind('click', function (event) {
+      var target = event.target || event.srcElement;
+      if (target.className === 'list-table-studeletework') {
+        _this4.deleteWork($(target).attr('workid'));
+      } else if (true) {}
+    });
+  }
 };
 
 exports.default = function (tokenObj) {

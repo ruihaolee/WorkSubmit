@@ -11,31 +11,53 @@ import {
 let firDO = true;
 
 const setView = async viewData => {
+  let totalWorksArr = [];
   for (let i = 0; i < viewData.works.length; i++) {
-    console.log(await viewData.works[i]);
+    totalWorksArr = totalWorksArr.concat(await viewData.works[i]);
   }
+  const worksHTMLArr = totalWorksArr.map(work => {
+    return `
+      <tr class="list-table-row">
+        <td>${work.title}</td>
+        <td>${work.workid}</td>
+        <td>${work.typename}</td>
+        <td>${work.time}</td>
+        <td>${work.size}</td>
+        <td>${work.level === ' ' ? '暂无批阅' : work.level}</td>
+        <td>
+          <span class='list-table-studeletework' workid=${work.workid}>删除</span>
+        </td>
+      </tr>
+    `
+  });
+  const worksHTML = worksHTMLArr.join('');
+  $('.student-works-list').html(worksHTML);
+  $('.student-works-coursname').html(viewData.courseName);
 }
 
 const WritingWork = {
   init: function(tokenObj) {
+    this.tokenObj = tokenObj;
+    // this.defaultSearch();
+    this.initDate();
+    this.startDate = Date.getBeforeDate(7);
+    this.endDate = Date.getBeforeDate(0);
     if (firDO) {
+      this.bindHandle();
       firDO = !firDO;
     } else {
       return;
     }
-    this.tokenObj = tokenObj;
-    this.initDate();
-    this.defaultSearch();
-    this.startDate = Date.getBeforeDate(7);
-    this.endDate = Date.getBeforeDate(0);
   },
   initDate: function() {
     $('#rangedate').DatePicker({
       type: 'rangedate',
       startDate: moment().subtract(1, 'week'),
       endDate: moment(),
-      dateChange: function(startDate, endDate) {
-        // console.log(startDate, endDate);
+      dateChange: (startDate, endDate) => {
+        this.startDate = startDate.replace(/\./g, '-');
+        this.endDate = endDate.replace(/\./g, '-');
+        this.defaultSearch();
       }
     });
   },
@@ -88,6 +110,30 @@ const WritingWork = {
         }
       });
     setView(this.viewData);
+  },
+  deleteWork: function(workid) {
+    const workToken = Object.assign({}, this.tokenObj, {
+      workid: workid
+    });
+    fetchAPI('http://222.24.63.100:9138/cms/delwork', workToken)
+      .then(result => {
+        console.log(result);
+        if (result === '0') {
+          alert('删除失败');
+        } else if (result === '-1') {
+          alert('删除成功');
+          this.defaultSearch();
+        }
+      })
+    console.log(workToken);
+  },
+  bindHandle: function() {
+    $('.student-works-list').bind('click', event => {
+      const target = event.target || event.srcElement;
+      if (target.className === 'list-table-studeletework') {
+        this.deleteWork($(target).attr('workid'));
+      } else if (true) {}
+    })
   }
 }
 

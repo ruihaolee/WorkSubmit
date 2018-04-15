@@ -2,7 +2,7 @@
  * @Author: liruihao02
  * @Date:   2018-04-13
  * @Last Modified by:   liruihao02
- * @Last Modified time: 2018-04-14
+ * @Last Modified time: 2018-04-15
  */
 import {
   fetchAPI
@@ -33,7 +33,7 @@ const submitworkHandle = () => {
         alert('提交失败');
       } else if (result === '1') {
         alert('提交成功');
-        this.viewBack();
+        WritingWork.viewBack();
       }
     }
   });

@@ -2,13 +2,19 @@
  * @Author: liruihao02
  * @Date:   2018-04-13
  * @Last Modified by:   liruihao02
- * @Last Modified time: 2018-04-14
+ * @Last Modified time: 2018-04-15
  */
 import {
   fetchAPI
 } from '../pub_funcs/fetchApi.js';
 
 let firDO = true;
+
+const setView = async viewData => {
+  for (let i = 0; i < viewData.works.length; i++) {
+    console.log(await viewData.works[i]);
+  }
+}
 
 const WritingWork = {
   init: function(tokenObj) {
@@ -33,16 +39,30 @@ const WritingWork = {
       }
     });
   },
-  getWork: async function(typeId) {
+  getWork: async function(typeId, typeName) {
     const workToken = Object.assign({}, this.tokenObj, {
       typeid: typeId,
       datefrom: this.startDate,
       dateto: this.endDate
     });
-    console.log(workToken);
     return await fetchAPI('http://222.24.63.100:9138/cms/searchmywork', workToken)
-      .then((workdata) => {
-        console.log(workdata);
+      .then(workdata => {
+        let workArr = [];
+        const workdataTemp = workdata.split('`');
+        workdataTemp.pop();
+        for (let i = 0; i < workdataTemp.length; i = i + 6) {
+          const work = {
+            workid: workdataTemp[i],
+            time: workdataTemp[i + 1],
+            typeid: workdataTemp[i + 2],
+            title: workdataTemp[i + 3],
+            size: workdataTemp[i + 4],
+            level: workdataTemp[i + 5],
+            typename: typeName
+          }
+          workArr.push(work);
+        }
+        return workArr;
       })
   },
   defaultSearch: async function() {
@@ -56,7 +76,6 @@ const WritingWork = {
         this.viewData = {
           courseName: courseTemp[1],
           isShare: courseTemp[2],
-          types: [],
           works: []
         };
       });
@@ -64,14 +83,11 @@ const WritingWork = {
       .then(typeData => {
         const typeTemp = typeData.split('`');
         for (let i = 0; i < typeTemp.length; i = i + 2) {
-          console.log(typeTemp[i]);
-          this.getWork(typeTemp[i]);
-          this.viewData.types.push({
-            typeId: typeTemp[i],
-            typeName: typeTemp[i + 1]
-          });
+          const work = this.getWork(typeTemp[i], typeTemp[i + 1]);
+          this.viewData.works.push(work);
         }
       });
+    setView(this.viewData);
   }
 }
 

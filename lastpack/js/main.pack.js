@@ -2890,11 +2890,53 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Author: liruihao02
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Date:   2018-04-13
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Last Modified by:   liruihao02
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-04-14
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-04-15
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             */
 
 
 var firDO = true;
+
+var setView = function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee(viewData) {
+    var i;
+    return _regenerator2.default.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            i = 0;
+
+          case 1:
+            if (!(i < viewData.works.length)) {
+              _context.next = 10;
+              break;
+            }
+
+            _context.t0 = console;
+            _context.next = 5;
+            return viewData.works[i];
+
+          case 5:
+            _context.t1 = _context.sent;
+
+            _context.t0.log.call(_context.t0, _context.t1);
+
+          case 7:
+            i++;
+            _context.next = 1;
+            break;
+
+          case 10:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, undefined);
+  }));
+
+  return function setView(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
 
 var WritingWork = {
   init: function init(tokenObj) {
@@ -2920,76 +2962,39 @@ var WritingWork = {
     });
   },
   getWork: function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee(typeId) {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2(typeId, typeName) {
       var workToken;
-      return _regenerator2.default.wrap(function _callee$(_context) {
+      return _regenerator2.default.wrap(function _callee2$(_context2) {
         while (1) {
-          switch (_context.prev = _context.next) {
+          switch (_context2.prev = _context2.next) {
             case 0:
               workToken = Object.assign({}, this.tokenObj, {
                 typeid: typeId,
                 datefrom: this.startDate,
                 dateto: this.endDate
               });
-
-              console.log(workToken);
-              _context.next = 4;
+              _context2.next = 3;
               return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/searchmywork', workToken).then(function (workdata) {
-                console.log(workdata);
-              });
-
-            case 4:
-              return _context.abrupt('return', _context.sent);
-
-            case 5:
-            case 'end':
-              return _context.stop();
-          }
-        }
-      }, _callee, this);
-    }));
-
-    function getWork(_x) {
-      return _ref.apply(this, arguments);
-    }
-
-    return getWork;
-  }(),
-  defaultSearch: function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
-      var _this = this;
-
-      return _regenerator2.default.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.next = 2;
-              return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/searchmycourse', this.tokenObj).then(function (courseData) {
-                var courseTemp = courseData.split('`');
-                _this.courtokenObj = Object.assign({}, _this.tokenObj, {
-                  courseid: courseTemp[0]
-                });
-                _this.viewData = {
-                  courseName: courseTemp[1],
-                  isShare: courseTemp[2],
-                  types: [],
-                  works: []
-                };
-              });
-
-            case 2:
-              _context2.next = 4;
-              return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworktype', this.courtokenObj).then(function (typeData) {
-                var typeTemp = typeData.split('`');
-                for (var i = 0; i < typeTemp.length; i = i + 2) {
-                  console.log(typeTemp[i]);
-                  _this.getWork(typeTemp[i]);
-                  _this.viewData.types.push({
-                    typeId: typeTemp[i],
-                    typeName: typeTemp[i + 1]
-                  });
+                var workArr = [];
+                var workdataTemp = workdata.split('`');
+                workdataTemp.pop();
+                for (var i = 0; i < workdataTemp.length; i = i + 6) {
+                  var work = {
+                    workid: workdataTemp[i],
+                    time: workdataTemp[i + 1],
+                    typeid: workdataTemp[i + 2],
+                    title: workdataTemp[i + 3],
+                    size: workdataTemp[i + 4],
+                    level: workdataTemp[i + 5],
+                    typename: typeName
+                  };
+                  workArr.push(work);
                 }
+                return workArr;
               });
+
+            case 3:
+              return _context2.abrupt('return', _context2.sent);
 
             case 4:
             case 'end':
@@ -2999,8 +3004,56 @@ var WritingWork = {
       }, _callee2, this);
     }));
 
-    function defaultSearch() {
+    function getWork(_x2, _x3) {
       return _ref2.apply(this, arguments);
+    }
+
+    return getWork;
+  }(),
+  defaultSearch: function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee3() {
+      var _this = this;
+
+      return _regenerator2.default.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/searchmycourse', this.tokenObj).then(function (courseData) {
+                var courseTemp = courseData.split('`');
+                _this.courtokenObj = Object.assign({}, _this.tokenObj, {
+                  courseid: courseTemp[0]
+                });
+                _this.viewData = {
+                  courseName: courseTemp[1],
+                  isShare: courseTemp[2],
+                  works: []
+                };
+              });
+
+            case 2:
+              _context3.next = 4;
+              return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworktype', this.courtokenObj).then(function (typeData) {
+                var typeTemp = typeData.split('`');
+                for (var i = 0; i < typeTemp.length; i = i + 2) {
+                  var work = _this.getWork(typeTemp[i], typeTemp[i + 1]);
+                  _this.viewData.works.push(work);
+                }
+              });
+
+            case 4:
+              setView(this.viewData);
+
+            case 5:
+            case 'end':
+              return _context3.stop();
+          }
+        }
+      }, _callee3, this);
+    }));
+
+    function defaultSearch() {
+      return _ref3.apply(this, arguments);
     }
 
     return defaultSearch;

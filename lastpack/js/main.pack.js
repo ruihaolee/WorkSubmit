@@ -2927,7 +2927,7 @@ var setView = function () {
 
           case 11:
             worksHTMLArr = totalWorksArr.map(function (work) {
-              return '\n      <tr class="list-table-row">\n        <td>' + work.title + '</td>\n        <td>' + work.workid + '</td>\n        <td>' + work.typename + '</td>\n        <td>' + work.time + '</td>\n        <td>' + work.size + '</td>\n        <td>' + (work.level === ' ' ? '暂无批阅' : work.level) + '</td>\n        <td>\n          <span class=\'list-table-studeletework\' workid=' + work.workid + '>\u5220\u9664</span>\n        </td>\n      </tr>\n    ';
+              return '\n      <tr class="list-table-row student-work-row" workid=' + work.workid + '>\n        <td>' + work.title + '</td>\n        <td>' + work.workid + '</td>\n        <td>' + work.typename + '</td>\n        <td>' + work.time + '</td>\n        <td>' + work.size + '</td>\n        <td>' + (work.level === ' ' ? '暂无批阅' : work.level) + '</td>\n        <td>\n          <span class=\'list-table-studeletework\' workid=' + work.workid + '>\u5220\u9664</span>\n        </td>\n      </tr>\n    ';
             });
             worksHTML = worksHTMLArr.join('');
 
@@ -3095,8 +3095,15 @@ var WritingWork = {
     $('.student-works-list').bind('click', function (event) {
       var target = event.target || event.srcElement;
       if (target.className === 'list-table-studeletework') {
+        //删除
         _this4.deleteWork($(target).attr('workid'));
-      } else if (true) {}
+      } else {
+        //详情
+        var parentNode = target.parentNode;
+        var detailToken = Object.assign({}, _this4.tokenObj, {
+          workid: $(parentNode).attr('workid')
+        });
+      }
     });
   }
 };

@@ -17,7 +17,7 @@ const setView = async viewData => {
   }
   const worksHTMLArr = totalWorksArr.map(work => {
     return `
-      <tr class="list-table-row">
+      <tr class="list-table-row student-work-row" workid=${work.workid}>
         <td>${work.title}</td>
         <td>${work.workid}</td>
         <td>${work.typename}</td>
@@ -130,9 +130,14 @@ const WritingWork = {
   bindHandle: function() {
     $('.student-works-list').bind('click', event => {
       const target = event.target || event.srcElement;
-      if (target.className === 'list-table-studeletework') {
+      if (target.className === 'list-table-studeletework') { //删除
         this.deleteWork($(target).attr('workid'));
-      } else if (true) {}
+      } else { //详情
+        const parentNode = target.parentNode;
+        const detailToken = Object.assign({}, this.tokenObj, {
+          workid: $(parentNode).attr('workid')
+        });
+      }
     })
   }
 }

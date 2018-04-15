@@ -1,4 +1,5 @@
 import '../less/index.less';
+import '../pub_funcs/datePicker.js'
 import Router from '../pub_funcs/router.js';
 import {
   indexCheckFunc

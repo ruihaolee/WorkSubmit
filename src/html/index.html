@@ -8,6 +8,7 @@
     <meta name="author" content="李睿豪,liruihao@xiyou3g.com">
     <!-- 比如这个登录页面，你要引用这个页面编译后的css,参考下面的方式 -->
     <link rel="stylesheet" type="text/css" href="./css/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="./css/calendar.css">
     <link rel="stylesheet" type="text/css" href="./css/main.css">
     <link rel="stylesheet" type="text/css" href="./public/editormd/css/editormd.css">
 </head>
@@ -67,9 +68,9 @@
                 <i class='iconfont icon-similarproduct'></i>
                 <span>课程信息管理</span>
               </li>
-              <li class="menu-li" name='members'>
-                <i class='iconfont icon-category'></i>
-                <span>成员管理</span>
+              <li class="menu-li" name='works'>
+                <i class='iconfont icon-office'></i>
+                <span>作业信息管理</span>
               </li>
               <li class="menu-li" name="apps">
                 <i class='iconfont icon-category'></i>
@@ -151,7 +152,7 @@
                   <thead class="list-table-thead">
                     <tr>
                       <th>
-                        <span>年纪ID</span>
+                        <span>年级ID</span>
                       </th>
                       <th>
                         <span>班级ID</span>
@@ -170,7 +171,44 @@
               </div>
               <script id="editor-container" name="content" type="text/plain"></script>
             </div>
-            <div class="student-rightbox"></div>
+            <div class="student-rightbox student-workinfo">
+              <div class="rightbody-title">作业信息管理</div>
+                <div class="datepicker-content">
+                    <label for="rangedate">日期范围选择</label>
+                    <input type="text" placeholder="Date range picker" id="rangedate" readonly="readonly">
+                </div>
+                <div class="student-works-coursname"></div>
+                <div class="student-works-box">
+                  <table class="list-table">
+                    <thead class="list-table-thead">
+                      <tr>
+                        <th>
+                          <span>作业标题</span>
+                        </th>
+                        <th>
+                          <span>作业ID</span>
+                        </th>
+                        <th>
+                          <span>作业类型</span>
+                        </th>
+                        <th>
+                          <span>提交日期</span>
+                        </th>
+                        <th>
+                          <span>字节数</span>
+                        </th>
+                        <th>
+                          <span>批阅等级</span>
+                        </th>
+                        <th>
+                          <span>删除</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="list-table-tbody student-works-list"></tbody>
+                  </table>
+                </div>
+            </div>
             <div class="student-rightbox"></div>
         </div>
       </div>

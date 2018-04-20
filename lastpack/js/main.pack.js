@@ -184,7 +184,7 @@ var studentCheckFunc = {
     });
   },
   course: function course() {
-    console.log('course view');
+    // console.log('course view');
     $('.student-rightbox').css({
       display: 'none'
     });
@@ -205,6 +205,14 @@ var studentCheckFunc = {
       display: 'none'
     });
     $('.student-workinfo').css({
+      display: 'block'
+    });
+  },
+  workdetail: function workdetail() {
+    $('.student-rightbox').css({
+      display: 'none'
+    });
+    $('.student-workdetail').css({
       display: 'block'
     });
   }
@@ -506,6 +514,7 @@ var Student = function () {
       this.studentRoute.route('course', _routerView.studentCheckFunc.course);
       this.studentRoute.route('writework', _routerView.studentCheckFunc.writework);
       this.studentRoute.route('works', _routerView.studentCheckFunc.works);
+      this.studentRoute.route('workdetail', _routerView.studentCheckFunc.workdetail);
     }
   }, {
     key: 'routeBack',
@@ -2884,13 +2893,17 @@ var _regenerator2 = _interopRequireDefault(_regenerator);
 
 var _fetchApi = __webpack_require__(0);
 
+var _studentWorkdetail = __webpack_require__(21);
+
+var _studentWorkdetail2 = _interopRequireDefault(_studentWorkdetail);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /*
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Author: liruihao02
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Date:   2018-04-13
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Last Modified by:   liruihao02
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-04-15
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-04-16
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             */
 
 
@@ -2948,8 +2961,9 @@ var setView = function () {
 }();
 
 var WritingWork = {
-  init: function init(tokenObj) {
+  init: function init(tokenObj, studentRoute) {
     this.tokenObj = tokenObj;
+    this.studentRoute = studentRoute;
     // this.defaultSearch();
     this.initDate();
     this.startDate = Date.getBeforeDate(7);
@@ -3103,13 +3117,72 @@ var WritingWork = {
         var detailToken = Object.assign({}, _this4.tokenObj, {
           workid: $(parentNode).attr('workid')
         });
+        _this4.studentRoute.changeRoute('workdetail');
+        (0, _studentWorkdetail2.default)(detailToken);
+        console.log(detailToken);
       }
     });
   }
 };
 
-exports.default = function (tokenObj) {
-  WritingWork.init(tokenObj);
+exports.default = function (tokenObj, studentRoute) {
+  WritingWork.init(tokenObj, studentRoute);
+};
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _fetchApi = __webpack_require__(0);
+
+var firDO = true; /*
+                   * @Author: liruihao02
+                   * @Date:   2018-04-16
+                   * @Last Modified by:   liruihao02
+                   * @Last Modified time: 2018-04-16
+                   */
+
+var WorkDetail = {
+  init: function init(detailToken) {
+    // if (firDO) {
+    //   firDO = !firDO;
+    // } else {
+    //   return;
+    // }
+    this.detailToken = detailToken;
+    this.defaultWorkDetail();
+    this.bindHandle();
+  },
+  defaultWorkDetail: function defaultWorkDetail() {
+    var _this = this;
+
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworkdetail', this.detailToken).then(function (detail) {
+      var detailTemp = detail.split('`');
+      detailTemp.pop();
+      _this.workDetail = {
+        time: detailTemp[0],
+        typeid: detailTemp[1],
+        title: detailTemp[2],
+        body: detailTemp[3],
+        member: detailTemp[4] === 'null' ? '无' : detailTemp[4],
+        level: detailTemp[6] === ' ' ? '暂无' : detailTemp[6],
+        levelsay: detailTemp[7] === ' ' ? '暂无' : detailTemp[7]
+      };
+      console.log(detailTemp, _this.workDetail);
+    });
+  },
+  bindHandle: function bindHandle() {}
+};
+
+exports.default = function (detailToken) {
+  WorkDetail.init(detailToken);
 };
 
 /***/ })

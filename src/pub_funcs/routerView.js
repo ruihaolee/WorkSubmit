@@ -8,7 +8,7 @@ const studentCheckFunc = {
     });
   },
   course: () => {
-    console.log('course view');
+    // console.log('course view');
     $('.student-rightbox').css({
       display: 'none'
     });
@@ -29,6 +29,14 @@ const studentCheckFunc = {
       display: 'none'
     });
     $('.student-workinfo').css({
+      display: 'block'
+    });
+  },
+  workdetail: () => {
+    $('.student-rightbox').css({
+      display: 'none'
+    });
+    $('.student-workdetail').css({
       display: 'block'
     });
   }

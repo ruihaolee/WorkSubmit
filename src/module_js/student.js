@@ -72,6 +72,7 @@ export default class Student {
     this.studentRoute.route('course', studentCheckFunc.course);
     this.studentRoute.route('writework', studentCheckFunc.writework);
     this.studentRoute.route('works', studentCheckFunc.works);
+    this.studentRoute.route('workdetail', studentCheckFunc.workdetail);
   }
 
   static routeBack(tokenObj) {

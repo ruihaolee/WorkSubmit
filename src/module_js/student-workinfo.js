@@ -2,11 +2,12 @@
  * @Author: liruihao02
  * @Date:   2018-04-13
  * @Last Modified by:   liruihao02
- * @Last Modified time: 2018-04-15
+ * @Last Modified time: 2018-04-16
  */
 import {
   fetchAPI
 } from '../pub_funcs/fetchApi.js';
+import WorkDetail from './student-workdetail.js';
 
 let firDO = true;
 
@@ -36,8 +37,9 @@ const setView = async viewData => {
 }
 
 const WritingWork = {
-  init: function(tokenObj) {
+  init: function(tokenObj, studentRoute) {
     this.tokenObj = tokenObj;
+    this.studentRoute = studentRoute;
     // this.defaultSearch();
     this.initDate();
     this.startDate = Date.getBeforeDate(7);
@@ -130,18 +132,23 @@ const WritingWork = {
   bindHandle: function() {
     $('.student-works-list').bind('click', event => {
       const target = event.target || event.srcElement;
-      if (target.className === 'list-table-studeletework') { //删除
+      if (target.className === 'list-table-studeletework') {
+        //删除
         this.deleteWork($(target).attr('workid'));
-      } else { //详情
+      } else {
+        //详情
         const parentNode = target.parentNode;
         const detailToken = Object.assign({}, this.tokenObj, {
           workid: $(parentNode).attr('workid')
         });
+        this.studentRoute.changeRoute('workdetail');
+        WorkDetail(detailToken);
+        console.log(detailToken);
       }
     })
   }
 }
 
-export default (tokenObj) => {
-  WritingWork.init(tokenObj);
+export default (tokenObj, studentRoute) => {
+  WritingWork.init(tokenObj, studentRoute);
 }

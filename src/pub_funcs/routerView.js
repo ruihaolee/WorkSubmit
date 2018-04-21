@@ -42,6 +42,10 @@ const studentCheckFunc = {
   }
 }
 
+const teacherCheckFunc = {
+
+}
+
 const indexCheckFunc = {
   login: () => {
     $('.container-body').css({

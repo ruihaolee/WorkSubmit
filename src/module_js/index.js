@@ -6,6 +6,7 @@ import {
 } from '../pub_funcs/routerView.js';
 import Login from './login.js'
 import Student from './student.js'
+import Teacher from './teacher.js';
 
 const init = () => {
   if (!$.cookie('per')) {
@@ -21,6 +22,10 @@ const init = () => {
     Login.init();
   } else if ($.cookie('token') && $.cookie('per') === 'teacher') {
     indexRoute = new Router('teacher');
+    Teacher.init({
+      id: $.cookie('id'),
+      token: $.cookie('token')
+    });
   } else if ($.cookie('token') && $.cookie('per') === 'student') {
     indexRoute = new Router('student');
     Student.init({

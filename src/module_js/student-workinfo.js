@@ -2,7 +2,7 @@
  * @Author: liruihao02
  * @Date:   2018-04-13
  * @Last Modified by:   liruihao02
- * @Last Modified time: 2018-04-16
+ * @Last Modified time: 2018-04-21
  */
 import {
   fetchAPI
@@ -122,7 +122,7 @@ const WritingWork = {
         console.log(result);
         if (result === '0') {
           alert('删除失败');
-        } else if (result === '-1') {
+        } else if (result === '1') {
           alert('删除成功');
           this.defaultSearch();
         }

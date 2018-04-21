@@ -59,20 +59,20 @@
             <div class="admin-imgtext">Hello,Administrator</div>
           </div>
           <div class="admin-menu">
-            <ul class="menu-ul">
-              <li class="menu-li active-li" name='setting'>
+            <ul class="menu-ul student-menu-ul">
+              <li class="menu-li student-menu-li active-li" name='setting'>
                 <i class='iconfont icon-iconfontjixieqimo'></i>
                 <span>个人信息管理</span>
               </li>
-              <li class="menu-li" name='course'>
+              <li class="menu-li student-menu-li" name='course'>
                 <i class='iconfont icon-similarproduct'></i>
                 <span>课程信息管理</span>
               </li>
-              <li class="menu-li" name='works'>
+              <li class="menu-li student-menu-li" name='works'>
                 <i class='iconfont icon-office'></i>
                 <span>作业信息管理</span>
               </li>
-              <li class="menu-li" name='exitlogin'>
+              <li class="menu-li student-menu-li" name='exitlogin'>
                 <i class='iconfont icon-tuichu'></i>
                 <span>注销</span>
               </li>
@@ -209,20 +209,45 @@
                   <div class="workdetail-member">成员：无</div>
                   <div class="workdetail-submittime">提交日期：2018-04-20</div>
               </div>
-              <div class="workdetail-body">
-<h2 id="h2-u6DF1u62F7u8D1Du4E0Eu6D45u62F7u8D1D" style="margin: 1em 0px 16px; padding: 0px 0px 0.3em; font-size: 1.75em; box-sizing: border-box; line-height: 1.225; position: relative; border-bottom: 1px solid rgb(238, 238, 238); color: rgb(51, 51, 51); font-family: &quot;Microsoft YaHei&quot;, Helvetica, &quot;Meiryo UI&quot;, &quot;Malgun Gothic&quot;, &quot;Segoe UI&quot;, &quot;Trebuchet MS&quot;, Monaco, monospace, Tahoma, STXihei, åŽæ–‡ç»†é»‘, STHeiti, &quot;Helvetica Neue&quot;, &quot;Droid Sans&quot;, &quot;wenquanyi micro hei&quot;, FreeSans, Arimo, Arial, SimSun, å®‹ä½“, Heiti, é»‘ä½“, sans-serif; white-space: normal; background-color: rgb(255, 255, 255);">深拷贝与浅拷贝</h2><p style="margin-top: 0px; margin-bottom: 16px; padding: 0px; box-sizing: border-box; text-indent: 1em; line-height: 2em; color: rgb(51, 51, 51); font-family: &quot;Microsoft YaHei&quot;, Helvetica, &quot;Meiryo UI&quot;, &quot;Malgun Gothic&quot;, &quot;Segoe UI&quot;, &quot;Trebuchet MS&quot;, Monaco, monospace, Tahoma, STXihei, åŽæ–‡ç»†é»‘, STHeiti, &quot;Helvetica Neue&quot;, &quot;Droid Sans&quot;, &quot;wenquanyi micro hei&quot;, FreeSans, Arimo, Arial, SimSun, å®‹ä½“, Heiti, é»‘ä½“, sans-serif; white-space: normal; background-color: rgb(255, 255, 255);">在 JavaScript 中，对于基本数据类型（undefined、null、boolean、number、string）来说，在变量中存储的就是这个变量本身的值，复制是对<span style="font-weight: 700; box-sizing: border-box;">值的复制</span>，不存在深浅之说。但C系语言的共同特点中有，存储引用类型（对象），实际中在变量里存的是它的地址。因此对 JavaScript 中的复杂数据类型（object）来说，也会有浅拷贝和深拷贝的概念：<span style="font-weight: 700; box-sizing: border-box;">浅拷贝指两个不同的变量存的是同一个对象的地址，即两个变量指向同一块内存区域；深拷贝则是重新分配了一块内存区域来存储复制后的对象，两个变量存的是真正的两个互不影响的变量</span>。</p><p style="margin-top: 0px; margin-bottom: 16px; padding: 0px; box-sizing: border-box; text-indent: 1em; line-height: 2em; color: rgb(51, 51, 51); font-family: &quot;Microsoft YaHei&quot;, Helvetica, &quot;Meiryo UI&quot;, &quot;Malgun Gothic&quot;, &quot;Segoe UI&quot;, &quot;Trebuchet MS&quot;, Monaco, monospace, Tahoma, STXihei, åŽæ–‡ç»†é»‘, STHeiti, &quot;Helvetica Neue&quot;, &quot;Droid Sans&quot;, &quot;wenquanyi micro hei&quot;, FreeSans, Arimo, Arial, SimSun, å®‹ä½“, Heiti, é»‘ä½“, sans-serif; white-space: normal; background-color: rgb(255, 255, 255);">p.s. 有些资料认为<span style="font-weight: 700; box-sizing: border-box;">浅拷贝是重新分配内存，并把原对象中的各个属性进行依次复制而不进行递归复制属性值是对象的情况，也就是只复制对象的最外面一层</span>。本文将这种情况归于“<span style="font-weight: 700; box-sizing: border-box;">深拷贝和浅拷贝的中间情况</span>”，文中以“<span style="font-weight: 700; box-sizing: border-box;">是否划分新的内存</span>”为界限划分深浅拷贝，这种划分方式与 C/C++、C#、Java 等C系语言保持概念一致。</p><h2 id="h2--javascript-" style="margin: 1em 0px 16px; padding: 0px 0px 0.3em; font-size: 1.75em; box-sizing: border-box; line-height: 1.225; position: relative; border-bottom: 1px solid rgb(238, 238, 238); color: rgb(51, 51, 51); font-family: &quot;Microsoft YaHei&quot;, Helvetica, &quot;Meiryo UI&quot;, &quot;Malgun Gothic&quot;, &quot;Segoe UI&quot;, &quot;Trebuchet MS&quot;, Monaco, monospace, Tahoma, STXihei, åŽæ–‡ç»†é»‘, STHeiti, &quot;Helvetica Neue&quot;, &quot;Droid Sans&quot;, &quot;wenquanyi micro hei&quot;, FreeSans, Arimo, Arial, SimSun, å®‹ä½“, Heiti, é»‘ä½“, sans-serif; white-space: normal; background-color: rgb(255, 255, 255);">浅拷贝在JavaScript中的实现</h2><pre class="brush:js;toolbar:false">let&nbsp;objA&nbsp;=&nbsp;{&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;name:&nbsp;&#39;对象A&#39;,
-&nbsp;&nbsp;&nbsp;&nbsp;content:&nbsp;&#39;我是A&#39;
-};
-let&nbsp;copyA&nbsp;=&nbsp;objA;console.log(objA.name);&nbsp;&nbsp;
-//&nbsp;==&gt;&nbsp;&quot;对象A&quot;console.log(copyA.name);&nbsp;&nbsp;
-//&nbsp;==&gt;&nbsp;&quot;对象A&quot;</pre><p><br/></p>
-
-              </div>
+              <div class="workdetail-body"></div>
             </div>
         </div>
       </div>
       <div class="teacher container-body">
+        <div class="admin-leftbody">
+          <div class="admin-img">
+            <div class="admin-imgbox"><img src="./image/student.JPG"></div>
+            <div class="admin-imgtext">Hello,Administrator</div>
+          </div>
+          <div class="admin-menu">
+            <ul class="menu-ul teacher-menu-ul">
+              <li class="menu-li teacher-menu-li active-li" name='setting'>
+                <i class='iconfont icon-iconfontjixieqimo'></i>
+                <span>个人信息管理</span>
+              </li>
+              <li class="menu-li teacher-menu-li" name='courseyears'>
+                <i class='iconfont icon-similarproduct'></i>
+                <span>课程/年级信息管理</span>
+              </li>
+              <li class="menu-li teacher-menu-li" name='class'>
+                <i class='iconfont icon-office'></i>
+                <span>班级信息管理</span>
+              </li>
+              <li class="menu-li teacher-menu-li" name='students'>
+                <i class='iconfont icon-office'></i>
+                <span>学生信息管理</span>
+              </li>
+              <li class="menu-li teacher-menu-li" name='works'>
+                <i class='iconfont icon-office'></i>
+                <span>作业信息管理</span>
+              </li>
+              <li class="menu-li teacher-menu-li" name='exitlogin'>
+                <i class='iconfont icon-tuichu'></i>
+                <span>注销</span>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
   </div>
 </div>

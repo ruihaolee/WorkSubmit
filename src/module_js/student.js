@@ -12,8 +12,10 @@ import studentSetting from './student-setting.js';
 import studentCourse from './student-course.js';
 import studentWorkInfor from './student-workinfo.js';
 
+let TokenObj = null;
+
 const LeftContainer = {
-  menuClickHandle: function(event, tokenObj) {
+  menuClickHandle: function(event) {
     let target = event.target;
     if (!target.className.match('menu-li')) {
       target = this.findTargetli(target);
@@ -28,14 +30,15 @@ const LeftContainer = {
         break;
       case 'setting':
         Student.studentRoute.changeRoute('setting');
+        studentSetting(TokenObj);
         break;
       case 'course':
         Student.studentRoute.changeRoute('course');
-        studentCourse(tokenObj, Student.studentRoute);
+        studentCourse(TokenObj, Student.studentRoute);
         break;
       case 'works':
         Student.studentRoute.changeRoute('works');
-        studentWorkInfor(tokenObj, Student.studentRoute);
+        studentWorkInfor(TokenObj, Student.studentRoute);
         break;
       default:
         break;
@@ -50,19 +53,23 @@ const LeftContainer = {
   },
 
   changeActive: function(target) {
-    let liArr = $('.menu-li');
+    let liArr = $('.student-menu-li');
     for (let i = 0; i < liArr.length; i++) {
-      liArr[i].className = 'menu-li';
+      liArr[i].className = 'menu-li student-menu-li';
     }
-    target.className = 'menu-li active-li';
+    target.className = 'menu-li student-menu-li active-li';
   }
 }
 
 export default class Student {
   static init(tokenObj) {
-    this.bindHandle(tokenObj);
-    this.initRoute();
-    this.routeBack(tokenObj);
+    if (!TokenObj) {
+      this.bindHandle();
+      this.initRoute();
+    }
+    TokenObj = tokenObj;
+    this.routeBack();
+    console.log(TokenObj);
   }
 
   static initRoute() {
@@ -75,17 +82,17 @@ export default class Student {
     this.studentRoute.route('workdetail', studentCheckFunc.workdetail);
   }
 
-  static routeBack(tokenObj) {
-    const firLi = $('.menu-li').get(0);
+  static routeBack() {
+    const firLi = $('.student-menu-li').get(0);
     LeftContainer.changeActive(firLi);
 
     this.studentRoute.changeRoute('setting');
-    studentSetting(tokenObj);
+    studentSetting(TokenObj);
   }
 
-  static bindHandle(tokenObj) {
-    $('.menu-ul').bind('click', event => {
-      LeftContainer.menuClickHandle(event, tokenObj);
+  static bindHandle() {
+    $('.student-menu-ul').bind('click', event => {
+      LeftContainer.menuClickHandle(event);
     })
   }
 }

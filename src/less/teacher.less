@@ -1,0 +1,136 @@
+.container-rightbody {
+	// margin-left: 256px;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	padding-left: 256px;
+	>div {
+		width: 100%;
+		height: 100%;
+    display: none;
+	}
+}
+
+.teacher-rightbox {
+	.rightbody-title {
+		width: 100%;
+		height: 100px;
+		box-sizing: border-box;
+		padding: 25px 50px;
+		border-bottom: 1px solid #eee;
+		font-size: 28px;
+		color: #404040;
+	    font-weight: 500;
+	    line-height: 50px;
+	}
+}
+.teacher-setting-box {
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 50px 100px 0 100px;
+	position: relative;
+	.teacher-info-box {
+		width: 100%;
+		height: 100%;
+		.teacher-info-li {
+			// text-align: center;
+			font-size: 24px;
+			color: #404040;
+	    	font-weight: 500;
+	    	line-height: 50px;
+	    	span {
+	    		margin-left: 80px;
+	    	}
+	    	span:nth-child(1) {
+	    		color: #999;
+	    	}
+	    	span:nth-child(2) {
+	    		color: #404040;
+	    	}
+		}
+	}
+}
+.teach-info-button {
+	position: absolute;
+	top: 90px;
+	right: 300px;
+	width: 200px;
+	height: 50px;
+	border-radius: 5px;
+	text-align: center;
+	border: 1px solid;
+	border-color: rgba(27, 31, 35, 0.2);
+	background-color: #eff3f6;
+	cursor: pointer;
+	color: #24292e;
+	font-size: 15px;
+	font-weight: 600;
+	transition: all .5s;
+	img {
+		height: 30px;
+		padding: 10px 0;
+		display: inline-block;
+		float: left;
+		margin-left: 20px;
+	}
+	span {
+		display: inline-block;
+		height: 50px;
+		line-height: 50px;
+	}
+}
+.teach-info-button:hover {
+	background-color: #E7ECF1;
+}
+
+.teacher-change-info {
+    position: relative;
+    box-sizing: border-box;
+    padding: 0 170px;
+    margin-top: 50px;
+    display: none;
+    opacity: 0;
+	>div {
+    position: relative;
+    max-width: 500px;
+    margin-bottom: 30px;
+    label {
+      font-family: Microsoft YaHei;
+      font-size: 18px;
+      line-height: 40px;
+      display: inline-block;
+      color: #999;
+    }
+		input {
+			position: absolute;
+	    left: 80px;
+	    top: 0;
+	    min-width: 450px;
+	    height: 40px;
+	    border: 1px solid #ccc;
+	    border-radius: 5px;
+	    padding-left: 20px;
+      font-size: 18px;
+		}
+	}
+}
+
+.teach-change-button {
+  width: 200px !important;
+  height: 35px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: rgba(27, 31, 35, 0.2);
+  transition: all .5s;
+  line-height: 35px;
+  text-align: center;
+  color: #24292e;
+  font-size: 13px;
+  font-weight: 500;
+  left: 30%;
+}
+.teach-change-button:hover {
+  background-color: #6BC30D;
+  color: #fff;
+}

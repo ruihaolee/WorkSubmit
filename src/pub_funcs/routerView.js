@@ -43,7 +43,14 @@ const studentCheckFunc = {
 }
 
 const teacherCheckFunc = {
-
+  setting: () => {
+    $('.teacher-rightbox').css({
+      display: 'none'
+    });
+    $('.teacher-setting').css({
+      display: 'block'
+    });
+  }
 }
 
 const indexCheckFunc = {
@@ -75,5 +82,6 @@ const indexCheckFunc = {
 
 export {
   indexCheckFunc,
-  studentCheckFunc
+  studentCheckFunc,
+  teacherCheckFunc
 };

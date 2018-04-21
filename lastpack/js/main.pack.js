@@ -218,7 +218,16 @@ var studentCheckFunc = {
   }
 };
 
-var teacherCheckFunc = {};
+var teacherCheckFunc = {
+  setting: function setting() {
+    $('.teacher-rightbox').css({
+      display: 'none'
+    });
+    $('.teacher-setting').css({
+      display: 'block'
+    });
+  }
+};
 
 var indexCheckFunc = {
   login: function login() {
@@ -249,6 +258,7 @@ var indexCheckFunc = {
 
 exports.indexCheckFunc = indexCheckFunc;
 exports.studentCheckFunc = studentCheckFunc;
+exports.teacherCheckFunc = teacherCheckFunc;
 
 /***/ }),
 /* 3 */
@@ -648,6 +658,10 @@ var _fetchApi = __webpack_require__(0);
 
 var _routerView = __webpack_require__(2);
 
+var _teacherSetting = __webpack_require__(24);
+
+var _teacherSetting2 = _interopRequireDefault(_teacherSetting);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -669,6 +683,8 @@ var LeftContainer = {
         (0, _exitlogin2.default)();
         break;
       case 'setting':
+        Teacher.teacherRoute.changeRoute('setting');
+        (0, _teacherSetting2.default)(TokenObj);
         break;
       case 'courseyears':
         break;
@@ -699,12 +715,12 @@ var LeftContainer = {
   }
 };
 
-var Student = function () {
-  function Student() {
-    _classCallCheck(this, Student);
+var Teacher = function () {
+  function Teacher() {
+    _classCallCheck(this, Teacher);
   }
 
-  _createClass(Student, null, [{
+  _createClass(Teacher, null, [{
     key: 'init',
     value: function init(tokenObj) {
       if (!TokenObj) {
@@ -718,14 +734,18 @@ var Student = function () {
   }, {
     key: 'initRoute',
     value: function initRoute() {
-      this.studentRoute = new _router2.default('teacher');
-      this.studentRoute.init();
+      this.teacherRoute = new _router2.default('teacher');
+      this.teacherRoute.init();
+      this.teacherRoute.route('setting', _routerView.teacherCheckFunc.setting);
     }
   }, {
     key: 'routeBack',
     value: function routeBack() {
       var firLi = $('.teacher-menu-li').get(0);
       LeftContainer.changeActive(firLi);
+
+      Teacher.teacherRoute.changeRoute('setting');
+      (0, _teacherSetting2.default)(TokenObj);
     }
   }, {
     key: 'bindHandle',
@@ -737,10 +757,10 @@ var Student = function () {
     }
   }]);
 
-  return Student;
+  return Teacher;
 }();
 
-exports.default = Student;
+exports.default = Teacher;
 
 /***/ }),
 /* 9 */
@@ -1868,9 +1888,9 @@ var Setting = {
         };
       } else {
         return {
-          id: stuInfo.split(' ')[0],
-          class: stuInfo.split(' ')[1].split('`')[0],
-          name: stuInfo.split(' ')[1].split('`')[1]
+          id: _this.tokenObj.id,
+          class: stuInfo.split('`')[0],
+          name: stuInfo.split('`')[1]
         };
       }
     }).then(function (infoJson) {
@@ -3354,6 +3374,109 @@ exports.default = function (detailToken) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _fetchApi = __webpack_require__(0);
+
+var firDO = true; /*
+                   * @Author: liruihao02
+                   * @Date:   2018-04-21
+                   * @Last Modified by:   liruihao02
+                   * @Last Modified time: 2018-04-21
+                   */
+
+
+var eventHandle = {
+  infoClickHandle: function infoClickHandle() {
+    $('.teacher-change-info').css('display', 'block');
+    $('.teacher-change-info').animate({
+      opacity: '1'
+    }, 1000);
+  },
+  changeInfoClickHandle: function changeInfoClickHandle() {
+    var changeObj = {
+      name: $('.teach-change-name').find('input').val(),
+      oldpass: $('.teach-change-oldpass').find('input').val(),
+      newpass: $('.teach-change-newpass').find('input').val(),
+      id: Setting.tokenObj.id,
+      token: Setting.tokenObj.token
+    };
+
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/setprofile', changeObj).then(function (result) {
+      if (result === '1') {
+        Setting.getStudentInfo();
+        $('.teach-change-name').find('input').val('');
+        $('.teach-change-oldpass').find('input').val('');
+        $('.teach-change-newpass').find('input').val('');
+
+        alert('修改成功');
+      } else if (result === '0') {
+        alert('修改失败，请检查旧密码是否正确');
+      }
+    });
+  }
+};
+
+var Setting = {
+  init: function init(tokenObj) {
+    this.tokenObj = tokenObj;
+    if (firDO) {
+      firDO = !firDO;
+      this.bindHandle();
+    }
+    this.getStudentInfo();
+  },
+  bindHandle: function bindHandle() {
+    $('.teach-info-button').bind('click', function () {
+      eventHandle.infoClickHandle();
+    });
+    $('.teach-change-button').bind('click', function () {
+      eventHandle.changeInfoClickHandle();
+    });
+  },
+  getStudentInfo: function getStudentInfo() {
+    var _this = this;
+
+    //获取学生个人信息
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getprofile', this.tokenObj).then(function (teachInfo) {
+      // console.log(stuInfo);
+      if (teachInfo.toString().slice(0, 1) === '0') {
+        return {
+          id: '获取信息失败',
+          class: '获取信息失败',
+          name: '获取信息失败'
+        };
+      } else {
+        return {
+          id: _this.tokenObj.id,
+          class: teachInfo.split('`')[0],
+          name: teachInfo.split('`')[1] === 'null' ? '暂无,请修改' : teachInfo.split('`')[1]
+        };
+      }
+    }).then(function (infoJson) {
+      _this.setData(infoJson);
+    });
+  },
+  setData: function setData(infoJson) {
+    $($('.teacher-info-li').get(0)).find('span').get(1).innerHTML = infoJson.id;
+    $($('.teacher-info-li').get(1)).find('span').get(1).innerHTML = infoJson.name;
+    $($('.teacher-info-li').get(2)).find('span').get(1).innerHTML = infoJson.class;
+  }
+};
+
+exports.default = function (tokenObj) {
+  Setting.init(tokenObj);
+};
 
 /***/ })
 /******/ ]);

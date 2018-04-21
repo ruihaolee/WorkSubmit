@@ -2,7 +2,7 @@
  * @Author: liruihao02
  * @Date:   2018-04-04
  * @Last Modified by:   liruihao02
- * @Last Modified time: 2018-04-13
+ * @Last Modified time: 2018-04-21
  */
 import '../less/login.less';
 import backAnamite from './login-background.js';
@@ -14,6 +14,9 @@ import {
   indexCheckFunc
 } from '../pub_funcs/routerView.js';
 import Student from './student.js';
+import Teacher from './teacher.js';
+
+let firDO = true;
 
 const elstyleChange = {
   errortextBlock: (text) => {
@@ -29,9 +32,12 @@ export default class Login {
   constructor() {}
 
   static init() {
-    backAnamite();
-    this.bindHandle();
-    this.remeberState = true;
+    if (firDO) {
+      firDO = !firDO;
+      backAnamite();
+      this.bindHandle();
+      this.remeberState = true;
+    }
   }
 
   static bindHandle() {
@@ -68,6 +74,10 @@ export default class Login {
           this.route.changeRoute('/');
           $.cookie('per', 'teacher', {
             expires: 1
+          });
+          Teacher.init({
+            id: signObj.id,
+            token: this.token
           });
         } else if (per === '1') {
           this.route = new Router('student');

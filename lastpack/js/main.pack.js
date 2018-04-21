@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -75,7 +75,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.fetchAPI = undefined;
 
-__webpack_require__(11);
+__webpack_require__(14);
 
 var fetchAPI = exports.fetchAPI = function fetchAPI(fetchUrl, fetchData) {
   var fetchString = '';
@@ -184,7 +184,7 @@ var studentCheckFunc = {
     });
   },
   course: function course() {
-    console.log('course view');
+    // console.log('course view');
     $('.student-rightbox').css({
       display: 'none'
     });
@@ -207,8 +207,18 @@ var studentCheckFunc = {
     $('.student-workinfo').css({
       display: 'block'
     });
+  },
+  workdetail: function workdetail() {
+    $('.student-rightbox').css({
+      display: 'none'
+    });
+    $('.student-workdetail').css({
+      display: 'block'
+    });
   }
 };
+
+var teacherCheckFunc = {};
 
 var indexCheckFunc = {
   login: function login() {
@@ -255,13 +265,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Author: liruihao02
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Date:   2018-04-04
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Last Modified by:   liruihao02
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Last Modified time: 2018-04-13
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Last Modified time: 2018-04-21
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
-__webpack_require__(9);
+__webpack_require__(12);
 
-var _loginBackground = __webpack_require__(10);
+var _loginBackground = __webpack_require__(13);
 
 var _loginBackground2 = _interopRequireDefault(_loginBackground);
 
@@ -277,9 +287,15 @@ var _student = __webpack_require__(4);
 
 var _student2 = _interopRequireDefault(_student);
 
+var _teacher = __webpack_require__(8);
+
+var _teacher2 = _interopRequireDefault(_teacher);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var firDO = true;
 
 var elstyleChange = {
   errortextBlock: function errortextBlock(text) {
@@ -300,9 +316,12 @@ var Login = function () {
   _createClass(Login, null, [{
     key: 'init',
     value: function init() {
-      (0, _loginBackground2.default)();
-      this.bindHandle();
-      this.remeberState = true;
+      if (firDO) {
+        firDO = !firDO;
+        (0, _loginBackground2.default)();
+        this.bindHandle();
+        this.remeberState = true;
+      }
     }
   }, {
     key: 'bindHandle',
@@ -344,6 +363,10 @@ var Login = function () {
           _this2.route.changeRoute('/');
           $.cookie('per', 'teacher', {
             expires: 1
+          });
+          _teacher2.default.init({
+            id: signObj.id,
+            token: _this2.token
           });
         } else if (per === '1') {
           _this2.route = new _router2.default('student');
@@ -407,15 +430,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-__webpack_require__(12);
+__webpack_require__(5);
 
-__webpack_require__(13);
+__webpack_require__(15);
 
 var _router = __webpack_require__(1);
 
 var _router2 = _interopRequireDefault(_router);
 
-var _exitlogin = __webpack_require__(14);
+var _exitlogin = __webpack_require__(6);
 
 var _exitlogin2 = _interopRequireDefault(_exitlogin);
 
@@ -423,15 +446,15 @@ var _fetchApi = __webpack_require__(0);
 
 var _routerView = __webpack_require__(2);
 
-var _studentSetting = __webpack_require__(15);
+var _studentSetting = __webpack_require__(16);
 
 var _studentSetting2 = _interopRequireDefault(_studentSetting);
 
-var _studentCourse = __webpack_require__(16);
+var _studentCourse = __webpack_require__(17);
 
 var _studentCourse2 = _interopRequireDefault(_studentCourse);
 
-var _studentWorkinfo = __webpack_require__(20);
+var _studentWorkinfo = __webpack_require__(21);
 
 var _studentWorkinfo2 = _interopRequireDefault(_studentWorkinfo);
 
@@ -439,8 +462,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var TokenObj = null;
+
 var LeftContainer = {
-  menuClickHandle: function menuClickHandle(event, tokenObj) {
+  menuClickHandle: function menuClickHandle(event) {
     var target = event.target;
     if (!target.className.match('menu-li')) {
       target = this.findTargetli(target);
@@ -455,14 +480,15 @@ var LeftContainer = {
         break;
       case 'setting':
         Student.studentRoute.changeRoute('setting');
+        (0, _studentSetting2.default)(TokenObj);
         break;
       case 'course':
         Student.studentRoute.changeRoute('course');
-        (0, _studentCourse2.default)(tokenObj, Student.studentRoute);
+        (0, _studentCourse2.default)(TokenObj, Student.studentRoute);
         break;
       case 'works':
         Student.studentRoute.changeRoute('works');
-        (0, _studentWorkinfo2.default)(tokenObj, Student.studentRoute);
+        (0, _studentWorkinfo2.default)(TokenObj, Student.studentRoute);
         break;
       default:
         break;
@@ -477,11 +503,11 @@ var LeftContainer = {
   },
 
   changeActive: function changeActive(target) {
-    var liArr = $('.menu-li');
+    var liArr = $('.student-menu-li');
     for (var i = 0; i < liArr.length; i++) {
-      liArr[i].className = 'menu-li';
+      liArr[i].className = 'menu-li student-menu-li';
     }
-    target.className = 'menu-li active-li';
+    target.className = 'menu-li student-menu-li active-li';
   }
 };
 
@@ -493,9 +519,13 @@ var Student = function () {
   _createClass(Student, null, [{
     key: 'init',
     value: function init(tokenObj) {
-      this.bindHandle(tokenObj);
-      this.initRoute();
-      this.routeBack(tokenObj);
+      if (!TokenObj) {
+        this.bindHandle();
+        this.initRoute();
+      }
+      TokenObj = tokenObj;
+      this.routeBack();
+      console.log(TokenObj);
     }
   }, {
     key: 'initRoute',
@@ -506,21 +536,22 @@ var Student = function () {
       this.studentRoute.route('course', _routerView.studentCheckFunc.course);
       this.studentRoute.route('writework', _routerView.studentCheckFunc.writework);
       this.studentRoute.route('works', _routerView.studentCheckFunc.works);
+      this.studentRoute.route('workdetail', _routerView.studentCheckFunc.workdetail);
     }
   }, {
     key: 'routeBack',
-    value: function routeBack(tokenObj) {
-      var firLi = $('.menu-li').get(0);
+    value: function routeBack() {
+      var firLi = $('.student-menu-li').get(0);
       LeftContainer.changeActive(firLi);
 
       this.studentRoute.changeRoute('setting');
-      (0, _studentSetting2.default)(tokenObj);
+      (0, _studentSetting2.default)(TokenObj);
     }
   }, {
     key: 'bindHandle',
-    value: function bindHandle(tokenObj) {
-      $('.menu-ul').bind('click', function (event) {
-        LeftContainer.menuClickHandle(event, tokenObj);
+    value: function bindHandle() {
+      $('.student-menu-ul').bind('click', function (event) {
+        LeftContainer.menuClickHandle(event);
       });
     }
   }]);
@@ -532,10 +563,9 @@ exports.default = Student;
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-module.exports = __webpack_require__(17);
-
+// removed by extract-text-webpack-plugin
 
 /***/ }),
 /* 6 */
@@ -544,9 +574,184 @@ module.exports = __webpack_require__(17);
 "use strict";
 
 
-__webpack_require__(7);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-__webpack_require__(8);
+var _router = __webpack_require__(1);
+
+var _router2 = _interopRequireDefault(_router);
+
+var _routerView = __webpack_require__(2);
+
+var _login = __webpack_require__(3);
+
+var _login2 = _interopRequireDefault(_login);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  var route = new _router2.default('login');
+  route.init();
+  route.route('/', _routerView.indexCheckFunc.login);
+  route.changeRoute('/');
+
+  $.cookie('per', 'login');
+  $.cookie('token', null);
+  _login2.default.init();
+}; /*
+    * @Author: liruihao02
+    * @Date:   2018-04-06
+    * @Last Modified by:   liruihao02
+    * @Last Modified time: 2018-04-06
+    */
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(18);
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Author: liruihao02
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Date:   2018-04-04
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Last Modified by:   liruihao02
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Last Modified time: 2018-04-21
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+
+__webpack_require__(5);
+
+__webpack_require__(23);
+
+var _router = __webpack_require__(1);
+
+var _router2 = _interopRequireDefault(_router);
+
+var _exitlogin = __webpack_require__(6);
+
+var _exitlogin2 = _interopRequireDefault(_exitlogin);
+
+var _fetchApi = __webpack_require__(0);
+
+var _routerView = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var TokenObj = null;
+
+var LeftContainer = {
+  menuClickHandle: function menuClickHandle(event) {
+    var target = event.target;
+    if (!target.className.match('menu-li')) {
+      target = this.findTargetli(target);
+    }
+    this.changeActive(target); //改变样式
+
+    var targetName = target.getAttribute('name');
+    console.log(targetName);
+    switch (targetName) {
+      case 'exitlogin':
+        (0, _exitlogin2.default)();
+        break;
+      case 'setting':
+        break;
+      case 'courseyears':
+        break;
+      case 'class':
+        break;
+      case 'students':
+        break;
+      case 'works':
+        break;
+      default:
+        break;
+    }
+  },
+
+  findTargetli: function findTargetli(target) {
+    while (!target.className.match('menu-li')) {
+      target = target.parentNode;
+    }
+    return target;
+  },
+
+  changeActive: function changeActive(target) {
+    var liArr = $('.teacher-menu-li');
+    for (var i = 0; i < liArr.length; i++) {
+      liArr[i].className = 'menu-li teacher-menu-li';
+    }
+    target.className = 'menu-li teacher-menu-li active-li';
+  }
+};
+
+var Student = function () {
+  function Student() {
+    _classCallCheck(this, Student);
+  }
+
+  _createClass(Student, null, [{
+    key: 'init',
+    value: function init(tokenObj) {
+      if (!TokenObj) {
+        this.bindHandle();
+        this.initRoute();
+      }
+      TokenObj = tokenObj;
+      this.routeBack();
+      console.log(TokenObj);
+    }
+  }, {
+    key: 'initRoute',
+    value: function initRoute() {
+      this.studentRoute = new _router2.default('teacher');
+      this.studentRoute.init();
+    }
+  }, {
+    key: 'routeBack',
+    value: function routeBack() {
+      var firLi = $('.teacher-menu-li').get(0);
+      LeftContainer.changeActive(firLi);
+    }
+  }, {
+    key: 'bindHandle',
+    value: function bindHandle() {
+      console.log('AAA');
+      $('.teacher-menu-ul').bind('click', function (event) {
+        LeftContainer.menuClickHandle(event);
+      });
+    }
+  }]);
+
+  return Student;
+}();
+
+exports.default = Student;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(10);
+
+__webpack_require__(11);
 
 var _router = __webpack_require__(1);
 
@@ -561,6 +766,10 @@ var _login2 = _interopRequireDefault(_login);
 var _student = __webpack_require__(4);
 
 var _student2 = _interopRequireDefault(_student);
+
+var _teacher = __webpack_require__(8);
+
+var _teacher2 = _interopRequireDefault(_teacher);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -578,6 +787,10 @@ var init = function init() {
     _login2.default.init();
   } else if ($.cookie('token') && $.cookie('per') === 'teacher') {
     indexRoute = new _router2.default('teacher');
+    _teacher2.default.init({
+      id: $.cookie('id'),
+      token: $.cookie('token')
+    });
   } else if ($.cookie('token') && $.cookie('per') === 'student') {
     indexRoute = new _router2.default('student');
     _student2.default.init({
@@ -592,13 +805,13 @@ var init = function init() {
 init();
 
 /***/ }),
-/* 7 */
+/* 10 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 8 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1037,13 +1250,13 @@ Date.getBeforeDate = function (n) {
 };
 
 /***/ }),
-/* 9 */
+/* 12 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 10 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1095,7 +1308,7 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 11 */
+/* 14 */
 /***/ (function(module, exports) {
 
 (function(self) {
@@ -1567,58 +1780,13 @@ exports.default = function () {
 
 
 /***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _router = __webpack_require__(1);
-
-var _router2 = _interopRequireDefault(_router);
-
-var _routerView = __webpack_require__(2);
-
-var _login = __webpack_require__(3);
-
-var _login2 = _interopRequireDefault(_login);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function () {
-  var route = new _router2.default('login');
-  route.init();
-  route.route('/', _routerView.indexCheckFunc.login);
-  route.changeRoute('/');
-
-  $.cookie('per', 'login');
-  $.cookie('token', null);
-  _login2.default.init();
-}; /*
-    * @Author: liruihao02
-    * @Date:   2018-04-06
-    * @Last Modified by:   liruihao02
-    * @Last Modified time: 2018-04-06
-    */
-
-/***/ }),
 /* 15 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1629,6 +1797,14 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 var _fetchApi = __webpack_require__(0);
+
+var firDO = true; /*
+                   * @Author: liruihao02
+                   * @Date:   2018-04-06
+                   * @Last Modified by:   liruihao02
+                   * @Last Modified time: 2018-04-21
+                   */
+
 
 var eventHandle = {
   infoClickHandle: function infoClickHandle() {
@@ -1659,19 +1835,16 @@ var eventHandle = {
       }
     });
   }
-}; /*
-    * @Author: liruihao02
-    * @Date:   2018-04-06
-    * @Last Modified by:   liruihao02
-    * @Last Modified time: 2018-04-13
-    */
-
+};
 
 var Setting = {
   init: function init(tokenObj) {
     this.tokenObj = tokenObj;
+    if (firDO) {
+      firDO = !firDO;
+      this.bindHandle();
+    }
     this.getStudentInfo();
-    this.bindHandle();
   },
   bindHandle: function bindHandle() {
     $('.student-info-button').bind('click', function () {
@@ -1716,7 +1889,7 @@ exports.default = function (tokenObj) {
 };
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1726,13 +1899,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _regenerator = __webpack_require__(5);
+var _regenerator = __webpack_require__(7);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
 var _fetchApi = __webpack_require__(0);
 
-var _studentWritework = __webpack_require__(19);
+var _studentWritework = __webpack_require__(20);
 
 var _studentWritework2 = _interopRequireDefault(_studentWritework);
 
@@ -2014,7 +2187,7 @@ exports.default = function (tokenObj, studentRoute) {
 };
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -2039,7 +2212,7 @@ var oldRuntime = hadRuntime && g.regeneratorRuntime;
 // Force reevalutation of runtime.js.
 g.regeneratorRuntime = undefined;
 
-module.exports = __webpack_require__(18);
+module.exports = __webpack_require__(19);
 
 if (hadRuntime) {
   // Restore the original runtime.
@@ -2055,7 +2228,7 @@ if (hadRuntime) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 /**
@@ -2788,7 +2961,7 @@ if (hadRuntime) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2868,7 +3041,7 @@ exports.default = function (typeToken) {
 };
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2878,11 +3051,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _regenerator = __webpack_require__(5);
+var _regenerator = __webpack_require__(7);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
 var _fetchApi = __webpack_require__(0);
+
+var _studentWorkdetail = __webpack_require__(22);
+
+var _studentWorkdetail2 = _interopRequireDefault(_studentWorkdetail);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2890,7 +3067,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Author: liruihao02
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Date:   2018-04-13
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Last Modified by:   liruihao02
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-04-15
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-04-21
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             */
 
 
@@ -2948,8 +3125,9 @@ var setView = function () {
 }();
 
 var WritingWork = {
-  init: function init(tokenObj) {
+  init: function init(tokenObj, studentRoute) {
     this.tokenObj = tokenObj;
+    this.studentRoute = studentRoute;
     // this.defaultSearch();
     this.initDate();
     this.startDate = Date.getBeforeDate(7);
@@ -3082,7 +3260,7 @@ var WritingWork = {
       console.log(result);
       if (result === '0') {
         alert('删除失败');
-      } else if (result === '-1') {
+      } else if (result === '1') {
         alert('删除成功');
         _this3.defaultSearch();
       }
@@ -3103,14 +3281,79 @@ var WritingWork = {
         var detailToken = Object.assign({}, _this4.tokenObj, {
           workid: $(parentNode).attr('workid')
         });
+        _this4.studentRoute.changeRoute('workdetail');
+        (0, _studentWorkdetail2.default)(detailToken);
+        console.log(detailToken);
       }
     });
   }
 };
 
-exports.default = function (tokenObj) {
-  WritingWork.init(tokenObj);
+exports.default = function (tokenObj, studentRoute) {
+  WritingWork.init(tokenObj, studentRoute);
 };
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _fetchApi = __webpack_require__(0);
+
+var firDO = true; /*
+                   * @Author: liruihao02
+                   * @Date:   2018-04-16
+                   * @Last Modified by:   liruihao02
+                   * @Last Modified time: 2018-04-16
+                   */
+
+var WorkDetail = {
+  init: function init(detailToken) {
+    // if (firDO) {
+    //   firDO = !firDO;
+    // } else {
+    //   return;
+    // }
+    this.detailToken = detailToken;
+    this.defaultWorkDetail();
+    this.bindHandle();
+  },
+  defaultWorkDetail: function defaultWorkDetail() {
+    var _this = this;
+
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworkdetail', this.detailToken).then(function (detail) {
+      var detailTemp = detail.split('`');
+      detailTemp.pop();
+      _this.workDetail = {
+        time: detailTemp[0],
+        typeid: detailTemp[1],
+        title: detailTemp[2],
+        body: detailTemp[3],
+        member: detailTemp[4] === 'null' ? '无' : detailTemp[4],
+        level: detailTemp[6] === ' ' ? '暂无' : detailTemp[6],
+        levelsay: detailTemp[7] === ' ' ? '暂无' : detailTemp[7]
+      };
+      console.log(detailTemp, _this.workDetail);
+    });
+  },
+  bindHandle: function bindHandle() {}
+};
+
+exports.default = function (detailToken) {
+  WorkDetail.init(detailToken);
+};
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

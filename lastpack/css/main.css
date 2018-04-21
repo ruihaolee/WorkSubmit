@@ -557,3 +557,32 @@ tbody > tr {
 .list-table-studeletework:hover {
   color: red;
 }
+.workdetail-title {
+  width: 100%;
+  height: 80px;
+  box-sizing: border-box;
+  padding: 15px 0px;
+  text-align: center;
+  font-size: 24px;
+  color: #404040;
+  font-weight: 500;
+  line-height: 50px;
+}
+.workdetail-info {
+  text-align: right;
+  padding-right: 10%;
+  font-size: 15px;
+  color: #999;
+}
+.workdetail-info > div {
+  display: inline-block;
+  margin-left: 3%;
+}
+.workdetail-body {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 120px;
+}
+.workdetail-body pre {
+  background: rgba(153, 153, 153, 0.1);
+}

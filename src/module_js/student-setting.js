@@ -2,11 +2,13 @@
  * @Author: liruihao02
  * @Date:   2018-04-06
  * @Last Modified by:   liruihao02
- * @Last Modified time: 2018-04-13
+ * @Last Modified time: 2018-04-21
  */
 import {
   fetchAPI
 } from '../pub_funcs/fetchApi.js';
+
+let firDO = true;
 
 const eventHandle = {
   infoClickHandle: function() {
@@ -43,8 +45,11 @@ const eventHandle = {
 const Setting = {
   init: function(tokenObj) {
     this.tokenObj = tokenObj;
+    if (firDO) {
+      firDO = !firDO;
+      this.bindHandle();
+    }
     this.getStudentInfo();
-    this.bindHandle();
   },
   bindHandle: function() {
     $('.student-info-button').bind('click', () => {

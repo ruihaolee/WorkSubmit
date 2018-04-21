@@ -1,6 +1,6 @@
 /*
  * @Author: liruihao02
- * @Date:   2018-04-06
+ * @Date:   2018-04-21
  * @Last Modified by:   liruihao02
  * @Last Modified time: 2018-04-21
  */
@@ -12,16 +12,16 @@ let firDO = true;
 
 const eventHandle = {
   infoClickHandle: function() {
-    $('.student-change-info').css('display', 'block');
-    $('.student-change-info').animate({
+    $('.teacher-change-info').css('display', 'block');
+    $('.teacher-change-info').animate({
       opacity: '1'
     }, 1000);
   },
   changeInfoClickHandle: function() {
     const changeObj = {
-      name: $('.stu-change-name').find('input').val(),
-      oldpass: $('.stu-change-oldpass').find('input').val(),
-      newpass: $('.stu-change-newpass').find('input').val(),
+      name: $('.teach-change-name').find('input').val(),
+      oldpass: $('.teach-change-oldpass').find('input').val(),
+      newpass: $('.teach-change-newpass').find('input').val(),
       id: Setting.tokenObj.id,
       token: Setting.tokenObj.token
     }
@@ -30,9 +30,9 @@ const eventHandle = {
       .then(result => {
         if (result === '1') {
           Setting.getStudentInfo();
-          $('.stu-change-name').find('input').val('');
-          $('.stu-change-oldpass').find('input').val('');
-          $('.stu-change-newpass').find('input').val('');
+          $('.teach-change-name').find('input').val('');
+          $('.teach-change-oldpass').find('input').val('');
+          $('.teach-change-newpass').find('input').val('');
 
           alert('修改成功');
         } else if (result === '0') {
@@ -52,18 +52,18 @@ const Setting = {
     this.getStudentInfo();
   },
   bindHandle: function() {
-    $('.student-info-button').bind('click', () => {
+    $('.teach-info-button').bind('click', () => {
       eventHandle.infoClickHandle();
     });
-    $('.stu-change-button').bind('click', () => {
+    $('.teach-change-button').bind('click', () => {
       eventHandle.changeInfoClickHandle();
     });
   },
   getStudentInfo: function() { //获取学生个人信息
     fetchAPI('http://222.24.63.100:9138/cms/getprofile', this.tokenObj)
-      .then(stuInfo => {
+      .then(teachInfo => {
         // console.log(stuInfo);
-        if (stuInfo.toString().slice(0, 1) === '0') {
+        if (teachInfo.toString().slice(0, 1) === '0') {
           return {
             id: '获取信息失败',
             class: '获取信息失败',
@@ -72,8 +72,8 @@ const Setting = {
         } else {
           return {
             id: this.tokenObj.id,
-            class: stuInfo.split('`')[0],
-            name: stuInfo.split('`')[1]
+            class: teachInfo.split('`')[0],
+            name: teachInfo.split('`')[1] === 'null' ? '暂无,请修改' : teachInfo.split('`')[1]
           }
         }
       })
@@ -82,9 +82,9 @@ const Setting = {
       })
   },
   setData: function(infoJson) {
-    $($('.student-info-li').get(0)).find('span').get(1).innerHTML = infoJson.id;
-    $($('.student-info-li').get(1)).find('span').get(1).innerHTML = infoJson.name;
-    $($('.student-info-li').get(2)).find('span').get(1).innerHTML = infoJson.class;
+    $($('.teacher-info-li').get(0)).find('span').get(1).innerHTML = infoJson.id;
+    $($('.teacher-info-li').get(1)).find('span').get(1).innerHTML = infoJson.name;
+    $($('.teacher-info-li').get(2)).find('span').get(1).innerHTML = infoJson.class;
   }
 }
 

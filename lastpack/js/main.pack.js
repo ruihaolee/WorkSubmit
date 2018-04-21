@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -75,7 +75,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.fetchAPI = undefined;
 
-__webpack_require__(14);
+__webpack_require__(15);
 
 var fetchAPI = exports.fetchAPI = function fetchAPI(fetchUrl, fetchData) {
   var fetchString = '';
@@ -218,7 +218,24 @@ var studentCheckFunc = {
   }
 };
 
-var teacherCheckFunc = {};
+var teacherCheckFunc = {
+  setting: function setting() {
+    $('.teacher-rightbox').css({
+      display: 'none'
+    });
+    $('.teacher-setting').css({
+      display: 'block'
+    });
+  },
+  courseyears: function courseyears() {
+    $('.teacher-rightbox').css({
+      display: 'none'
+    });
+    $('.teacher-courseyears').css({
+      display: 'block'
+    });
+  }
+};
 
 var indexCheckFunc = {
   login: function login() {
@@ -249,6 +266,7 @@ var indexCheckFunc = {
 
 exports.indexCheckFunc = indexCheckFunc;
 exports.studentCheckFunc = studentCheckFunc;
+exports.teacherCheckFunc = teacherCheckFunc;
 
 /***/ }),
 /* 3 */
@@ -269,9 +287,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
-__webpack_require__(12);
+__webpack_require__(13);
 
-var _loginBackground = __webpack_require__(13);
+var _loginBackground = __webpack_require__(14);
 
 var _loginBackground2 = _interopRequireDefault(_loginBackground);
 
@@ -287,7 +305,7 @@ var _student = __webpack_require__(4);
 
 var _student2 = _interopRequireDefault(_student);
 
-var _teacher = __webpack_require__(8);
+var _teacher = __webpack_require__(9);
 
 var _teacher2 = _interopRequireDefault(_teacher);
 
@@ -432,7 +450,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 __webpack_require__(5);
 
-__webpack_require__(15);
+__webpack_require__(16);
 
 var _router = __webpack_require__(1);
 
@@ -446,15 +464,15 @@ var _fetchApi = __webpack_require__(0);
 
 var _routerView = __webpack_require__(2);
 
-var _studentSetting = __webpack_require__(16);
+var _studentSetting = __webpack_require__(17);
 
 var _studentSetting2 = _interopRequireDefault(_studentSetting);
 
-var _studentCourse = __webpack_require__(17);
+var _studentCourse = __webpack_require__(18);
 
 var _studentCourse2 = _interopRequireDefault(_studentCourse);
 
-var _studentWorkinfo = __webpack_require__(21);
+var _studentWorkinfo = __webpack_require__(22);
 
 var _studentWorkinfo2 = _interopRequireDefault(_studentWorkinfo);
 
@@ -610,11 +628,66 @@ exports.default = function () {
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(18);
+module.exports = __webpack_require__(19);
 
 
 /***/ }),
 /* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _fetchApi = __webpack_require__(0);
+
+var firDO = true; /*
+                   * @Author: liruihao02
+                   * @Date:   2018-04-16
+                   * @Last Modified by:   liruihao02
+                   * @Last Modified time: 2018-04-21
+                   */
+
+var setView = function setView(workDetail) {
+  var detailHTML = '\n    <div class="rightbody-title">\u4F5C\u4E1A\u4FE1\u606F\u8BE6\u60C5</div>\n      <div class="workdetail-title">' + workDetail.title + '</div>\n      <div class="workdetail-info">\n          <div class="workdetail-typeid">\u4F5C\u4E1A\u7C7B\u578B: ' + workDetail.typeid + '</div>\n          <div class="workdetail-member">\u6210\u5458: ' + workDetail.member + '</div>\n          <div class="workdetail-submittime">\u63D0\u4EA4\u65E5\u671F\uFF1A' + workDetail.time + '</div>\n      </div>\n    <div class="workdetail-body">' + workDetail.body + '</div>\n    <div class="workdetail-levelbox">\n      <div class="workdetail-level"><span>\u8001\u5E08\u8BC4\u5206\uFF1A</span>' + workDetail.level + '</div>\n      <div class="workdetail-levelsay"><span>\u8001\u5E08\u8BC4\u8BED\uFF1A</span>' + workDetail.levelsay + '</div>\n    </div>\n    ';
+  $('.student-workdetail').html(detailHTML);
+};
+
+var WorkDetail = {
+  init: function init(detailToken) {
+    this.detailToken = detailToken;
+    this.defaultWorkDetail();
+  },
+  defaultWorkDetail: function defaultWorkDetail() {
+    var _this = this;
+
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworkdetail', this.detailToken).then(function (detail) {
+      var detailTemp = detail.split('`');
+      detailTemp.pop();
+      _this.workDetail = {
+        time: detailTemp[0],
+        typeid: detailTemp[1],
+        title: detailTemp[2],
+        body: detailTemp[3],
+        member: detailTemp[4] === 'null' ? '无' : detailTemp[4],
+        level: detailTemp[6] === ' ' ? '暂无' : detailTemp[6],
+        levelsay: detailTemp[7] === ' ' ? '暂无' : detailTemp[7]
+      };
+      setView(_this.workDetail);
+      console.log(detailTemp, _this.workDetail);
+    });
+  }
+};
+
+exports.default = function (detailToken) {
+  WorkDetail.init(detailToken);
+};
+
+/***/ }),
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -648,6 +721,14 @@ var _fetchApi = __webpack_require__(0);
 
 var _routerView = __webpack_require__(2);
 
+var _teacherSetting = __webpack_require__(24);
+
+var _teacherSetting2 = _interopRequireDefault(_teacherSetting);
+
+var _teacherCourseyears = __webpack_require__(25);
+
+var _teacherCourseyears2 = _interopRequireDefault(_teacherCourseyears);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -669,8 +750,12 @@ var LeftContainer = {
         (0, _exitlogin2.default)();
         break;
       case 'setting':
+        Teacher.teacherRoute.changeRoute('setting');
+        (0, _teacherSetting2.default)(TokenObj);
         break;
       case 'courseyears':
+        Teacher.teacherRoute.changeRoute('courseyears');
+        (0, _teacherCourseyears2.default)(TokenObj);
         break;
       case 'class':
         break;
@@ -699,12 +784,12 @@ var LeftContainer = {
   }
 };
 
-var Student = function () {
-  function Student() {
-    _classCallCheck(this, Student);
+var Teacher = function () {
+  function Teacher() {
+    _classCallCheck(this, Teacher);
   }
 
-  _createClass(Student, null, [{
+  _createClass(Teacher, null, [{
     key: 'init',
     value: function init(tokenObj) {
       if (!TokenObj) {
@@ -718,14 +803,19 @@ var Student = function () {
   }, {
     key: 'initRoute',
     value: function initRoute() {
-      this.studentRoute = new _router2.default('teacher');
-      this.studentRoute.init();
+      this.teacherRoute = new _router2.default('teacher');
+      this.teacherRoute.init();
+      this.teacherRoute.route('setting', _routerView.teacherCheckFunc.setting);
+      this.teacherRoute.route('courseyears', _routerView.teacherCheckFunc.courseyears);
     }
   }, {
     key: 'routeBack',
     value: function routeBack() {
       var firLi = $('.teacher-menu-li').get(0);
       LeftContainer.changeActive(firLi);
+
+      Teacher.teacherRoute.changeRoute('setting');
+      (0, _teacherSetting2.default)(TokenObj);
     }
   }, {
     key: 'bindHandle',
@@ -737,21 +827,21 @@ var Student = function () {
     }
   }]);
 
-  return Student;
+  return Teacher;
 }();
 
-exports.default = Student;
+exports.default = Teacher;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(10);
-
 __webpack_require__(11);
+
+__webpack_require__(12);
 
 var _router = __webpack_require__(1);
 
@@ -767,7 +857,7 @@ var _student = __webpack_require__(4);
 
 var _student2 = _interopRequireDefault(_student);
 
-var _teacher = __webpack_require__(8);
+var _teacher = __webpack_require__(9);
 
 var _teacher2 = _interopRequireDefault(_teacher);
 
@@ -805,13 +895,13 @@ var init = function init() {
 init();
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1250,13 +1340,13 @@ Date.getBeforeDate = function (n) {
 };
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1308,7 +1398,7 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 (function(self) {
@@ -1780,13 +1870,13 @@ exports.default = function () {
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1868,9 +1958,9 @@ var Setting = {
         };
       } else {
         return {
-          id: stuInfo.split(' ')[0],
-          class: stuInfo.split(' ')[1].split('`')[0],
-          name: stuInfo.split(' ')[1].split('`')[1]
+          id: _this.tokenObj.id,
+          class: stuInfo.split('`')[0],
+          name: stuInfo.split('`')[1]
         };
       }
     }).then(function (infoJson) {
@@ -1889,7 +1979,7 @@ exports.default = function (tokenObj) {
 };
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1905,7 +1995,7 @@ var _regenerator2 = _interopRequireDefault(_regenerator);
 
 var _fetchApi = __webpack_require__(0);
 
-var _studentWritework = __webpack_require__(20);
+var _studentWritework = __webpack_require__(21);
 
 var _studentWritework2 = _interopRequireDefault(_studentWritework);
 
@@ -2187,7 +2277,7 @@ exports.default = function (tokenObj, studentRoute) {
 };
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -2212,7 +2302,7 @@ var oldRuntime = hadRuntime && g.regeneratorRuntime;
 // Force reevalutation of runtime.js.
 g.regeneratorRuntime = undefined;
 
-module.exports = __webpack_require__(19);
+module.exports = __webpack_require__(20);
 
 if (hadRuntime) {
   // Restore the original runtime.
@@ -2228,7 +2318,7 @@ if (hadRuntime) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 /**
@@ -2961,7 +3051,7 @@ if (hadRuntime) {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3041,7 +3131,7 @@ exports.default = function (typeToken) {
 };
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3057,7 +3147,7 @@ var _regenerator2 = _interopRequireDefault(_regenerator);
 
 var _fetchApi = __webpack_require__(0);
 
-var _studentWorkdetail = __webpack_require__(22);
+var _studentWorkdetail = __webpack_require__(8);
 
 var _studentWorkdetail2 = _interopRequireDefault(_studentWorkdetail);
 
@@ -3294,7 +3384,13 @@ exports.default = function (tokenObj, studentRoute) {
 };
 
 /***/ }),
-/* 22 */
+/* 23 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3308,52 +3404,217 @@ var _fetchApi = __webpack_require__(0);
 
 var firDO = true; /*
                    * @Author: liruihao02
-                   * @Date:   2018-04-16
+                   * @Date:   2018-04-21
                    * @Last Modified by:   liruihao02
-                   * @Last Modified time: 2018-04-16
+                   * @Last Modified time: 2018-04-21
                    */
 
-var WorkDetail = {
-  init: function init(detailToken) {
-    // if (firDO) {
-    //   firDO = !firDO;
-    // } else {
-    //   return;
-    // }
-    this.detailToken = detailToken;
-    this.defaultWorkDetail();
-    this.bindHandle();
-  },
-  defaultWorkDetail: function defaultWorkDetail() {
-    var _this = this;
 
-    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworkdetail', this.detailToken).then(function (detail) {
-      var detailTemp = detail.split('`');
-      detailTemp.pop();
-      _this.workDetail = {
-        time: detailTemp[0],
-        typeid: detailTemp[1],
-        title: detailTemp[2],
-        body: detailTemp[3],
-        member: detailTemp[4] === 'null' ? '无' : detailTemp[4],
-        level: detailTemp[6] === ' ' ? '暂无' : detailTemp[6],
-        levelsay: detailTemp[7] === ' ' ? '暂无' : detailTemp[7]
-      };
-      console.log(detailTemp, _this.workDetail);
-    });
+var eventHandle = {
+  infoClickHandle: function infoClickHandle() {
+    $('.teacher-change-info').css('display', 'block');
+    $('.teacher-change-info').animate({
+      opacity: '1'
+    }, 1000);
   },
-  bindHandle: function bindHandle() {}
+  changeInfoClickHandle: function changeInfoClickHandle() {
+    var changeObj = {
+      name: $('.teach-change-name').find('input').val(),
+      oldpass: $('.teach-change-oldpass').find('input').val(),
+      newpass: $('.teach-change-newpass').find('input').val(),
+      id: Setting.tokenObj.id,
+      token: Setting.tokenObj.token
+    };
+
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/setprofile', changeObj).then(function (result) {
+      if (result === '1') {
+        Setting.getStudentInfo();
+        $('.teach-change-name').find('input').val('');
+        $('.teach-change-oldpass').find('input').val('');
+        $('.teach-change-newpass').find('input').val('');
+
+        alert('修改成功');
+      } else if (result === '0') {
+        alert('修改失败，请检查旧密码是否正确');
+      }
+    });
+  }
 };
 
-exports.default = function (detailToken) {
-  WorkDetail.init(detailToken);
+var Setting = {
+  init: function init(tokenObj) {
+    this.tokenObj = tokenObj;
+    if (firDO) {
+      firDO = !firDO;
+      this.bindHandle();
+    }
+    this.getStudentInfo();
+  },
+  bindHandle: function bindHandle() {
+    $('.teach-info-button').bind('click', function () {
+      eventHandle.infoClickHandle();
+    });
+    $('.teach-change-button').bind('click', function () {
+      eventHandle.changeInfoClickHandle();
+    });
+  },
+  getStudentInfo: function getStudentInfo() {
+    var _this = this;
+
+    //获取学生个人信息
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getprofile', this.tokenObj).then(function (teachInfo) {
+      // console.log(stuInfo);
+      if (teachInfo.toString().slice(0, 1) === '0') {
+        return {
+          id: '获取信息失败',
+          class: '获取信息失败',
+          name: '获取信息失败'
+        };
+      } else {
+        return {
+          id: _this.tokenObj.id,
+          class: teachInfo.split('`')[0],
+          name: teachInfo.split('`')[1] === 'null' ? '暂无,请修改' : teachInfo.split('`')[1]
+        };
+      }
+    }).then(function (infoJson) {
+      _this.setData(infoJson);
+    });
+  },
+  setData: function setData(infoJson) {
+    $($('.teacher-info-li').get(0)).find('span').get(1).innerHTML = infoJson.id;
+    $($('.teacher-info-li').get(1)).find('span').get(1).innerHTML = infoJson.name;
+    $($('.teacher-info-li').get(2)).find('span').get(1).innerHTML = infoJson.class;
+  }
+};
+
+exports.default = function (tokenObj) {
+  Setting.init(tokenObj);
 };
 
 /***/ }),
-/* 23 */
-/***/ (function(module, exports) {
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
 
-// removed by extract-text-webpack-plugin
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _fetchApi = __webpack_require__(0);
+
+var _studentWorkdetail = __webpack_require__(8);
+
+var _studentWorkdetail2 = _interopRequireDefault(_studentWorkdetail);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/*
+ * @Author: liruihao02
+ * @Date:   2018-04-21
+ * @Last Modified by:   liruihao02
+ * @Last Modified time: 2018-04-21
+ */
+var firDO = true;
+
+var setView = function setView(viewData, type) {
+  var dataHTMLArr = null;
+  var targetEle = type === 'years' ? $('.teacher-yearsclass-list') : $('.teacher-yearsclass-list');
+  if (type === 'years') {
+    dataHTMLArr = viewData.map(function (year) {
+      return '\n        <tr class="list-table-row">\n          <td>' + year.yearID + '</td>\n          <td>' + year.yearName + '</td>\n          <td>\n            <span class=\'list-table-teachdeleteyear\' yearid=' + year.yearID + '>\u5220\u9664</span>\n          </td>\n        </tr>\n      ';
+    });
+  } else if (type === 'courses') {}
+
+  var dataTotalHTML = dataHTMLArr.join('');
+  targetEle.html(dataTotalHTML);
+};
+
+var CourseYears = {
+  init: function init(tokenObj) {
+    this.tokenObj = tokenObj;
+    if (firDO) {
+      this.bindHandle();
+      firDO = !firDO;
+    } else {
+      return;
+    }
+    this.getYears();
+    this.getCourse();
+  },
+  getYears: function getYears() {
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getyearinfo', this.tokenObj).then(function (yearsData) {
+      var yearsTemp = yearsData.split('`');
+      var yearsArr = [];
+      for (var i = 0; i < yearsTemp.length; i = i + 2) {
+        var oneYear = {
+          yearID: yearsTemp[i],
+          yearName: yearsTemp[i + 1]
+        };
+        yearsArr.push(oneYear);
+      }
+      console.log(yearsArr);
+      setView(yearsArr, 'years');
+    });
+  },
+  getCourse: function getCourse() {},
+  createYearCourse: function createYearCourse(type) {
+    var _this = this;
+
+    var creInfo = {};
+    var creatUrl = type === 'year' ? 'http://222.24.63.100:9138/cms/addyear' : 'http://222.24.63.100:9138/cms/addcourse';
+    if (type === 'year') {
+      creInfo = {
+        year: $('.teacher-newyear-input').val()
+      };
+    } else if (type === 'course') {}
+    (0, _fetchApi.fetchAPI)(creatUrl, Object.assign({}, creInfo, this.tokenObj)).then(function (result) {
+      if (result === '-1') {
+        alert('\u521B\u5EFA' + (type === 'year' ? '年级' : '课程') + '\u5931\u8D25');
+      } else if (result === '1') {
+        $('.teacher-newyear-input').val('');
+        type === 'year' ? _this.getYears() : _this.getCourse();
+      }
+    });
+  },
+  deleteYearCourse: function deleteYearCourse(itemID, type) {
+    var _this2 = this;
+
+    var deleteUrl = type === 'year' ? 'http://222.24.63.100:9138/cms/delyear' : 'http://222.24.63.100:9138/cms/delcourse';
+    var delIDObj = type === 'year' ? {
+      yearid: itemID
+    } : {
+      courseid: itemID
+    };
+    (0, _fetchApi.fetchAPI)(deleteUrl, Object.assign({}, delIDObj, this.tokenObj)).then(function (result) {
+      if (result === '0') {
+        alert('删除失败');
+      } else if (result === '1') {
+        type === 'year' ? _this2.getYears() : _this2.getCourse();
+        alert('删除成功');
+      }
+    });
+  },
+  bindHandle: function bindHandle() {
+    var _this3 = this;
+
+    $('.teacher-createyear-button').bind('click', function () {
+      _this3.createYearCourse('year');
+    });
+    $('.teacher-yearsclass-list').bind('click', function (event) {
+      var target = event.target || event.srcElement;
+      if (target.className === 'list-table-teachdeleteyear') {
+        _this3.deleteYearCourse($(target).attr('yearid'), 'year');
+      }
+    });
+  }
+};
+
+exports.default = function (tokenObj) {
+  CourseYears.init(tokenObj);
+};
 
 /***/ })
 /******/ ]);

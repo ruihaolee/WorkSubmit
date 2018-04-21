@@ -14,6 +14,8 @@ import {
 import {
   teacherCheckFunc
 } from '../pub_funcs/routerView.js';
+import teacherSetting from './teacher-setting.js';
+import courseYears from './teacher-courseyears.js';
 
 let TokenObj = null;
 
@@ -32,8 +34,12 @@ const LeftContainer = {
         exitLogin();
         break;
       case 'setting':
+        Teacher.teacherRoute.changeRoute('setting');
+        teacherSetting(TokenObj);
         break;
       case 'courseyears':
+        Teacher.teacherRoute.changeRoute('courseyears');
+        courseYears(TokenObj);
         break;
       case 'class':
         break;
@@ -62,7 +68,7 @@ const LeftContainer = {
   }
 }
 
-export default class Student {
+export default class Teacher {
   static init(tokenObj) {
     if (!TokenObj) {
       this.bindHandle();
@@ -74,14 +80,18 @@ export default class Student {
   }
 
   static initRoute() {
-    this.studentRoute = new Router('teacher');
-    this.studentRoute.init();
+    this.teacherRoute = new Router('teacher');
+    this.teacherRoute.init();
+    this.teacherRoute.route('setting', teacherCheckFunc.setting);
+    this.teacherRoute.route('courseyears', teacherCheckFunc.courseyears);
   }
 
   static routeBack() {
     const firLi = $('.teacher-menu-li').get(0);
     LeftContainer.changeActive(firLi);
 
+    Teacher.teacherRoute.changeRoute('setting');
+    teacherSetting(TokenObj);
   }
 
   static bindHandle() {

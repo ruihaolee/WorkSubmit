@@ -226,6 +226,14 @@ var teacherCheckFunc = {
     $('.teacher-setting').css({
       display: 'block'
     });
+  },
+  courseyears: function courseyears() {
+    $('.teacher-rightbox').css({
+      display: 'none'
+    });
+    $('.teacher-courseyears').css({
+      display: 'block'
+    });
   }
 };
 
@@ -687,6 +695,8 @@ var LeftContainer = {
         (0, _teacherSetting2.default)(TokenObj);
         break;
       case 'courseyears':
+        Teacher.teacherRoute.changeRoute('courseyears');
+        (0, _teacherSetting2.default)(TokenObj);
         break;
       case 'class':
         break;
@@ -737,6 +747,7 @@ var Teacher = function () {
       this.teacherRoute = new _router2.default('teacher');
       this.teacherRoute.init();
       this.teacherRoute.route('setting', _routerView.teacherCheckFunc.setting);
+      this.teacherRoute.route('courseyears', _routerView.teacherCheckFunc.courseyears);
     }
   }, {
     key: 'routeBack',
@@ -3330,19 +3341,18 @@ var firDO = true; /*
                    * @Author: liruihao02
                    * @Date:   2018-04-16
                    * @Last Modified by:   liruihao02
-                   * @Last Modified time: 2018-04-16
+                   * @Last Modified time: 2018-04-21
                    */
+
+var setView = function setView(workDetail) {
+  var detailHTML = '\n    <div class="rightbody-title">\u4F5C\u4E1A\u4FE1\u606F\u8BE6\u60C5</div>\n      <div class="workdetail-title">' + workDetail.title + '</div>\n      <div class="workdetail-info">\n          <div class="workdetail-typeid">\u4F5C\u4E1A\u7C7B\u578B: ' + workDetail.typeid + '</div>\n          <div class="workdetail-member">\u6210\u5458: ' + workDetail.member + '</div>\n          <div class="workdetail-submittime">\u63D0\u4EA4\u65E5\u671F\uFF1A' + workDetail.time + '</div>\n      </div>\n    <div class="workdetail-body">' + workDetail.body + '</div>\n    <div class="workdetail-levelbox">\n      <div class="workdetail-level"><span>\u8001\u5E08\u8BC4\u5206\uFF1A</span>' + workDetail.level + '</div>\n      <div class="workdetail-levelsay"><span>\u8001\u5E08\u8BC4\u8BED\uFF1A</span>' + workDetail.levelsay + '</div>\n    </div>\n    ';
+  $('.student-workdetail').html(detailHTML);
+};
 
 var WorkDetail = {
   init: function init(detailToken) {
-    // if (firDO) {
-    //   firDO = !firDO;
-    // } else {
-    //   return;
-    // }
     this.detailToken = detailToken;
     this.defaultWorkDetail();
-    this.bindHandle();
   },
   defaultWorkDetail: function defaultWorkDetail() {
     var _this = this;
@@ -3359,10 +3369,10 @@ var WorkDetail = {
         level: detailTemp[6] === ' ' ? '暂无' : detailTemp[6],
         levelsay: detailTemp[7] === ' ' ? '暂无' : detailTemp[7]
       };
+      setView(_this.workDetail);
       console.log(detailTemp, _this.workDetail);
     });
-  },
-  bindHandle: function bindHandle() {}
+  }
 };
 
 exports.default = function (detailToken) {

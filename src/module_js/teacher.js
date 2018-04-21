@@ -37,6 +37,8 @@ const LeftContainer = {
         teacherSetting(TokenObj);
         break;
       case 'courseyears':
+        Teacher.teacherRoute.changeRoute('courseyears');
+        teacherSetting(TokenObj);
         break;
       case 'class':
         break;
@@ -80,6 +82,7 @@ export default class Teacher {
     this.teacherRoute = new Router('teacher');
     this.teacherRoute.init();
     this.teacherRoute.route('setting', teacherCheckFunc.setting);
+    this.teacherRoute.route('courseyears', teacherCheckFunc.courseyears);
   }
 
   static routeBack() {

@@ -15,6 +15,7 @@ import {
   teacherCheckFunc
 } from '../pub_funcs/routerView.js';
 import teacherSetting from './teacher-setting.js';
+import courseYears from './teacher-courseyears.js';
 
 let TokenObj = null;
 
@@ -38,7 +39,7 @@ const LeftContainer = {
         break;
       case 'courseyears':
         Teacher.teacherRoute.changeRoute('courseyears');
-        teacherSetting(TokenObj);
+        courseYears(TokenObj);
         break;
       case 'class':
         break;

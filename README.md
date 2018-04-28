@@ -20,10 +20,10 @@ gulp start
 
 ```
 - lastpack                 // 最终打包结果目录
-    - css                  // 打包CSS 
+    - css                  // 打包CSS
     - image                // 静态图片资源
     - fontface             // 字体图标
-    - editor               // UEditor 
+    - editor               // UEditor
     - image                // 静态图片资源
     - js                   // 打包后JS
 - src                      // 模块源代码

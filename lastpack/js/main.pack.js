@@ -3515,18 +3515,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @Author: liruihao02
  * @Date:   2018-04-21
  * @Last Modified by:   liruihao02
- * @Last Modified time: 2018-04-21
+ * @Last Modified time: 2018-04-28
  */
 var firDO = true;
 
 var setView = function setView(viewData, type) {
   var dataHTMLArr = null;
-  var targetEle = type === 'years' ? $('.teacher-yearsclass-list') : $('.teacher-yearsclass-list');
+  var targetEle = type === 'years' ? $('.teacher-yearsclass-list') : $('.teacher-courses-list');
   if (type === 'years') {
     dataHTMLArr = viewData.map(function (year) {
       return '\n        <tr class="list-table-row">\n          <td>' + year.yearID + '</td>\n          <td>' + year.yearName + '</td>\n          <td>\n            <span class=\'list-table-teachdeleteyear\' yearid=' + year.yearID + '>\u5220\u9664</span>\n          </td>\n        </tr>\n      ';
     });
-  } else if (type === 'courses') {}
+  } else if (type === 'courses') {
+    dataHTMLArr = viewData.map(function (course) {
+      return '\n        <tr class="list-table-row">\n          <td>' + course.courseID + '</td>\n          <td>' + course.courseName + '</td>\n          <td>' + (course.isShare === '1' ? '是' : '否') + '</td>\n          <td>\n            <span class=\'list-table-teachdeletecourse\' courseid=' + course.courseID + '>\u5220\u9664</span>\n          </td>\n        </tr>\n      ';
+    });
+  }
 
   var dataTotalHTML = dataHTMLArr.join('');
   targetEle.html(dataTotalHTML);
@@ -3549,17 +3553,31 @@ var CourseYears = {
       var yearsTemp = yearsData.split('`');
       var yearsArr = [];
       for (var i = 0; i < yearsTemp.length; i = i + 2) {
-        var oneYear = {
+        yearsArr.push({
           yearID: yearsTemp[i],
           yearName: yearsTemp[i + 1]
-        };
-        yearsArr.push(oneYear);
+        });
       }
       console.log(yearsArr);
       setView(yearsArr, 'years');
     });
   },
-  getCourse: function getCourse() {},
+  getCourse: function getCourse() {
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getcourseinfo', this.tokenObj).then(function (coursesData) {
+      console.log(coursesData);
+      var coursesTemp = coursesData.split('`');
+      var coursesArr = [];
+      for (var i = 0; i < coursesTemp.length; i = i + 3) {
+        coursesArr.push({
+          courseID: coursesTemp[i],
+          courseName: coursesTemp[i + 1],
+          isShare: coursesTemp[i + 2]
+        });
+      }
+      console.log(coursesArr);
+      setView(coursesArr, 'courses');
+    });
+  },
   createYearCourse: function createYearCourse(type) {
     var _this = this;
 
@@ -3569,7 +3587,12 @@ var CourseYears = {
       creInfo = {
         year: $('.teacher-newyear-input').val()
       };
-    } else if (type === 'course') {}
+    } else if (type === 'course') {
+      creInfo = {
+        title: $('.teacher-newcourse-input').val(),
+        share: $('.teacher-course-share').val()
+      };
+    }
     (0, _fetchApi.fetchAPI)(creatUrl, Object.assign({}, creInfo, this.tokenObj)).then(function (result) {
       if (result === '-1') {
         alert('\u521B\u5EFA' + (type === 'year' ? '年级' : '课程') + '\u5931\u8D25');
@@ -3603,10 +3626,15 @@ var CourseYears = {
     $('.teacher-createyear-button').bind('click', function () {
       _this3.createYearCourse('year');
     });
-    $('.teacher-yearsclass-list').bind('click', function (event) {
+    $('.teacher-createcourse-button').bind('click', function () {
+      _this3.createYearCourse('course');
+    });
+    $('.teacher-courseyear-list').bind('click', function (event) {
       var target = event.target || event.srcElement;
       if (target.className === 'list-table-teachdeleteyear') {
         _this3.deleteYearCourse($(target).attr('yearid'), 'year');
+      } else if (target.className === 'list-table-teachdeletecourse') {
+        _this3.deleteYearCourse($(target).attr('courseid'), 'course');
       }
     });
   }

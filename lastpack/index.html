@@ -312,15 +312,46 @@
                           </th>
                         </tr>
                       </thead>
-                      <tbody class="list-table-tbody teacher-yearsclass-list">
-
-                      </tbody>
+                      <tbody class="list-table-tbody teacher-yearsclass-list teacher-courseyear-list"></tbody>
                   </table>
                 </div>
               </div>
               <div class="teacher-course-box">
-                <div class="teacher-createcourse-box"></div>
-                <div class="teacher-courses-listbox"></div>
+                <div class="teacher-createcourse-box">
+                  <div>
+                    <label>课程名称</label>
+                    <input type="text" name="newyear" class="teacher-newcourse-input">
+                  </div>
+                  <label>是否分享</label>
+                  <div>
+                    <select class="teacher-course-share">
+                        <option value="0" selected = "selected">不分享</option>
+                        <option value="1">分享</option>
+                    </select>
+                  </div>
+                  <div class="teacher-createcourse-button">添加</div>
+                </div>
+                <div class="teacher-courses-listbox">
+                  <table class="list-table">
+                      <thead class="list-table-thead">
+                        <tr>
+                          <th>
+                            <span>课程ID</span>
+                          </th>
+                          <th>
+                            <span>课程名称</span>
+                          </th>
+                          <th>
+                            <span>是否分享</span>
+                          </th>
+                          <th>
+                            <span>删除</span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="list-table-tbody teacher-courses-list teacher-courseyear-list"></tbody>
+                  </table>
+                </div>
               </div>
             </div>
             <div class="teacher-rightbox"></div>

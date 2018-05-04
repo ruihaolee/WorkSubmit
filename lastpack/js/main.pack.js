@@ -234,6 +234,14 @@ var teacherCheckFunc = {
     $('.teacher-courseyears').css({
       display: 'block'
     });
+  },
+  class: function _class() {
+    $('.teacher-rightbox').css({
+      display: 'none'
+    });
+    $('.teacher-classes').css({
+      display: 'block'
+    });
   }
 };
 
@@ -272,6 +280,13 @@ exports.teacherCheckFunc = teacherCheckFunc;
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
+module.exports = __webpack_require__(19);
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
@@ -301,7 +316,7 @@ var _fetchApi = __webpack_require__(0);
 
 var _routerView = __webpack_require__(2);
 
-var _student = __webpack_require__(4);
+var _student = __webpack_require__(5);
 
 var _student2 = _interopRequireDefault(_student);
 
@@ -436,7 +451,7 @@ var Login = function () {
 exports.default = Login;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -448,7 +463,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-__webpack_require__(5);
+__webpack_require__(6);
 
 __webpack_require__(16);
 
@@ -456,7 +471,7 @@ var _router = __webpack_require__(1);
 
 var _router2 = _interopRequireDefault(_router);
 
-var _exitlogin = __webpack_require__(6);
+var _exitlogin = __webpack_require__(7);
 
 var _exitlogin2 = _interopRequireDefault(_exitlogin);
 
@@ -580,13 +595,13 @@ var Student = function () {
 exports.default = Student;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -602,7 +617,7 @@ var _router2 = _interopRequireDefault(_router);
 
 var _routerView = __webpack_require__(2);
 
-var _login = __webpack_require__(3);
+var _login = __webpack_require__(4);
 
 var _login2 = _interopRequireDefault(_login);
 
@@ -623,13 +638,6 @@ exports.default = function () {
     * @Last Modified by:   liruihao02
     * @Last Modified time: 2018-04-06
     */
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(19);
-
 
 /***/ }),
 /* 8 */
@@ -700,12 +708,12 @@ Object.defineProperty(exports, "__esModule", {
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Author: liruihao02
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Date:   2018-04-04
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Last Modified by:   liruihao02
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Last Modified by:   Marte
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Last Modified time: 2018-04-21
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
-__webpack_require__(5);
+__webpack_require__(6);
 
 __webpack_require__(23);
 
@@ -713,7 +721,7 @@ var _router = __webpack_require__(1);
 
 var _router2 = _interopRequireDefault(_router);
 
-var _exitlogin = __webpack_require__(6);
+var _exitlogin = __webpack_require__(7);
 
 var _exitlogin2 = _interopRequireDefault(_exitlogin);
 
@@ -728,6 +736,10 @@ var _teacherSetting2 = _interopRequireDefault(_teacherSetting);
 var _teacherCourseyears = __webpack_require__(25);
 
 var _teacherCourseyears2 = _interopRequireDefault(_teacherCourseyears);
+
+var _teacherClasses = __webpack_require__(26);
+
+var _teacherClasses2 = _interopRequireDefault(_teacherClasses);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -758,6 +770,8 @@ var LeftContainer = {
         (0, _teacherCourseyears2.default)(TokenObj);
         break;
       case 'class':
+        Teacher.teacherRoute.changeRoute('class');
+        (0, _teacherClasses2.default)(TokenObj);
         break;
       case 'students':
         break;
@@ -807,6 +821,7 @@ var Teacher = function () {
       this.teacherRoute.init();
       this.teacherRoute.route('setting', _routerView.teacherCheckFunc.setting);
       this.teacherRoute.route('courseyears', _routerView.teacherCheckFunc.courseyears);
+      this.teacherRoute.route('class', _routerView.teacherCheckFunc.class);
     }
   }, {
     key: 'routeBack',
@@ -849,11 +864,11 @@ var _router2 = _interopRequireDefault(_router);
 
 var _routerView = __webpack_require__(2);
 
-var _login = __webpack_require__(3);
+var _login = __webpack_require__(4);
 
 var _login2 = _interopRequireDefault(_login);
 
-var _student = __webpack_require__(4);
+var _student = __webpack_require__(5);
 
 var _student2 = _interopRequireDefault(_student);
 
@@ -1989,7 +2004,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _regenerator = __webpack_require__(7);
+var _regenerator = __webpack_require__(3);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
@@ -3141,7 +3156,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _regenerator = __webpack_require__(7);
+var _regenerator = __webpack_require__(3);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
@@ -3642,6 +3657,227 @@ var CourseYears = {
 
 exports.default = function (tokenObj) {
   CourseYears.init(tokenObj);
+};
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _regenerator = __webpack_require__(3);
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _fetchApi = __webpack_require__(0);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Author: liruihao02
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Date:   2018-04-21
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified by:   Marte
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-04-21
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            */
+
+
+var firDO = true;
+
+var eventHandle = {
+  panClickHandle: function panClickHandle(whichPan, target) {
+    Classes.panType = whichPan;
+    $('.teacher-classbutton').attr('class', 'teacher-classbutton');
+    $(target).attr('class', 'teacher-classbutton teacher-checkactive-clicked');
+    if (whichPan === 'activeClass') {
+      $('.teacher-searchactive-check').css('display', 'block');
+      $('.teacher-searchunactive-check').css('display', 'none');
+    } else if (whichPan === 'unactiveClass') {
+      $('.teacher-searchactive-check').css('display', 'none');
+      $('.teacher-searchunactive-check').css('display', 'block');
+    }
+    Classes.getClassList();
+  },
+
+  selectTypeChangeHandle: function selectTypeChangeHandle(target) {
+    var targetClassName = target.className;
+    var selectValue = target.value;
+    if (targetClassName.indexOf('teacher-searchactive-select') !== -1) {
+      Classes.selectCheck.active = selectValue;
+    } else if (targetClassName.indexOf('teacher-searchunactive-select') !== -1) {
+      targetClassName.indexOf('teacher-searchunactive-coursetype') !== -1 ? Classes.selectCheck.unactive.course = selectValue : Classes.selectCheck.unactive.year = selectValue;
+    }
+
+    Classes.getClassList();
+  },
+
+  createClassHandle: function createClassHandle() {
+    var newClassObj = {
+      yearid: $('.teacher-createclass-year').val(),
+      courseid: $('.teacher-createclass-course').val(),
+      name: $('.teacher-createclass-name').val()
+    };
+    var fetchObj = Object.assign({}, newClassObj, Classes.tokenObj);
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/addclass', fetchObj).then(function (result) {
+      if (result === '1') {
+        alert('添加成功');
+        Classes.getClassList();
+      } else if (result === '0') {
+        alert('添加失敗');
+      }
+    });
+  }
+};
+
+var Classes = {
+  init: function init(tokenObj) {
+    this.tokenObj = tokenObj;
+    this.panType = 'activeClass';
+    this.selectCheck = {
+      active: null,
+      unactive: {}
+    };
+
+    this.bindHandle();
+    this.getYearsCourseOpitons();
+  },
+
+  setOption: function setOption(yearcourseOptions) {
+    var opitonHTMLArr = [];
+    yearcourseOptions.forEach(function (dataArr, index) {
+      opitonHTMLArr[index] = dataArr.map(function (item) {
+        return '<option value=' + item.id + '>' + item.name + '</option>';
+      });
+    });
+    $('.teacher-createclass-year').html(opitonHTMLArr[0].join(''));
+    $('.teacher-createclass-course').html(opitonHTMLArr[1].join(''));
+    $('.teacher-searchactive-coursetype').html(opitonHTMLArr[1].join(''));
+    $('.teacher-searchunactive-yeartype').html(opitonHTMLArr[0].join(''));
+    $('.teacher-searchunactive-coursetype').html(opitonHTMLArr[1].join(''));
+  },
+
+  getYearsCourseOpitons: function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+      var yearcourseOptions;
+      return _regenerator2.default.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              yearcourseOptions = [];
+              _context.next = 3;
+              return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getyearinfo', this.tokenObj).then(function (yearsData) {
+                var yearsTempArr = yearsData.split('`');
+                yearcourseOptions[0] = [];
+                for (var i = 0; i < yearsTempArr.length; i = i + 2) {
+                  yearcourseOptions[0].push({
+                    id: yearsTempArr[i],
+                    name: yearsTempArr[i + 1]
+                  });
+                }
+              });
+
+            case 3:
+              _context.next = 5;
+              return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getcourseinfo', this.tokenObj).then(function (coursesData) {
+                var coursesTempArr = coursesData.split('`');
+                yearcourseOptions[1] = [];
+                for (var i = 0; i < coursesTempArr.length; i = i + 3) {
+                  yearcourseOptions[1].push({
+                    id: coursesTempArr[i],
+                    name: coursesTempArr[i + 1]
+                  });
+                }
+              });
+
+            case 5:
+              this.selectCheck = {
+                active: yearcourseOptions[1][0].id,
+                unactive: {
+                  course: yearcourseOptions[1][0].id,
+                  year: yearcourseOptions[0][0].id
+                }
+              };
+              this.setOption(yearcourseOptions);
+              this.getClassList();
+
+            case 8:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    }));
+
+    function getYearsCourseOpitons() {
+      return _ref.apply(this, arguments);
+    }
+
+    return getYearsCourseOpitons;
+  }(),
+
+  getClassList: function getClassList() {
+    var isActive = this.panType === 'activeClass';
+    var fetchUrl = isActive ? 'http://222.24.63.100:9138/cms/getactiveclass' : 'http://222.24.63.100:9138/cms/getclassbyyear';
+    var selectObj = null;
+    if (isActive) {
+      selectObj = {
+        courseid: this.selectCheck.active
+      };
+    } else {
+      selectObj = {
+        courseid: this.selectCheck.unactive.course,
+        yearid: this.selectCheck.unactive.year
+      };
+    }
+    (0, _fetchApi.fetchAPI)(fetchUrl, Object.assign({}, this.tokenObj, selectObj)).then(function (classData) {
+      if (classData === '0') {
+        $('.teacher-class-list').html('');
+        $('.teacher-classes-nodata').css('display', 'block');
+        return;
+      }
+      $('.teacher-classes-nodata').css('display', 'none');
+
+      var classesArr = [];
+      var classesTemp = classData.split('`');
+      for (var i = 0; i < classesTemp.length; i = i + 2) {
+        classesArr.push({
+          classID: classesTemp[i],
+          className: classesTemp[i + 1]
+        });
+      }
+      var classesHTMLArr = classesArr.map(function (classItem) {
+        return '\n              <tr class="list-table-row">\n                <td>' + classItem.classID + '</td>\n                <td>' + classItem.className + '</td>\n                <td>\n                  <span class=\'list-table-checkactive\' typeid=' + classItem.classID + '>\u5207\u6362</span>\n                </td>\n                <td>\n                  <span class=\'list-table-deleteClass\' typeid=' + classItem.classID + '>\u5220\u9664</span>\n                </td>\n              </tr>\n          ';
+      });
+      $('.teacher-class-list').html(classesHTMLArr.join(''));
+      console.log(classesArr);
+    });
+    console.log(fetchUrl);
+  },
+
+  bindHandle: function bindHandle() {
+    $('.teacher-checkactive-pan').bind('click', function (event) {
+      var whichPan = $(event.target).attr('name');
+      if (!whichPan) return;
+      eventHandle.panClickHandle(whichPan, event.target);
+    });
+    $('.teacher-searchactive-select').bind('change', function (event) {
+      eventHandle.selectTypeChangeHandle(event.target);
+    });
+    $('.teacher-searchunactive-select').bind('change', function (event) {
+      eventHandle.selectTypeChangeHandle(event.target);
+    });
+    $('.teacher-createclass-button').bind('click', function (event) {
+      eventHandle.createClassHandle();
+    });
+  }
+};
+
+exports.default = function (tokenObj) {
+  Classes.init(tokenObj);
 };
 
 /***/ })

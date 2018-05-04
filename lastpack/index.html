@@ -97,19 +97,21 @@
                       <span></span>
                     </div>
                     <div class="student-change-info">
-                      <div class="stu-change-name">
-                        <label>姓名</label>
-                        <input type="text" name="name">
+                      <div class="flex-change-box">
+                        <div class="stu-change-name">
+                          <label>姓名</label>
+                          <input type="text" name="name">
+                        </div>
+                        <div class="stu-change-oldpass">
+                          <label>旧密码</label>
+                          <input type="password" name="oldpassword">
+                        </div>
+                        <div class="stu-change-newpass">
+                          <label>新密码</label>
+                          <input type="password" name="newpassword">
+                        </div>
+                        <div class="stu-change-button">确认修改</div>                        
                       </div>
-                      <div class="stu-change-oldpass">
-                        <label>旧密码</label>
-                        <input type="password" name="oldpassword">
-                      </div>
-                      <div class="stu-change-newpass">
-                        <label>新密码</label>
-                        <input type="password" name="newpassword">
-                      </div>
-                      <div class="stu-change-button">确认修改</div>
                     </div>
                 </div>
                 <div class="student-info-button">
@@ -266,19 +268,21 @@
                       <span></span>
                     </div>
                     <div class="teacher-change-info">
-                      <div class="teach-change-name">
-                        <label>姓名</label>
-                        <input type="text" name="name">
+                      <div class="flex-change-box">
+                        <div class="teach-change-name">
+                          <label>姓名</label>
+                          <input type="text" name="name">
+                        </div>
+                        <div class="teach-change-oldpass">
+                          <label>旧密码</label>
+                          <input type="password" name="oldpassword">
+                        </div>
+                        <div class="teach-change-newpass">
+                          <label>新密码</label>
+                          <input type="password" name="newpassword">
+                        </div>
+                        <div class="teach-change-button">确认修改</div>
                       </div>
-                      <div class="teach-change-oldpass">
-                        <label>旧密码</label>
-                        <input type="password" name="oldpassword">
-                      </div>
-                      <div class="teach-change-newpass">
-                        <label>新密码</label>
-                        <input type="password" name="newpassword">
-                      </div>
-                      <div class="teach-change-button">确认修改</div>
                     </div>
                 </div>
                 <div class="teach-info-button">
@@ -354,7 +358,78 @@
                 </div>
               </div>
             </div>
-            <div class="teacher-rightbox"></div>
+            <div class="teacher-rightbox teacher-classes">
+              <div class="rightbody-title">班级信息管理</div>
+              <div class="teacher-classes-box">
+                <div class="teacher-createclass-box">
+                  <div>
+                    <label>班级名称</label>
+                    <input type="text" name="classname" class="teacher-createclass-name" />
+                  </div>
+                  <div>
+                    <label class="teacher-createclass-selectlable">所属年纪</label>
+                    <div class="teacher-createclass-select">
+                      <select class="teacher-createclass-year">
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="teacher-createclass-selectlable">对应课程</label>
+                    <div class="teacher-createclass-select">
+                      <select class="teacher-createclass-course">
+                      </select>
+                    </div>
+                  </div>
+                  <div class="teacher-createclass-button">
+                    创建班级
+                  </div>
+                </div>
+                <div class="teacher-searchclass-box">
+                  <div class="teacher-checkactive-pan">
+                    <div class="teacher-classbutton teacher-checkactive-clicked" name='activeClass'>活动班级</div>
+                    <div  class="teacher-classbutton" name='unactiveClass'>非活动班级</div>
+                  </div>
+                  <div class="teacher-searchactive-box">
+                    <div class="teacher-searchactive-check">
+                      <label>课程类别</label>
+                      <select class="teacher-searchactive-coursetype teacher-searchactive-select"></select>
+                    </div>
+                    <div class="teacher-searchunactive-check">
+                      <div>
+                        <label>课程类别</label>
+                        <select class="teacher-searchunactive-coursetype teacher-searchunactive-select"></select>
+                      </div>
+                      <div>
+                        <label>年级类别</label>
+                        <select class="teacher-searchunactive-yeartype teacher-searchunactive-select"></select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="teacher-class-listbox">
+                  <table class="list-table">
+                    <thead class="list-table-thead">
+                      <tr>
+                        <th>
+                          <span>班级ID</span>
+                        </th>
+                        <th>
+                          <span>班级名称</span>
+                        </th>
+                        <th>
+                          <span>切换活动状态</span>
+                        </th>
+                        <th>
+                          <span>删除</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="list-table-tbody teacher-class-list"></tbody>
+                  </table>
+                  <div class="teacher-classes-nodata">暂无数据</div>                  
+                </div>
+              </div>
+            </div>
             <div class="teacher-rightbox"></div>
         </div>
       </div>

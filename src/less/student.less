@@ -91,10 +91,24 @@
     margin-top: 50px;
     display: none;
     opacity: 0;
+}
+.flex-change-box {
+	position: relative;
+	>div:nth-child(2) {
+		top: 70px;
+	}
+	>div:nth-child(3) {
+		top: 140px;
+	}
+	>div:nth-child(4) {
+		top: 210px;
+		margin-left: 55px;
+	}
 	>div {
-    position: relative;
+    position: absolute;
     max-width: 500px;
-    margin-bottom: 30px;
+    left: 50%;
+    margin-left: -300px;
     label {
       font-family: Microsoft YaHei;
       font-size: 18px;

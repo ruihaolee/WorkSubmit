@@ -91,10 +91,24 @@
     margin-top: 50px;
     display: none;
     opacity: 0;
-	>div {
-    position: relative;
+}
+.flex-change-box {
+  position: relative;
+  >div:nth-child(2) {
+    top: 70px;
+  }
+  >div:nth-child(3) {
+    top: 140px;
+  }
+  >div:nth-child(4) {
+    top: 210px;
+    margin-left: 55px;
+  }
+  >div {
+    position: absolute;
     max-width: 500px;
-    margin-bottom: 30px;
+    left: 50%;
+    margin-left: -300px;
     label {
       font-family: Microsoft YaHei;
       font-size: 18px;
@@ -102,20 +116,19 @@
       display: inline-block;
       color: #999;
     }
-		input {
-			position: absolute;
-	    left: 80px;
-	    top: 0;
-	    min-width: 450px;
-	    height: 40px;
-	    border: 1px solid #ccc;
-	    border-radius: 5px;
-	    padding-left: 20px;
+    input {
+      position: absolute;
+      left: 80px;
+      top: 0;
+      min-width: 450px;
+      height: 40px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding-left: 20px;
       font-size: 18px;
-		}
-	}
+    }
+  }
 }
-
 .teach-change-button {
   width: 200px !important;
   height: 35px;
@@ -322,4 +335,162 @@ tbody > tr {
 
 .teacher-courses-listbox {
   margin-top: 45px;
+}
+
+.teacher-classes-box {
+
+}
+.teacher-createclass-box {
+  position: relative;
+  >div:nth-child(1) {
+    margin-top: 25px;
+    label {
+      font-family: Microsoft YaHei;
+      font-size: 18px;
+      line-height: 40px;
+      display: inline-block;
+      color: #999;
+      margin-right: 30px;
+      margin-left: 15%;
+    }
+    input {
+      min-width: 300px;
+      height: 40px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding-left: 20px;
+      font-size: 18px;
+    }
+  }
+  >div:nth-child(3) {
+    margin-top: 40px;
+  } 
+  .teacher-createclass-selectlable{
+    font-family: Microsoft YaHei;
+    font-size: 18px;
+    color: #999;
+    margin-left: 15%;
+    position: relative;
+    top: 32px;
+}
+
+.teacher-createclass-select {
+   background: url(http://ourjs.github.io/static/2015/arrow.png) right center no-repeat;
+    width: 315px;
+    height: 40px;
+    overflow: hidden;
+    border: solid 1px #ccc;
+    position: absolute;
+    left: 15%;
+    margin-left: 110px;
+    label {
+      font-family: Microsoft YaHei;
+      font-size: 18px;
+      line-height: 40px;
+      display: inline-block;
+      color: #999;
+      margin-right: 30px;
+      margin-left: 15%;
+    }
+    select{
+      -webkit-appearance:none;
+      -moz-appearance:none;
+      appearance:none;
+      background:transparent;
+      border:none;
+      padding-left:10px;
+      width: 316px;
+      height:100%;
+    }
+  } 
+}
+.teacher-createclass-button{
+    position: absolute;
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border: 1px solid #ededed;
+    font-size: 18px;
+    border-radius: 5px;
+    background-color: #ededed;
+    cursor: pointer;
+    transition: all .3s;
+    z-index: 999;  
+    right: 250px;
+    top: 51%;
+    transition: all 0.5s;
+}
+.teacher-createclass-button:hover {
+  background-color: #6BC30D;
+  color: #fff;
+}
+
+.teacher-searchclass-box {
+  margin-top: 80px;
+}
+.teacher-checkactive-pan {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 13%;
+  overflow: hidden;
+  >div {
+    float: left;
+    width: 49%;
+    text-align: center;
+    height: 40px;
+    background-color: #ededed;
+    line-height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 1%;
+    transition: all 0.5s;
+  }
+  .teacher-checkactive-clicked {
+    background-color: #6BC30D;
+    color: #fff;  
+  }
+}
+.teacher-searchactive-box {
+  display: flex;
+  margin-top: 20px;
+  width: 100%;
+  padding: 0 13%;
+  box-sizing: border-box;
+  .teacher-searchactive-check {
+    display: block;
+  }
+  .teacher-searchunactive-check {
+    display: none;
+    >div {
+      display: inline-block;
+    }
+    >div:nth-child(1) {
+      margin-right: 20px;
+    }
+  }
+  label {
+    font-family: Microsoft YaHei;
+    font-size: 16px;
+    color: #999;
+  }
+  select {
+    background: url(http://ourjs.github.io/static/2015/arrow.png) right center no-repeat;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 315px;
+    height: 40px; 
+    text-indent: 10px;
+  }
+}
+.teacher-class-listbox {
+  margin-top: 20px;
+}
+.teacher-classes-nodata {
+  font-size: 22px;
+  width: 100%;
+  text-align: center;
+  margin-top: -22px;
+  display: none;
 }

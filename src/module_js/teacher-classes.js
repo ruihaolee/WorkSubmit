@@ -53,6 +53,28 @@ const eventHandle = {
           alert('添加失敗');
         }
       })
+  },
+
+  checkActiveDeleteHandle: function(isCheckActive, isDelete, target) {
+    const classid = $(target).attr('classid');
+    const fetchUrl = isCheckActive ? 'http://222.24.63.100:9138/cms/setclasstype' : 'http://222.24.63.100:9138/cms/delclass';
+    const infoObj = isCheckActive ? {
+      classid,
+      isactive: Classes.panType === 'activeClass' ? false : true
+    } : {
+      classid
+    };
+    fetchAPI(fetchUrl, Object.assign({}, infoObj, Classes.tokenObj))
+      .then(result => {
+        const sucessAlert = isCheckActive ? '切换活动状态成功' : '删除班级成功';
+        const failAlert = isCheckActive ? '切换活动状态失败' : '删除班级失败';
+        if (result === '0') {
+          alert(failAlert);
+        } else if (result === '1') {
+          alert(sucessAlert);
+        }
+        Classes.getClassList();
+      })
   }
 }
 
@@ -155,10 +177,10 @@ const Classes = {
                 <td>${classItem.classID}</td>
                 <td>${classItem.className}</td>
                 <td>
-                  <span class='list-table-checkactive' typeid=${classItem.classID}>切换</span>
+                  <span class='list-table-checkactive' classid=${classItem.classID}>切换</span>
                 </td>
                 <td>
-                  <span class='list-table-deleteClass' typeid=${classItem.classID}>删除</span>
+                  <span class='list-table-deleteClass' classid=${classItem.classID}>删除</span>
                 </td>
               </tr>
           `
@@ -183,7 +205,16 @@ const Classes = {
     });
     $('.teacher-createclass-button').bind('click', event => {
       eventHandle.createClassHandle();
-    })
+    });
+    $('.teacher-class-list').bind('click', event => {
+      const target = event.target || event.srcElement;
+      const targetClassName = $(target).attr('class');
+      if (!targetClassName) return;
+      const isCheckActive = targetClassName.indexOf('list-table-checkactive') !== -1 ? true : false;
+      const isDelete = targetClassName.indexOf('list-table-deleteClass') !== -1 ? true : false;
+      if (!isCheckActive && !isDelete) return;
+      eventHandle.checkActiveDeleteHandle(isCheckActive, isDelete, target);
+    });
   }
 }
 

@@ -3730,6 +3730,27 @@ var eventHandle = {
         alert('添加失敗');
       }
     });
+  },
+
+  checkActiveDeleteHandle: function checkActiveDeleteHandle(isCheckActive, isDelete, target) {
+    var classid = $(target).attr('classid');
+    var fetchUrl = isCheckActive ? 'http://222.24.63.100:9138/cms/setclasstype' : 'http://222.24.63.100:9138/cms/delclass';
+    var infoObj = isCheckActive ? {
+      classid: classid,
+      isactive: Classes.panType === 'activeClass' ? false : true
+    } : {
+      classid: classid
+    };
+    (0, _fetchApi.fetchAPI)(fetchUrl, Object.assign({}, infoObj, Classes.tokenObj)).then(function (result) {
+      var sucessAlert = isCheckActive ? '切换活动状态成功' : '删除班级成功';
+      var failAlert = isCheckActive ? '切换活动状态失败' : '删除班级失败';
+      if (result === '0') {
+        alert(failAlert);
+      } else if (result === '1') {
+        alert(sucessAlert);
+      }
+      Classes.getClassList();
+    });
   }
 };
 
@@ -3850,7 +3871,7 @@ var Classes = {
         });
       }
       var classesHTMLArr = classesArr.map(function (classItem) {
-        return '\n              <tr class="list-table-row">\n                <td>' + classItem.classID + '</td>\n                <td>' + classItem.className + '</td>\n                <td>\n                  <span class=\'list-table-checkactive\' typeid=' + classItem.classID + '>\u5207\u6362</span>\n                </td>\n                <td>\n                  <span class=\'list-table-deleteClass\' typeid=' + classItem.classID + '>\u5220\u9664</span>\n                </td>\n              </tr>\n          ';
+        return '\n              <tr class="list-table-row">\n                <td>' + classItem.classID + '</td>\n                <td>' + classItem.className + '</td>\n                <td>\n                  <span class=\'list-table-checkactive\' classid=' + classItem.classID + '>\u5207\u6362</span>\n                </td>\n                <td>\n                  <span class=\'list-table-deleteClass\' classid=' + classItem.classID + '>\u5220\u9664</span>\n                </td>\n              </tr>\n          ';
       });
       $('.teacher-class-list').html(classesHTMLArr.join(''));
       console.log(classesArr);
@@ -3872,6 +3893,15 @@ var Classes = {
     });
     $('.teacher-createclass-button').bind('click', function (event) {
       eventHandle.createClassHandle();
+    });
+    $('.teacher-class-list').bind('click', function (event) {
+      var target = event.target || event.srcElement;
+      var targetClassName = $(target).attr('class');
+      if (!targetClassName) return;
+      var isCheckActive = targetClassName.indexOf('list-table-checkactive') !== -1 ? true : false;
+      var isDelete = targetClassName.indexOf('list-table-deleteClass') !== -1 ? true : false;
+      if (!isCheckActive && !isDelete) return;
+      eventHandle.checkActiveDeleteHandle(isCheckActive, isDelete, target);
     });
   }
 };

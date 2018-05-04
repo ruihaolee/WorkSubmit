@@ -3762,9 +3762,13 @@ var Classes = {
       active: null,
       unactive: {}
     };
-
-    this.bindHandle();
+    // 手动触发一次 还原样式状态
+    eventHandle.panClickHandle('activeClass', $('.teacher-classbutton').get(0));
     this.getYearsCourseOpitons();
+    if (firDO) {
+      this.bindHandle();
+      firDO = false;
+    }
   },
 
   setOption: function setOption(yearcourseOptions) {

@@ -58,6 +58,14 @@ const teacherCheckFunc = {
     $('.teacher-courseyears').css({
       display: 'block'
     });
+  },
+  class: () => {
+    $('.teacher-rightbox').css({
+      display: 'none'
+    });
+    $('.teacher-classes').css({
+      display: 'block'
+    });
   }
 }
 

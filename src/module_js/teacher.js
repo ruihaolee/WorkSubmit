@@ -1,7 +1,7 @@
 /*
  * @Author: liruihao02
  * @Date:   2018-04-04
- * @Last Modified by:   liruihao02
+ * @Last Modified by:   Marte
  * @Last Modified time: 2018-04-21
  */
 import '../less/left-container.less';
@@ -16,6 +16,7 @@ import {
 } from '../pub_funcs/routerView.js';
 import teacherSetting from './teacher-setting.js';
 import courseYears from './teacher-courseyears.js';
+import teacherClass from './teacher-classes.js';
 
 let TokenObj = null;
 
@@ -42,6 +43,8 @@ const LeftContainer = {
         courseYears(TokenObj);
         break;
       case 'class':
+        Teacher.teacherRoute.changeRoute('class');
+        teacherClass(TokenObj);
         break;
       case 'students':
         break;
@@ -84,6 +87,7 @@ export default class Teacher {
     this.teacherRoute.init();
     this.teacherRoute.route('setting', teacherCheckFunc.setting);
     this.teacherRoute.route('courseyears', teacherCheckFunc.courseyears);
+    this.teacherRoute.route('class', teacherCheckFunc.class);
   }
 
   static routeBack() {

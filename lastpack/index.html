@@ -430,6 +430,56 @@
                 </div>
               </div>
             </div>
+            <div class="teacher-rightbox teacher-students">
+              <div class="rightbody-title">学生信息管理</div>
+              <div class="teacher-createstudents-box">
+                  <div>
+                    <label class="teacher-createstudents-class">所属班级</label>
+                    <div class="teacher-createstudents-classbox">
+                      <select class="teacher-createstudents-select">
+                      </select>
+                    </div>
+                  </div>  
+                  <div>
+                    <label>开始学号</label>
+                    <input type="text" class="teacher-createstudent-start" />
+                  </div>
+                  <div>
+                    <label>结束学号</label>
+                    <input type="text" class="teacher-createstudent-end" placeholder="可不填，不填则创建单个学生账号" />
+                  </div>
+                  <div class="teacher-createstudents-button">
+                      确认创建
+                  </div>            
+              </div>
+              <div class="teacher-search-studentlistbox">
+                  <div class="teacher-search-selectbox">
+                    <label class="teacher-search-class">按活动班级查询</label>
+                    <div class="teacher-search-classbox">
+                      <select class="teacher-search-select">
+                      </select>
+                    </div>
+                  </div>
+                  <div class="teacher-search-studentlist">
+                    <table class="list-table">
+                      <thead class="list-table-thead">
+                        <tr>
+                          <th>
+                            <span>学生学号</span>
+                          </th>
+                          <th>
+                            <span>学生姓名</span>
+                          </th>
+                          <th>
+                            <span>删除</span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="list-table-tbody teacher-students-list"></tbody>
+                    </table>  
+                  </div>                 
+              </div>
+            </div>
             <div class="teacher-rightbox"></div>
         </div>
       </div>

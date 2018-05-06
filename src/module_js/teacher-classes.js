@@ -1,7 +1,7 @@
 /*
  * @Author: liruihao02
  * @Date:   2018-04-21
- * @Last Modified by:   Marte
+ * @Last Modified by:   liruihao
  * @Last Modified time: 2018-04-21
  */
 import {
@@ -190,9 +190,7 @@ const Classes = {
           `
         });
         $('.teacher-class-list').html(classesHTMLArr.join(''));
-        console.log(classesArr);
       });
-    console.log(fetchUrl);
   },
 
   bindHandle: function() {

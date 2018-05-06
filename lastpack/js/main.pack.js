@@ -242,6 +242,14 @@ var teacherCheckFunc = {
     $('.teacher-classes').css({
       display: 'block'
     });
+  },
+  students: function students() {
+    $('.teacher-rightbox').css({
+      display: 'none'
+    });
+    $('.teacher-students').css({
+      display: 'block'
+    });
   }
 };
 
@@ -708,7 +716,7 @@ Object.defineProperty(exports, "__esModule", {
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Author: liruihao02
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Date:   2018-04-04
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Last Modified by:   Marte
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @Last Modified by:   liruihao
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @Last Modified time: 2018-04-21
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
@@ -740,6 +748,10 @@ var _teacherCourseyears2 = _interopRequireDefault(_teacherCourseyears);
 var _teacherClasses = __webpack_require__(26);
 
 var _teacherClasses2 = _interopRequireDefault(_teacherClasses);
+
+var _teacherStudents = __webpack_require__(27);
+
+var _teacherStudents2 = _interopRequireDefault(_teacherStudents);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -774,6 +786,8 @@ var LeftContainer = {
         (0, _teacherClasses2.default)(TokenObj);
         break;
       case 'students':
+        Teacher.teacherRoute.changeRoute('students');
+        (0, _teacherStudents2.default)(TokenObj);
         break;
       case 'works':
         break;
@@ -822,6 +836,7 @@ var Teacher = function () {
       this.teacherRoute.route('setting', _routerView.teacherCheckFunc.setting);
       this.teacherRoute.route('courseyears', _routerView.teacherCheckFunc.courseyears);
       this.teacherRoute.route('class', _routerView.teacherCheckFunc.class);
+      this.teacherRoute.route('students', _routerView.teacherCheckFunc.students);
     }
   }, {
     key: 'routeBack',
@@ -3681,7 +3696,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /*
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Author: liruihao02
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Date:   2018-04-21
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified by:   Marte
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified by:   liruihao
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Last Modified time: 2018-04-21
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             */
 
@@ -3878,9 +3893,7 @@ var Classes = {
         return '\n              <tr class="list-table-row">\n                <td>' + classItem.classID + '</td>\n                <td>' + classItem.className + '</td>\n                <td>\n                  <span class=\'list-table-checkactive\' classid=' + classItem.classID + '>\u5207\u6362</span>\n                </td>\n                <td>\n                  <span class=\'list-table-deleteClass\' classid=' + classItem.classID + '>\u5220\u9664</span>\n                </td>\n              </tr>\n          ';
       });
       $('.teacher-class-list').html(classesHTMLArr.join(''));
-      console.log(classesArr);
     });
-    console.log(fetchUrl);
   },
 
   bindHandle: function bindHandle() {
@@ -3912,6 +3925,182 @@ var Classes = {
 
 exports.default = function (tokenObj) {
   Classes.init(tokenObj);
+};
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _regenerator = __webpack_require__(3);
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _fetchApi = __webpack_require__(0);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Author: liruihao
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Date:   2018-05-04 16:36:51
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified by:   liruihao
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-07 00:10:50
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            */
+
+
+var firDO = true;
+
+var eventHandle = {
+  createStudentsHandle: function createStudentsHandle() {
+    var createStuObj = {
+      classid: $('.teacher-createstudents-select').val(),
+      idfrom: $('.teacher-createstudent-start').val().trim()
+    };
+    if ($('.teacher-createstudent-end').val().trim()) {
+      createStuObj['idto'] = $('.teacher-createstudent-end').val().trim();
+    }
+    if (!createStuObj.idfrom) {
+      alert('开始学号必须输入');
+      return;
+    }
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/addstudent', Object.assign({}, Students.tokenObj, createStuObj)).then(function (result) {
+      if (result === '0') {
+        alert('创建学生账号失败');
+      } else {
+        Students.getStudentList();
+        alert('创建学生账号成功');
+      }
+    });
+    // console.log(createStuObj);
+  },
+  deleteStudentHandle: function deleteStudentHandle(sid) {
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/delstudent', Object.assign({}, Students.tokenObj, {
+      sid: sid
+    })).then(function (result) {
+      Students.getStudentList();
+      result === '0' ? alert('\u5220\u9664\u5931\u8D25') : alert('\u5220\u9664 ' + sid + ' \u6210\u529F');
+    });
+  }
+};
+
+var Students = {
+  init: function init(tokenObj) {
+    this.tokenObj = tokenObj;
+    this.getActiveClasses();
+    this.bindHandle();
+  },
+  setStudentsListView: function setStudentsListView(studentsData) {
+    var studentsHTMLArr = studentsData.map(function (student) {
+      return '\n          <tr class="list-table-row">\n            <td>' + student.studentNumber + '</td>\n            <td>' + student.studentName + '</td>\n            <td>\n              <span class=\'list-table-deleteStudent\' sid=' + student.studentNumber + '>\u5220\u9664</span>\n            </td>\n          </tr>\n      ';
+    });
+    $('.teacher-students-list').html(studentsHTMLArr.join(''));
+  },
+  setOption: function setOption(totalClasses) {
+    // console.log(totalClasses);
+    var optionHTMLArr = totalClasses.map(function (item) {
+      return '<option value=' + item.classID + '>' + item.className + '</option>';
+    });
+    $('.teacher-createstudents-select').html(optionHTMLArr.join(''));
+    $('.teacher-search-select').html(optionHTMLArr.join(''));
+  },
+  getActiveClasses: function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+      var _this = this;
+
+      var coursesArr;
+      return _regenerator2.default.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              coursesArr = [];
+              _context.next = 3;
+              return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getcourseinfo', this.tokenObj).then(function (coursesData) {
+                var coursesTempArr = coursesData.split('`');
+                for (var i = 0; i < coursesTempArr.length; i = i + 3) {
+                  coursesArr.push(coursesTempArr[i]);
+                }
+              });
+
+            case 3:
+              Promise.all(coursesArr.map(function (courseid) {
+                return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getactiveclass', Object.assign({}, _this.tokenObj, {
+                  courseid: courseid
+                })).then(function (classesData) {
+                  if (classesData === '0') {
+                    return [];
+                  }
+                  var classesTemp = classesData.split('`');
+                  var classes = [];
+                  for (var i = 0; i < classesTemp.length; i = i + 2) {
+                    classes.push({
+                      classID: classesTemp[i],
+                      className: classesTemp[i + 1]
+                    });
+                  }
+                  return classes;
+                });
+              })).then(function (classesArr) {
+                var totalClasses = [];
+                classesArr.forEach(function (classes) {
+                  totalClasses = totalClasses.concat(classes);
+                });
+                _this.nowClassID = totalClasses[0].classID;
+                _this.setOption(totalClasses);
+                _this.getStudentList();
+              });
+
+            case 4:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    }));
+
+    function getActiveClasses() {
+      return _ref.apply(this, arguments);
+    }
+
+    return getActiveClasses;
+  }(),
+  getStudentList: function getStudentList() {
+    var _this2 = this;
+
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getstubyclass', Object.assign({}, this.tokenObj, {
+      classid: this.nowClassID
+    })).then(function (studentsData) {
+      var studentsTemp = studentsData.split('`');
+      var studentsArr = [];
+      for (var i = 0; i < studentsTemp.length; i = i + 2) {
+        studentsArr.push({
+          studentNumber: studentsTemp[i],
+          studentName: studentsTemp[i + 1]
+        });
+      }
+      console.log(studentsArr);
+      _this2.setStudentsListView(studentsArr);
+    });
+  },
+  bindHandle: function bindHandle() {
+    $('.teacher-createstudents-button').bind('click', function () {
+      eventHandle.createStudentsHandle();
+    });
+    $('.teacher-students-list').bind('click', function (event) {
+      var targetClassName = event.target.className;
+      if (targetClassName !== 'list-table-deleteStudent') return;
+      eventHandle.deleteStudentHandle($(event.target).attr('sid'));
+    });
+  }
+};
+
+exports.default = function (tokenObj) {
+  Students.init(tokenObj);
 };
 
 /***/ })

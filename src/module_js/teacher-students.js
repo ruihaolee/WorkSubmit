@@ -2,7 +2,7 @@
  * @Author: liruihao
  * @Date:   2018-05-04 16:36:51
  * @Last Modified by:   liruihao
- * @Last Modified time: 2018-05-07 00:13:34
+ * @Last Modified time: 2018-05-07 00:21:21
  */
 import {
   fetchAPI
@@ -45,6 +45,15 @@ const eventHandle = {
         Students.getStudentList();
         result === '0' ? alert(`删除失败`) : alert(`删除 ${sid} 成功`);
       });
+  },
+  listSelectChangeHandle(event) {
+    const selectValue = event.target.val();
+    if (selectValue === Students.nowClassID) {
+      return;
+    } else {
+      Students.nowClassID = selectValue;
+      Students.getStudentList();
+    }
   }
 }
 
@@ -139,6 +148,9 @@ const Students = {
       const targetClassName = event.target.className;
       if (targetClassName !== 'list-table-deleteStudent') return;
       eventHandle.deleteStudentHandle($(event.target).attr('sid'));
+    });
+    $('.teacher-search-select').bind('change', (event) => {
+      eventHandle.listSelectChangeHandle(event);
     });
   }
 }

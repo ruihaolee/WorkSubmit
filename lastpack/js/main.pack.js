@@ -3950,7 +3950,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Author: liruihao
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Date:   2018-05-04 16:36:51
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Last Modified by:   liruihao
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-07 00:10:50
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-07 00:21:21
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             */
 
 
@@ -3965,10 +3965,11 @@ var eventHandle = {
     if ($('.teacher-createstudent-end').val().trim()) {
       createStuObj['idto'] = $('.teacher-createstudent-end').val().trim();
     }
+
     if (!createStuObj.idfrom) {
       alert('开始学号必须输入');
       return;
-    }
+    } else if (!Number(createStuObj.idfrom) && Number(createStuObj.idfrom) === 0) {}
     (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/addstudent', Object.assign({}, Students.tokenObj, createStuObj)).then(function (result) {
       if (result === '0') {
         alert('创建学生账号失败');
@@ -3986,6 +3987,15 @@ var eventHandle = {
       Students.getStudentList();
       result === '0' ? alert('\u5220\u9664\u5931\u8D25') : alert('\u5220\u9664 ' + sid + ' \u6210\u529F');
     });
+  },
+  listSelectChangeHandle: function listSelectChangeHandle(event) {
+    var selectValue = event.target.val();
+    if (selectValue === Students.nowClassID) {
+      return;
+    } else {
+      Students.nowClassID = selectValue;
+      Students.getStudentList();
+    }
   }
 };
 
@@ -4095,6 +4105,9 @@ var Students = {
       var targetClassName = event.target.className;
       if (targetClassName !== 'list-table-deleteStudent') return;
       eventHandle.deleteStudentHandle($(event.target).attr('sid'));
+    });
+    $('.teacher-search-select').bind('change', function (event) {
+      eventHandle.listSelectChangeHandle(event);
     });
   }
 };

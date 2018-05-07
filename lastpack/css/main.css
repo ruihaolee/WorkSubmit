@@ -1087,3 +1087,249 @@ tbody > tr {
   margin-top: -22px;
   display: none;
 }
+.teacher-createstudents-box {
+  position: relative;
+}
+.teacher-createstudents-box > div {
+  margin-top: 10px;
+}
+.teacher-createstudents-box > div label {
+  font-family: Microsoft YaHei;
+  font-size: 18px;
+  line-height: 40px;
+  display: inline-block;
+  color: #999;
+  margin-right: 30px;
+  margin-left: 15%;
+}
+.teacher-createstudents-box > div input {
+  min-width: 300px;
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding-left: 20px;
+  font-size: 15px;
+}
+.teacher-createstudents-box > div:nth-child(2) {
+  margin-top: 52px;
+}
+.teacher-createstudents-box .teacher-createstudents-class {
+  font-family: Microsoft YaHei;
+  font-size: 18px;
+  color: #999;
+  margin-left: 15%;
+  position: relative;
+  top: 40px;
+}
+.teacher-createstudents-box .teacher-createstudents-classbox {
+  background: url(http://ourjs.github.io/static/2015/arrow.png) right center no-repeat;
+  width: 315px;
+  height: 40px;
+  overflow: hidden;
+  border: solid 1px #ccc;
+  position: absolute;
+  left: 15%;
+  margin-left: 110px;
+}
+.teacher-createstudents-box .teacher-createstudents-classbox label {
+  font-family: Microsoft YaHei;
+  font-size: 18px;
+  line-height: 40px;
+  display: inline-block;
+  color: #999;
+  margin-right: 30px;
+  margin-left: 15%;
+}
+.teacher-createstudents-box .teacher-createstudents-classbox select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding-left: 10px;
+  width: 316px;
+  height: 100%;
+}
+.teacher-createstudents-box .teacher-createstudents-button {
+  position: absolute;
+  width: 200px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border: 1px solid #ededed;
+  font-size: 18px;
+  border-radius: 5px;
+  background-color: #ededed;
+  cursor: pointer;
+  transition: all .3s;
+  z-index: 999;
+  right: 20%;
+  top: 43%;
+  transition: all 0.5s;
+}
+.teacher-createstudents-box .teacher-createstudents-button:hover {
+  background-color: #6BC30D;
+  color: #fff;
+}
+.teacher-search-studentlistbox {
+  margin-top: 35px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+.teacher-search-classbox {
+  height: 40px;
+}
+.teacher-search-selectbox {
+  background: url(http://ourjs.github.io/static/2015/arrow.png) right center no-repeat;
+  width: 315px;
+  height: 40px;
+  border: solid 1px #ccc;
+  margin-left: 25%;
+  position: relative;
+}
+.teacher-search-selectbox select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding-left: 10px;
+  width: 316px;
+  height: 100%;
+}
+.teacher-search-class {
+  font-family: Microsoft YaHei;
+  font-size: 18px;
+  color: #999;
+  position: absolute;
+  left: -52%;
+  top: 7px;
+}
+.teacher-search-studentlist {
+  margin-top: 20px;
+}
+.teacher-works-searchbox {
+  margin-top: 20px;
+}
+.teacher-works-searchbox > div {
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+.teacher-works-searchbox > div:nth-child(1) {
+  overflow: inherit;
+}
+.teacher-searchworks-select:nth-child(2) {
+  -ms-flex-pack: start;
+      justify-content: flex-start;
+}
+.teacher-searchworks-select {
+  position: relative;
+  width: 50%;
+  box-sizing: border-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -ms-flex-pack: center;
+      justify-content: center;
+  float: left;
+}
+.teacher-searchworks-select label {
+  font-family: Microsoft YaHei;
+  font-size: 18px;
+  color: #999;
+  line-height: 40px;
+  display: inline-block;
+  margin-right: 20px;
+  position: relative;
+  top: 3px;
+}
+.teacher-searchworks-select select {
+  background: url(http://ourjs.github.io/static/2015/arrow.png) right center no-repeat;
+  width: 315px;
+  height: 40px;
+  overflow: hidden;
+  border: solid 1px #ccc;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.teacher-searchworks-input:nth-child(2) {
+  -ms-flex-pack: start;
+      justify-content: flex-start;
+}
+.teacher-searchworks-input {
+  position: relative;
+  width: 50%;
+  box-sizing: border-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -ms-flex-pack: center;
+      justify-content: center;
+  float: left;
+}
+.teacher-searchworks-input label {
+  font-family: Microsoft YaHei;
+  font-size: 18px;
+  color: #999;
+  line-height: 40px;
+  display: inline-block;
+  margin-right: 20px;
+  position: relative;
+  top: 3px;
+}
+.teacher-searchworks-input input {
+  min-width: 315px;
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 15px;
+}
+.teacher-datepicker-content {
+  position: relative;
+  top: auto;
+  left: 50%;
+  width: 50%;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -ms-flex-pack: center;
+  justify-content: flex-start;
+}
+.teacher-datepicker-content label {
+  font-family: Microsoft YaHei;
+  font-size: 18px;
+  color: #999;
+  line-height: 40px;
+  display: inline-block;
+  margin-right: 20px;
+  position: relative;
+  top: 3px;
+}
+.teacher-datepicker-content input {
+  width: 315px;
+  height: 40px;
+}
+.teacher-datepicker-content .dt {
+  top: 46px;
+  left: -10%;
+}
+.teacher-works-searchbutton {
+  position: absolute;
+  width: 399px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border: 1px solid #ededed;
+  font-size: 18px;
+  border-radius: 5px;
+  background-color: #ededed;
+  cursor: pointer;
+  transition: all .3s;
+  z-index: 999;
+  left: 24.5%;
+  transition: all 0.5s;
+}

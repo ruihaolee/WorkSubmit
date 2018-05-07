@@ -66,6 +66,22 @@ const teacherCheckFunc = {
     $('.teacher-classes').css({
       display: 'block'
     });
+  },
+  students: () => {
+    $('.teacher-rightbox').css({
+      display: 'none'
+    });
+    $('.teacher-students').css({
+      display: 'block'
+    });
+  },
+  works: () => {
+    $('.teacher-rightbox').css({
+      display: 'none'
+    });
+    $('.teacher-works').css({
+      display: 'block'
+    });
   }
 }
 

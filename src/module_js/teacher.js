@@ -1,7 +1,7 @@
 /*
  * @Author: liruihao02
  * @Date:   2018-04-04
- * @Last Modified by:   Marte
+ * @Last Modified by:   liruihao
  * @Last Modified time: 2018-04-21
  */
 import '../less/left-container.less';
@@ -17,6 +17,8 @@ import {
 import teacherSetting from './teacher-setting.js';
 import courseYears from './teacher-courseyears.js';
 import teacherClass from './teacher-classes.js';
+import teacherStudents from './teacher-students.js';
+import teacherWorks from './teacher-works.js';
 
 let TokenObj = null;
 
@@ -47,8 +49,12 @@ const LeftContainer = {
         teacherClass(TokenObj);
         break;
       case 'students':
+        Teacher.teacherRoute.changeRoute('students');
+        teacherStudents(TokenObj);
         break;
       case 'works':
+        Teacher.teacherRoute.changeRoute('works');
+        teacherWorks(TokenObj);
         break;
       default:
         break;
@@ -88,6 +94,8 @@ export default class Teacher {
     this.teacherRoute.route('setting', teacherCheckFunc.setting);
     this.teacherRoute.route('courseyears', teacherCheckFunc.courseyears);
     this.teacherRoute.route('class', teacherCheckFunc.class);
+    this.teacherRoute.route('students', teacherCheckFunc.students);
+    this.teacherRoute.route('works', teacherCheckFunc.works);
   }
 
   static routeBack() {
@@ -99,7 +107,6 @@ export default class Teacher {
   }
 
   static bindHandle() {
-    console.log('AAA');
     $('.teacher-menu-ul').bind('click', event => {
       LeftContainer.menuClickHandle(event);
     })

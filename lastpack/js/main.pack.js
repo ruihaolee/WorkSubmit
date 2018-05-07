@@ -3950,11 +3950,21 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Author: liruihao
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Date:   2018-05-04 16:36:51
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Last Modified by:   liruihao
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-07 00:21:21
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-07 15:10:45
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             */
 
 
 var firDO = true;
+
+//批量删除test函数
+var testDeleteStudents = function testDeleteStudents() {
+  for (var i = 1198; i < 2201; i++) {
+    console.log(i);
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/delstudent', Object.assign({}, Students.tokenObj, {
+      sid: '0414' + i
+    })).then(function (result) {});
+  }
+};
 
 var eventHandle = {
   createStudentsHandle: function createStudentsHandle() {
@@ -3965,11 +3975,20 @@ var eventHandle = {
     if ($('.teacher-createstudent-end').val().trim()) {
       createStuObj['idto'] = $('.teacher-createstudent-end').val().trim();
     }
-
     if (!createStuObj.idfrom) {
       alert('开始学号必须输入');
       return;
-    } else if (!Number(createStuObj.idfrom) && Number(createStuObj.idfrom) === 0) {}
+    } else if (!Number(createStuObj.idfrom) || createStuObj.idfrom.length !== 8) {
+      alert('学号请输入8位数字，请检查');
+      return;
+    } else if (createStuObj.idto && (!Number(createStuObj.idto) || createStuObj.idto.length !== 8)) {
+      alert('学号请输入8位数字，请检查');
+      return;
+    } else if (createStuObj.idto && Number(createStuObj.idto) < Number(createStuObj.idfrom)) {
+      alert('结束学号应小于等于开始学号，请检查');
+      return;
+    }
+
     (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/addstudent', Object.assign({}, Students.tokenObj, createStuObj)).then(function (result) {
       if (result === '0') {
         alert('创建学生账号失败');
@@ -4003,6 +4022,7 @@ var Students = {
   init: function init(tokenObj) {
     this.tokenObj = tokenObj;
     this.getActiveClasses();
+    // testDeleteStudents();
     this.bindHandle();
   },
   setStudentsListView: function setStudentsListView(studentsData) {

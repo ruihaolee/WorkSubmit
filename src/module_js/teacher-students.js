@@ -2,13 +2,26 @@
  * @Author: liruihao
  * @Date:   2018-05-04 16:36:51
  * @Last Modified by:   liruihao
- * @Last Modified time: 2018-05-07 00:21:21
+ * @Last Modified time: 2018-05-07 15:10:45
  */
 import {
   fetchAPI
 } from '../pub_funcs/fetchApi.js';
 
 let firDO = true;
+
+//批量删除test函数
+const testDeleteStudents = () => {
+  for (let i = 1198; i < 2201; i++) {
+    console.log(i);
+    fetchAPI('http://222.24.63.100:9138/cms/delstudent', Object.assign({}, Students.tokenObj, {
+        sid: `0414${i}`
+      }))
+      .then(result => {
+
+      });
+  }
+}
 
 const eventHandle = {
   createStudentsHandle: function() {
@@ -19,13 +32,20 @@ const eventHandle = {
     if ($('.teacher-createstudent-end').val().trim()) {
       createStuObj['idto'] = $('.teacher-createstudent-end').val().trim();
     }
-
     if (!createStuObj.idfrom) {
       alert('开始学号必须输入');
       return;
-    } else if (!Number(createStuObj.idfrom) && Number(createStuObj.idfrom) === 0) {
-
+    } else if (!Number(createStuObj.idfrom) || createStuObj.idfrom.length !== 8) {
+      alert('学号请输入8位数字，请检查');
+      return;
+    } else if (createStuObj.idto && (!Number(createStuObj.idto) || createStuObj.idto.length !== 8)) {
+      alert('学号请输入8位数字，请检查');
+      return;
+    } else if (createStuObj.idto && Number(createStuObj.idto) < Number(createStuObj.idfrom)) {
+      alert('结束学号应小于等于开始学号，请检查');
+      return;
     }
+
     fetchAPI('http://222.24.63.100:9138/cms/addstudent', Object.assign({}, Students.tokenObj, createStuObj))
       .then(result => {
         if (result === '0') {
@@ -61,6 +81,7 @@ const Students = {
   init: function(tokenObj) {
     this.tokenObj = tokenObj;
     this.getActiveClasses();
+    // testDeleteStudents();
     this.bindHandle();
   },
   setStudentsListView: function(studentsData) {

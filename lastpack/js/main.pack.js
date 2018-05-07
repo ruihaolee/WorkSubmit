@@ -250,6 +250,14 @@ var teacherCheckFunc = {
     $('.teacher-students').css({
       display: 'block'
     });
+  },
+  works: function works() {
+    $('.teacher-rightbox').css({
+      display: 'none'
+    });
+    $('.teacher-works').css({
+      display: 'block'
+    });
   }
 };
 
@@ -753,6 +761,10 @@ var _teacherStudents = __webpack_require__(27);
 
 var _teacherStudents2 = _interopRequireDefault(_teacherStudents);
 
+var _teacherWorks = __webpack_require__(28);
+
+var _teacherWorks2 = _interopRequireDefault(_teacherWorks);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -790,6 +802,8 @@ var LeftContainer = {
         (0, _teacherStudents2.default)(TokenObj);
         break;
       case 'works':
+        Teacher.teacherRoute.changeRoute('works');
+        (0, _teacherWorks2.default)(TokenObj);
         break;
       default:
         break;
@@ -837,6 +851,7 @@ var Teacher = function () {
       this.teacherRoute.route('courseyears', _routerView.teacherCheckFunc.courseyears);
       this.teacherRoute.route('class', _routerView.teacherCheckFunc.class);
       this.teacherRoute.route('students', _routerView.teacherCheckFunc.students);
+      this.teacherRoute.route('works', _routerView.teacherCheckFunc.works);
     }
   }, {
     key: 'routeBack',
@@ -850,7 +865,6 @@ var Teacher = function () {
   }, {
     key: 'bindHandle',
     value: function bindHandle() {
-      console.log('AAA');
       $('.teacher-menu-ul').bind('click', function (event) {
         LeftContainer.menuClickHandle(event);
       });
@@ -3950,21 +3964,24 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Author: liruihao
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Date:   2018-05-04 16:36:51
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Last Modified by:   liruihao
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-07 15:10:45
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-07 15:50:50
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             */
 
 
 var firDO = true;
 
-//批量删除test函数
-var testDeleteStudents = function testDeleteStudents() {
-  for (var i = 1198; i < 2201; i++) {
-    console.log(i);
-    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/delstudent', Object.assign({}, Students.tokenObj, {
-      sid: '0414' + i
-    })).then(function (result) {});
-  }
-};
+// //批量删除test函数
+// const testDeleteStudents = () => {
+//   for (let i = 1198; i < 2201; i++) {
+//     console.log(i);
+//     fetchAPI('http://222.24.63.100:9138/cms/delstudent', Object.assign({}, Students.tokenObj, {
+//         sid: `0414${i}`
+//       }))
+//       .then(result => {
+
+//       });
+//   }
+// }
 
 var eventHandle = {
   createStudentsHandle: function createStudentsHandle() {
@@ -3997,7 +4014,6 @@ var eventHandle = {
         alert('创建学生账号成功');
       }
     });
-    // console.log(createStuObj);
   },
   deleteStudentHandle: function deleteStudentHandle(sid) {
     (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/delstudent', Object.assign({}, Students.tokenObj, {
@@ -4008,7 +4024,8 @@ var eventHandle = {
     });
   },
   listSelectChangeHandle: function listSelectChangeHandle(event) {
-    var selectValue = event.target.val();
+    var selectValue = $(event.target).val();
+    console.log(selectValue);
     if (selectValue === Students.nowClassID) {
       return;
     } else {
@@ -4022,8 +4039,10 @@ var Students = {
   init: function init(tokenObj) {
     this.tokenObj = tokenObj;
     this.getActiveClasses();
-    // testDeleteStudents();
-    this.bindHandle();
+    if (firDO) {
+      this.bindHandle();
+      firDO = false;
+    }
   },
   setStudentsListView: function setStudentsListView(studentsData) {
     var studentsHTMLArr = studentsData.map(function (student) {
@@ -4032,7 +4051,6 @@ var Students = {
     $('.teacher-students-list').html(studentsHTMLArr.join(''));
   },
   setOption: function setOption(totalClasses) {
-    // console.log(totalClasses);
     var optionHTMLArr = totalClasses.map(function (item) {
       return '<option value=' + item.classID + '>' + item.className + '</option>';
     });
@@ -4105,6 +4123,9 @@ var Students = {
     (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getstubyclass', Object.assign({}, this.tokenObj, {
       classid: this.nowClassID
     })).then(function (studentsData) {
+      if (studentsData === '0') {
+        _this2.setStudentsListView([]);
+      }
       var studentsTemp = studentsData.split('`');
       var studentsArr = [];
       for (var i = 0; i < studentsTemp.length; i = i + 2) {
@@ -4113,7 +4134,6 @@ var Students = {
           studentName: studentsTemp[i + 1]
         });
       }
-      console.log(studentsArr);
       _this2.setStudentsListView(studentsArr);
     });
   },
@@ -4134,6 +4154,58 @@ var Students = {
 
 exports.default = function (tokenObj) {
   Students.init(tokenObj);
+};
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _fetchApi = __webpack_require__(0);
+
+var firDO = true; /*
+                   * @Author: liruihao
+                   * @Date:   2018-05-07 15:53:01
+                   * @Last Modified by:   liruihao
+                   * @Last Modified time: 2018-05-07 21:06:46
+                   */
+
+
+var eventHandle = {};
+
+var Works = {
+  init: function init(tokenObj) {
+    this.tokenObj = tokenObj;
+    this.initDate();
+    this.startDate = Date.getBeforeDate(7);
+    this.endDate = Date.getBeforeDate(0);
+    this.bindHandle();
+  },
+  initDate: function initDate() {
+    var _this = this;
+
+    $('#teacher-rangedate').DatePicker({
+      type: 'rangedate',
+      startDate: moment().subtract(1, 'week'),
+      endDate: moment(),
+      dateChange: function dateChange(startDate, endDate) {
+        _this.startDate = startDate.replace(/\./g, '-');
+        _this.endDate = endDate.replace(/\./g, '-');
+        // this.defaultSearch();
+      }
+    });
+  },
+  bindHandle: function bindHandle() {}
+};
+
+exports.default = function (tokenObj) {
+  Works.init(tokenObj);
 };
 
 /***/ })

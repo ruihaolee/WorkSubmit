@@ -2,7 +2,7 @@
  * @Author: liruihao
  * @Date:   2018-05-04 16:36:51
  * @Last Modified by:   liruihao
- * @Last Modified time: 2018-05-07 15:10:45
+ * @Last Modified time: 2018-05-07 15:50:50
  */
 import {
   fetchAPI
@@ -10,18 +10,18 @@ import {
 
 let firDO = true;
 
-//批量删除test函数
-const testDeleteStudents = () => {
-  for (let i = 1198; i < 2201; i++) {
-    console.log(i);
-    fetchAPI('http://222.24.63.100:9138/cms/delstudent', Object.assign({}, Students.tokenObj, {
-        sid: `0414${i}`
-      }))
-      .then(result => {
+// //批量删除test函数
+// const testDeleteStudents = () => {
+//   for (let i = 1198; i < 2201; i++) {
+//     console.log(i);
+//     fetchAPI('http://222.24.63.100:9138/cms/delstudent', Object.assign({}, Students.tokenObj, {
+//         sid: `0414${i}`
+//       }))
+//       .then(result => {
 
-      });
-  }
-}
+//       });
+//   }
+// }
 
 const eventHandle = {
   createStudentsHandle: function() {
@@ -55,7 +55,6 @@ const eventHandle = {
           alert('创建学生账号成功');
         }
       });
-    // console.log(createStuObj);
   },
   deleteStudentHandle(sid) {
     fetchAPI('http://222.24.63.100:9138/cms/delstudent', Object.assign({}, Students.tokenObj, {
@@ -67,7 +66,8 @@ const eventHandle = {
       });
   },
   listSelectChangeHandle(event) {
-    const selectValue = event.target.val();
+    const selectValue = $(event.target).val();
+    console.log(selectValue);
     if (selectValue === Students.nowClassID) {
       return;
     } else {
@@ -81,8 +81,10 @@ const Students = {
   init: function(tokenObj) {
     this.tokenObj = tokenObj;
     this.getActiveClasses();
-    // testDeleteStudents();
-    this.bindHandle();
+    if (firDO) {
+      this.bindHandle();
+      firDO = false;
+    }
   },
   setStudentsListView: function(studentsData) {
     const studentsHTMLArr = studentsData.map(student =>
@@ -99,7 +101,6 @@ const Students = {
     $('.teacher-students-list').html(studentsHTMLArr.join(''));
   },
   setOption: function(totalClasses) {
-    // console.log(totalClasses);
     const optionHTMLArr = totalClasses.map(item =>
       `<option value=${item.classID}>${item.className}</option>`
     );
@@ -149,6 +150,9 @@ const Students = {
         classid: this.nowClassID
       }))
       .then(studentsData => {
+        if (studentsData === '0') {
+          this.setStudentsListView([]);
+        }
         const studentsTemp = studentsData.split('`');
         const studentsArr = [];
         for (let i = 0; i < studentsTemp.length; i = i + 2) {
@@ -157,7 +161,6 @@ const Students = {
             studentName: studentsTemp[i + 1]
           });
         }
-        console.log(studentsArr);
         this.setStudentsListView(studentsArr);
       })
   },

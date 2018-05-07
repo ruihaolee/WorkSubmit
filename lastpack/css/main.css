@@ -1208,3 +1208,128 @@ tbody > tr {
 .teacher-search-studentlist {
   margin-top: 20px;
 }
+.teacher-works-searchbox {
+  margin-top: 20px;
+}
+.teacher-works-searchbox > div {
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+.teacher-works-searchbox > div:nth-child(1) {
+  overflow: inherit;
+}
+.teacher-searchworks-select:nth-child(2) {
+  -ms-flex-pack: start;
+      justify-content: flex-start;
+}
+.teacher-searchworks-select {
+  position: relative;
+  width: 50%;
+  box-sizing: border-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -ms-flex-pack: center;
+      justify-content: center;
+  float: left;
+}
+.teacher-searchworks-select label {
+  font-family: Microsoft YaHei;
+  font-size: 18px;
+  color: #999;
+  line-height: 40px;
+  display: inline-block;
+  margin-right: 20px;
+  position: relative;
+  top: 3px;
+}
+.teacher-searchworks-select select {
+  background: url(http://ourjs.github.io/static/2015/arrow.png) right center no-repeat;
+  width: 315px;
+  height: 40px;
+  overflow: hidden;
+  border: solid 1px #ccc;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.teacher-searchworks-input:nth-child(2) {
+  -ms-flex-pack: start;
+      justify-content: flex-start;
+}
+.teacher-searchworks-input {
+  position: relative;
+  width: 50%;
+  box-sizing: border-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -ms-flex-pack: center;
+      justify-content: center;
+  float: left;
+}
+.teacher-searchworks-input label {
+  font-family: Microsoft YaHei;
+  font-size: 18px;
+  color: #999;
+  line-height: 40px;
+  display: inline-block;
+  margin-right: 20px;
+  position: relative;
+  top: 3px;
+}
+.teacher-searchworks-input input {
+  min-width: 315px;
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 15px;
+}
+.teacher-datepicker-content {
+  position: relative;
+  top: auto;
+  left: 50%;
+  width: 50%;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -ms-flex-pack: center;
+  justify-content: flex-start;
+}
+.teacher-datepicker-content label {
+  font-family: Microsoft YaHei;
+  font-size: 18px;
+  color: #999;
+  line-height: 40px;
+  display: inline-block;
+  margin-right: 20px;
+  position: relative;
+  top: 3px;
+}
+.teacher-datepicker-content input {
+  width: 315px;
+  height: 40px;
+}
+.teacher-datepicker-content .dt {
+  top: 46px;
+  left: -10%;
+}
+.teacher-works-searchbutton {
+  position: absolute;
+  width: 399px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border: 1px solid #ededed;
+  font-size: 18px;
+  border-radius: 5px;
+  background-color: #ededed;
+  cursor: pointer;
+  transition: all .3s;
+  z-index: 999;
+  left: 24.5%;
+  transition: all 0.5s;
+}

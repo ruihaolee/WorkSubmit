@@ -18,6 +18,7 @@ import teacherSetting from './teacher-setting.js';
 import courseYears from './teacher-courseyears.js';
 import teacherClass from './teacher-classes.js';
 import teacherStudents from './teacher-students.js';
+import teacherWorks from './teacher-works.js';
 
 let TokenObj = null;
 
@@ -52,6 +53,8 @@ const LeftContainer = {
         teacherStudents(TokenObj);
         break;
       case 'works':
+        Teacher.teacherRoute.changeRoute('works');
+        teacherWorks(TokenObj);
         break;
       default:
         break;
@@ -92,6 +95,7 @@ export default class Teacher {
     this.teacherRoute.route('courseyears', teacherCheckFunc.courseyears);
     this.teacherRoute.route('class', teacherCheckFunc.class);
     this.teacherRoute.route('students', teacherCheckFunc.students);
+    this.teacherRoute.route('works', teacherCheckFunc.works);
   }
 
   static routeBack() {
@@ -103,7 +107,6 @@ export default class Teacher {
   }
 
   static bindHandle() {
-    console.log('AAA');
     $('.teacher-menu-ul').bind('click', event => {
       LeftContainer.menuClickHandle(event);
     })

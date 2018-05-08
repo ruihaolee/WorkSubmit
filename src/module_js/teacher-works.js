@@ -2,7 +2,7 @@
  * @Author: liruihao
  * @Date:   2018-05-07 15:53:01
  * @Last Modified by:   liruihao
- * @Last Modified time: 2018-05-08 16:28:10
+ * @Last Modified time: 2018-05-08 22:11:28
  */
 import {
   fetchAPI
@@ -31,7 +31,6 @@ const getClasses = (coursesArr, isActive = true, yearsArr) => {
       });
     });
   }
-  // console.log(infoObjArr);
   return infoObjArr.map(infoObj => {
     return fetchAPI(fetchUrl, Object.assign({}, Works.tokenObj, infoObj))
       .then(classesData => {
@@ -56,22 +55,49 @@ const Works = {
   init: function(tokenObj) {
     this.tokenObj = tokenObj;
     this.initDate();
-    this.startDate = Date.getBeforeDate(7);
+    this.startDate = Date.getBeforeDate(365);
     this.endDate = Date.getBeforeDate(0);
     this.getClassesOptions();
     this.getTypesOptions();
+    this.getWorkList();
     this.bindHandle();
   },
   initDate: function() {
     $('#teacher-rangedate').DatePicker({
       type: 'rangedate',
-      startDate: moment().subtract(1, 'week'),
+      startDate: moment().subtract(1, 'year'),
       endDate: moment(),
       dateChange: (startDate, endDate) => {
         this.startDate = startDate.replace(/\./g, '-');
         this.endDate = endDate.replace(/\./g, '-');
       }
     });
+  },
+  setSearchOptions: function(isClasses, optionData) {
+    const optionsHTML = optionData.map(option =>
+      isClasses ? `<option value=${option.classID}>${option.className}(${option.isActive ? '活动' : '非活动'})</option>` : `<option value=${option.workid}>${option.workname}(${option.coursename})</option>`
+    );
+    optionsHTML.unshift('<option value="total">全部</option>');
+    const selectClassName = isClasses ? '.teacher-searchworks-selectclass' : '.teacher-searchworks-worktype';
+    $(selectClassName).html(optionsHTML.join(''));
+  },
+  setStudentList: function(worksArr) {
+    const worksHTMLArr = worksArr.map(work => {
+      return `
+        <tr class="list-table-row teacher-work-row" workid=${work.workID}>
+          <td>${work.className}</td>
+          <td>${work.studentName}/${work.studentID}</td>
+          <td>${work.workTitle}</td>
+          <td>${work.level === ' ' ? '暂无' : work.level}</td>
+          <td>${work.size}</td>
+          <td>${work.submitTime}</td>
+          <td>
+            <span class='list-table-teacherwork' workid=${work.workID}>删除</span>
+          </td>
+        </tr>
+      `
+    });
+    $('.teacher-work-list').html(worksHTMLArr.join(''));
   },
   getClassesOptions: async function() {
     const coursesArr = [];
@@ -99,7 +125,8 @@ const Works = {
         classesArr.forEach(classes => {
           totalClasses = totalClasses.concat(classes);
         });
-        console.log(totalClasses);
+        this.setSearchOptions(true, totalClasses);
+        // console.log(totalClasses);
       })
   },
   getTypesOptions: async function() {
@@ -141,9 +168,32 @@ const Works = {
         worktypeInfoArr.forEach(typeInfos => {
           totalworktypeInfoArr = totalworktypeInfoArr.concat(typeInfos);
         });
-        console.log(totalworktypeInfoArr);
+        this.setSearchOptions(false, totalworktypeInfoArr);
+        // console.log(totalworktypeInfoArr);
       });
-    // console.log(courseArr);
+  },
+  getWorkList: function() {
+    fetchAPI('http://222.24.63.100:9138/cms/searchallwork', this.tokenObj)
+      .then(workData => {
+        const worksArr = [];
+        const worksTemp = workData.split('`');
+        for (let i = 0; i < worksTemp.length; i = i + 9) {
+          worksArr.push({
+            className: worksTemp[i],
+            studentID: worksTemp[i + 1],
+            studentName: worksTemp[i + 2],
+            workID: worksTemp[i + 3],
+            submitTime: worksTemp[i + 4],
+            typeID: worksTemp[i + 5],
+            workTitle: worksTemp[i + 6],
+            size: worksTemp[i + 7],
+            level: worksTemp[i + 8]
+          });
+        }
+        worksArr.pop();
+        this.setStudentList(worksArr);
+        console.log(worksArr);
+      })
   },
   bindHandle: function() {}
 }

@@ -4179,7 +4179,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Author: liruihao
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Date:   2018-05-07 15:53:01
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Last Modified by:   liruihao
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-08 16:28:10
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-08 22:11:28
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             */
 
 
@@ -4209,7 +4209,6 @@ var getClasses = function getClasses(coursesArr) {
       });
     });
   }
-  // console.log(infoObjArr);
   return infoObjArr.map(function (infoObj) {
     return (0, _fetchApi.fetchAPI)(fetchUrl, Object.assign({}, Works.tokenObj, infoObj)).then(function (classesData) {
       if (classesData === '0') {
@@ -4233,10 +4232,11 @@ var Works = {
   init: function init(tokenObj) {
     this.tokenObj = tokenObj;
     this.initDate();
-    this.startDate = Date.getBeforeDate(7);
+    this.startDate = Date.getBeforeDate(365);
     this.endDate = Date.getBeforeDate(0);
     this.getClassesOptions();
     this.getTypesOptions();
+    this.getWorkList();
     this.bindHandle();
   },
   initDate: function initDate() {
@@ -4244,7 +4244,7 @@ var Works = {
 
     $('#teacher-rangedate').DatePicker({
       type: 'rangedate',
-      startDate: moment().subtract(1, 'week'),
+      startDate: moment().subtract(1, 'year'),
       endDate: moment(),
       dateChange: function dateChange(startDate, endDate) {
         _this.startDate = startDate.replace(/\./g, '-');
@@ -4252,8 +4252,24 @@ var Works = {
       }
     });
   },
+  setSearchOptions: function setSearchOptions(isClasses, optionData) {
+    var optionsHTML = optionData.map(function (option) {
+      return isClasses ? '<option value=' + option.classID + '>' + option.className + '(' + (option.isActive ? '活动' : '非活动') + ')</option>' : '<option value=' + option.workid + '>' + option.workname + '(' + option.coursename + ')</option>';
+    });
+    optionsHTML.unshift('<option value="total">全部</option>');
+    var selectClassName = isClasses ? '.teacher-searchworks-selectclass' : '.teacher-searchworks-worktype';
+    $(selectClassName).html(optionsHTML.join(''));
+  },
+  setStudentList: function setStudentList(worksArr) {
+    var worksHTMLArr = worksArr.map(function (work) {
+      return '\n        <tr class="list-table-row teacher-work-row" workid=' + work.workID + '>\n          <td>' + work.className + '</td>\n          <td>' + work.studentName + '/' + work.studentID + '</td>\n          <td>' + work.workTitle + '</td>\n          <td>' + (work.level === ' ' ? '暂无' : work.level) + '</td>\n          <td>' + work.size + '</td>\n          <td>' + work.submitTime + '</td>\n          <td>\n            <span class=\'list-table-teacherwork\' workid=' + work.workID + '>\u5220\u9664</span>\n          </td>\n        </tr>\n      ';
+    });
+    $('.teacher-work-list').html(worksHTMLArr.join(''));
+  },
   getClassesOptions: function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+      var _this2 = this;
+
       var coursesArr, yearsArr, activeClassPromises, unactiveClassPromises, totalClassPromises;
       return _regenerator2.default.wrap(function _callee$(_context) {
         while (1) {
@@ -4288,7 +4304,8 @@ var Works = {
                 classesArr.forEach(function (classes) {
                   totalClasses = totalClasses.concat(classes);
                 });
-                console.log(totalClasses);
+                _this2.setSearchOptions(true, totalClasses);
+                // console.log(totalClasses);
               });
 
             case 10:
@@ -4307,7 +4324,7 @@ var Works = {
   }(),
   getTypesOptions: function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
-      var _this2 = this;
+      var _this3 = this;
 
       var courseArr;
       return _regenerator2.default.wrap(function _callee2$(_context2) {
@@ -4331,7 +4348,7 @@ var Works = {
                 var courseid = courseInfo.courseid,
                     coursename = courseInfo.coursename;
 
-                return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworktype', Object.assign({}, _this2.tokenObj, {
+                return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworktype', Object.assign({}, _this3.tokenObj, {
                   courseid: courseid
                 })).then(function (workType) {
                   var worktypeInfos = [];
@@ -4351,9 +4368,9 @@ var Works = {
                 worktypeInfoArr.forEach(function (typeInfos) {
                   totalworktypeInfoArr = totalworktypeInfoArr.concat(typeInfos);
                 });
-                console.log(totalworktypeInfoArr);
+                _this3.setSearchOptions(false, totalworktypeInfoArr);
+                // console.log(totalworktypeInfoArr);
               });
-              // console.log(courseArr);
 
             case 4:
             case 'end':
@@ -4369,6 +4386,30 @@ var Works = {
 
     return getTypesOptions;
   }(),
+  getWorkList: function getWorkList() {
+    var _this4 = this;
+
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/searchallwork', this.tokenObj).then(function (workData) {
+      var worksArr = [];
+      var worksTemp = workData.split('`');
+      for (var i = 0; i < worksTemp.length; i = i + 9) {
+        worksArr.push({
+          className: worksTemp[i],
+          studentID: worksTemp[i + 1],
+          studentName: worksTemp[i + 2],
+          workID: worksTemp[i + 3],
+          submitTime: worksTemp[i + 4],
+          typeID: worksTemp[i + 5],
+          workTitle: worksTemp[i + 6],
+          size: worksTemp[i + 7],
+          level: worksTemp[i + 8]
+        });
+      }
+      worksArr.pop();
+      _this4.setStudentList(worksArr);
+      console.log(worksArr);
+    });
+  },
   bindHandle: function bindHandle() {}
 };
 

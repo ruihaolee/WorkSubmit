@@ -507,13 +507,43 @@
                  <div>
                     <div class="teacher-searchworks-input">
                       <label>学生学号</label>
-                      <input type="text" class="teacher-searchworks-stuid" />
+                      <input type="text" class="teacher-searchworks-stuid" placeholder="选填" />
                     </div>
                     <div class="teacher-searchworks-input">
                       <label>学生姓名</label>
-                      <input type="text" class="teacher-searchworks-stuname" />
+                      <input type="text" class="teacher-searchworks-stuname" placeholder="选填"/>
                     </div>
                  </div>
+               </div>
+               <div class="teacher-works-listbox">
+                  <table class="list-table">
+                    <thead class="list-table-thead">
+                      <tr>
+                        <th>
+                          <span>班级</span>
+                        </th>
+                        <th>
+                          <span>姓名/学号</span>
+                        </th>
+                        <th>
+                          <span>作业标题</span>
+                        </th>
+                        <th>
+                          <span>批阅等级</span>
+                        </th>
+                        <th>
+                          <span>字节数</span>
+                        </th>
+                        <th>
+                          <span>提交日期</span>
+                        </th>
+                        <th>
+                          <span>删除</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="list-table-tbody teacher-work-list"></tbody>
+                  </table>
                </div>
             </div>
         </div>

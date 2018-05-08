@@ -4167,17 +4167,67 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _regenerator = __webpack_require__(3);
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 var _fetchApi = __webpack_require__(0);
 
-var firDO = true; /*
-                   * @Author: liruihao
-                   * @Date:   2018-05-07 15:53:01
-                   * @Last Modified by:   liruihao
-                   * @Last Modified time: 2018-05-07 21:06:46
-                   */
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Author: liruihao
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Date:   2018-05-07 15:53:01
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified by:   liruihao
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-08 16:28:10
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            */
+
+
+var firDO = true;
 
 var eventHandle = {};
+
+var getClasses = function getClasses(coursesArr) {
+  var isActive = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  var yearsArr = arguments[2];
+
+  var infoObjArr = [];
+  var fetchUrl = isActive ? 'http://222.24.63.100:9138/cms/getactiveclass' : 'http://222.24.63.100:9138/cms/getclassbyyear';
+  if (isActive) {
+    coursesArr.forEach(function (courseid) {
+      infoObjArr.push({
+        courseid: courseid
+      });
+    });
+  } else {
+    coursesArr.forEach(function (courseid) {
+      yearsArr.forEach(function (yearid) {
+        infoObjArr.push({
+          courseid: courseid,
+          yearid: yearid
+        });
+      });
+    });
+  }
+  // console.log(infoObjArr);
+  return infoObjArr.map(function (infoObj) {
+    return (0, _fetchApi.fetchAPI)(fetchUrl, Object.assign({}, Works.tokenObj, infoObj)).then(function (classesData) {
+      if (classesData === '0') {
+        return [];
+      }
+      var classesTemp = classesData.split('`');
+      var classes = [];
+      for (var i = 0; i < classesTemp.length; i = i + 2) {
+        classes.push({
+          classID: classesTemp[i],
+          className: classesTemp[i + 1],
+          isActive: isActive
+        });
+      }
+      return classes;
+    });
+  });
+};
 
 var Works = {
   init: function init(tokenObj) {
@@ -4185,6 +4235,8 @@ var Works = {
     this.initDate();
     this.startDate = Date.getBeforeDate(7);
     this.endDate = Date.getBeforeDate(0);
+    this.getClassesOptions();
+    this.getTypesOptions();
     this.bindHandle();
   },
   initDate: function initDate() {
@@ -4197,10 +4249,126 @@ var Works = {
       dateChange: function dateChange(startDate, endDate) {
         _this.startDate = startDate.replace(/\./g, '-');
         _this.endDate = endDate.replace(/\./g, '-');
-        // this.defaultSearch();
       }
     });
   },
+  getClassesOptions: function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+      var coursesArr, yearsArr, activeClassPromises, unactiveClassPromises, totalClassPromises;
+      return _regenerator2.default.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              coursesArr = [];
+              yearsArr = [];
+              _context.next = 4;
+              return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getcourseinfo', this.tokenObj).then(function (coursesData) {
+                var coursesTempArr = coursesData.split('`');
+                for (var i = 0; i < coursesTempArr.length; i = i + 3) {
+                  coursesArr.push(coursesTempArr[i]);
+                }
+              });
+
+            case 4:
+              _context.next = 6;
+              return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getyearinfo', this.tokenObj).then(function (yearsData) {
+                var yearsTemp = yearsData.split('`');
+                for (var i = 0; i < yearsTemp.length; i = i + 2) {
+                  yearsArr.push(yearsTemp[i]);
+                }
+              });
+
+            case 6:
+              activeClassPromises = getClasses(coursesArr);
+              unactiveClassPromises = getClasses(coursesArr, false, yearsArr);
+              totalClassPromises = activeClassPromises.concat(unactiveClassPromises);
+
+              Promise.all(totalClassPromises).then(function (classesArr) {
+                var totalClasses = [];
+                classesArr.forEach(function (classes) {
+                  totalClasses = totalClasses.concat(classes);
+                });
+                console.log(totalClasses);
+              });
+
+            case 10:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    }));
+
+    function getClassesOptions() {
+      return _ref.apply(this, arguments);
+    }
+
+    return getClassesOptions;
+  }(),
+  getTypesOptions: function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
+      var _this2 = this;
+
+      var courseArr;
+      return _regenerator2.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              courseArr = [];
+              _context2.next = 3;
+              return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getcourseinfo', this.tokenObj).then(function (courseData) {
+                var courseTemp = courseData.split('`');
+                for (var i = 0; i < courseTemp.length; i = i + 3) {
+                  courseArr.push({
+                    courseid: courseTemp[i],
+                    coursename: courseTemp[i + 1]
+                  });
+                }
+              });
+
+            case 3:
+              Promise.all(courseArr.map(function (courseInfo) {
+                var courseid = courseInfo.courseid,
+                    coursename = courseInfo.coursename;
+
+                return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworktype', Object.assign({}, _this2.tokenObj, {
+                  courseid: courseid
+                })).then(function (workType) {
+                  var worktypeInfos = [];
+                  if (workType === '0') return worktypeInfos;
+                  var worksTemp = workType.split('`');
+                  for (var i = 0; i < worksTemp.length; i = i + 2) {
+                    worktypeInfos.push({
+                      coursename: coursename,
+                      workid: worksTemp[i],
+                      workname: worksTemp[i + 1]
+                    });
+                  }
+                  return worktypeInfos;
+                });
+              })).then(function (worktypeInfoArr) {
+                var totalworktypeInfoArr = [];
+                worktypeInfoArr.forEach(function (typeInfos) {
+                  totalworktypeInfoArr = totalworktypeInfoArr.concat(typeInfos);
+                });
+                console.log(totalworktypeInfoArr);
+              });
+              // console.log(courseArr);
+
+            case 4:
+            case 'end':
+              return _context2.stop();
+          }
+        }
+      }, _callee2, this);
+    }));
+
+    function getTypesOptions() {
+      return _ref2.apply(this, arguments);
+    }
+
+    return getTypesOptions;
+  }(),
   bindHandle: function bindHandle() {}
 };
 

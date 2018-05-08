@@ -1,7 +1,7 @@
 /*
  * @Author: liruihao02
  * @Date:   2018-04-13
- * @Last Modified by:   liruihao02
+ * @Last Modified by:   liruihao
  * @Last Modified time: 2018-04-21
  */
 import {
@@ -42,7 +42,7 @@ const WritingWork = {
     this.studentRoute = studentRoute;
     // this.defaultSearch();
     this.initDate();
-    this.startDate = Date.getBeforeDate(7);
+    this.startDate = Date.getBeforeDate(365);
     this.endDate = Date.getBeforeDate(0);
     if (firDO) {
       this.bindHandle();
@@ -54,7 +54,7 @@ const WritingWork = {
   initDate: function() {
     $('#rangedate').DatePicker({
       type: 'rangedate',
-      startDate: moment().subtract(1, 'week'),
+      startDate: moment().subtract(1, 'year'),
       endDate: moment(),
       dateChange: (startDate, endDate) => {
         this.startDate = startDate.replace(/\./g, '-');

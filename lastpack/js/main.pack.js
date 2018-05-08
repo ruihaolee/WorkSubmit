@@ -3200,7 +3200,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /*
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Author: liruihao02
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Date:   2018-04-13
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified by:   liruihao02
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified by:   liruihao
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Last Modified time: 2018-04-21
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             */
 
@@ -3264,7 +3264,7 @@ var WritingWork = {
     this.studentRoute = studentRoute;
     // this.defaultSearch();
     this.initDate();
-    this.startDate = Date.getBeforeDate(7);
+    this.startDate = Date.getBeforeDate(365);
     this.endDate = Date.getBeforeDate(0);
     if (firDO) {
       this.bindHandle();
@@ -3278,7 +3278,7 @@ var WritingWork = {
 
     $('#rangedate').DatePicker({
       type: 'rangedate',
-      startDate: moment().subtract(1, 'week'),
+      startDate: moment().subtract(1, 'year'),
       endDate: moment(),
       dateChange: function dateChange(startDate, endDate) {
         _this.startDate = startDate.replace(/\./g, '-');
@@ -4179,13 +4179,48 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Author: liruihao
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Date:   2018-05-07 15:53:01
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Last Modified by:   liruihao
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-08 22:11:28
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-09 00:58:42
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             */
 
 
 var firDO = true;
 
-var eventHandle = {};
+var eventHandle = {
+  searchButtonClickHandle: function searchButtonClickHandle() {
+    var searchObj = {};
+    if ($('.teacher-searchworks-selectclass').val() !== 'total') {
+      searchObj.classid = $('.teacher-searchworks-selectclass').val();
+    }
+    if ($('.teacher-searchworks-worktype').val() !== 'total') {
+      searchObj.typeid = $('.teacher-searchworks-worktype').val();
+    }
+    if ($('.teacher-searchworks-stuid').val().trim()) {
+      searchObj.sid = $('.teacher-searchworks-stuid').val().trim();
+    }
+    if ($('.teacher-searchworks-stuname').val().trim()) {
+      searchObj.name = $('.teacher-searchworks-stuname').val().trim();
+    }
+    searchObj.datefrom = Works.startDate;
+    searchObj.dateto = Works.endDate;
+    Works.searchObj = searchObj;
+    // console.log(searchObj);
+    Works.getWorkList(searchObj);
+  },
+  deleteWorkHandle: function deleteWorkHandle(workid) {
+    var workToken = Object.assign({}, Works.tokenObj, {
+      workid: workid
+    });
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/delwork', workToken).then(function (result) {
+      if (result === '0') {
+        alert('删除失败');
+      } else if (result === '1') {
+        alert('删除成功');
+        Works.getWorkList(Works.searchObj);
+      }
+    });
+    console.log(workToken);
+  }
+};
 
 var getClasses = function getClasses(coursesArr) {
   var isActive = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
@@ -4234,6 +4269,7 @@ var Works = {
     this.initDate();
     this.startDate = Date.getBeforeDate(365);
     this.endDate = Date.getBeforeDate(0);
+    this.searchObj = {};
     this.getClassesOptions();
     this.getTypesOptions();
     this.getWorkList();
@@ -4305,7 +4341,6 @@ var Works = {
                   totalClasses = totalClasses.concat(classes);
                 });
                 _this2.setSearchOptions(true, totalClasses);
-                // console.log(totalClasses);
               });
 
             case 10:
@@ -4369,7 +4404,6 @@ var Works = {
                   totalworktypeInfoArr = totalworktypeInfoArr.concat(typeInfos);
                 });
                 _this3.setSearchOptions(false, totalworktypeInfoArr);
-                // console.log(totalworktypeInfoArr);
               });
 
             case 4:
@@ -4389,7 +4423,9 @@ var Works = {
   getWorkList: function getWorkList() {
     var _this4 = this;
 
-    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/searchallwork', this.tokenObj).then(function (workData) {
+    var searchObj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/searchallwork', Object.assign({}, this.tokenObj, searchObj)).then(function (workData) {
       var worksArr = [];
       var worksTemp = workData.split('`');
       for (var i = 0; i < worksTemp.length; i = i + 9) {
@@ -4407,10 +4443,19 @@ var Works = {
       }
       worksArr.pop();
       _this4.setStudentList(worksArr);
-      console.log(worksArr);
     });
   },
-  bindHandle: function bindHandle() {}
+  bindHandle: function bindHandle() {
+    $('.teacher-works-searchbutton').bind('click', function () {
+      eventHandle.searchButtonClickHandle();
+    });
+    $('.teacher-work-list').bind('click', function (event) {
+      var target = event.target || event.srcElement;
+      if (target.className === 'list-table-teacherwork') {
+        eventHandle.deleteWorkHandle($(target).attr('workid'));
+      } else {}
+    });
+  }
 };
 
 exports.default = function (tokenObj) {

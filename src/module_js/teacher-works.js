@@ -2,7 +2,7 @@
  * @Author: liruihao
  * @Date:   2018-05-07 15:53:01
  * @Last Modified by:   liruihao
- * @Last Modified time: 2018-05-08 22:11:28
+ * @Last Modified time: 2018-05-09 00:58:42
  */
 import {
   fetchAPI
@@ -10,7 +10,43 @@ import {
 
 let firDO = true;
 
-const eventHandle = {};
+const eventHandle = {
+  searchButtonClickHandle: function() {
+    let searchObj = {};
+    if ($('.teacher-searchworks-selectclass').val() !== 'total') {
+      searchObj.classid = $('.teacher-searchworks-selectclass').val();
+    }
+    if ($('.teacher-searchworks-worktype').val() !== 'total') {
+      searchObj.typeid = $('.teacher-searchworks-worktype').val();
+    }
+    if ($('.teacher-searchworks-stuid').val().trim()) {
+      searchObj.sid = $('.teacher-searchworks-stuid').val().trim();
+    }
+    if ($('.teacher-searchworks-stuname').val().trim()) {
+      searchObj.name = $('.teacher-searchworks-stuname').val().trim();
+    }
+    searchObj.datefrom = Works.startDate;
+    searchObj.dateto = Works.endDate;
+    Works.searchObj = searchObj;
+    // console.log(searchObj);
+    Works.getWorkList(searchObj);
+  },
+  deleteWorkHandle: function(workid) {
+    const workToken = Object.assign({}, Works.tokenObj, {
+      workid
+    });
+    fetchAPI('http://222.24.63.100:9138/cms/delwork', workToken)
+      .then(result => {
+        if (result === '0') {
+          alert('删除失败');
+        } else if (result === '1') {
+          alert('删除成功');
+          Works.getWorkList(Works.searchObj);
+        }
+      })
+    console.log(workToken);
+  }
+};
 
 const getClasses = (coursesArr, isActive = true, yearsArr) => {
   const infoObjArr = [];
@@ -57,6 +93,7 @@ const Works = {
     this.initDate();
     this.startDate = Date.getBeforeDate(365);
     this.endDate = Date.getBeforeDate(0);
+    this.searchObj = {};
     this.getClassesOptions();
     this.getTypesOptions();
     this.getWorkList();
@@ -126,7 +163,6 @@ const Works = {
           totalClasses = totalClasses.concat(classes);
         });
         this.setSearchOptions(true, totalClasses);
-        // console.log(totalClasses);
       })
   },
   getTypesOptions: async function() {
@@ -169,11 +205,10 @@ const Works = {
           totalworktypeInfoArr = totalworktypeInfoArr.concat(typeInfos);
         });
         this.setSearchOptions(false, totalworktypeInfoArr);
-        // console.log(totalworktypeInfoArr);
       });
   },
-  getWorkList: function() {
-    fetchAPI('http://222.24.63.100:9138/cms/searchallwork', this.tokenObj)
+  getWorkList: function(searchObj = {}) {
+    fetchAPI('http://222.24.63.100:9138/cms/searchallwork', Object.assign({}, this.tokenObj, searchObj))
       .then(workData => {
         const worksArr = [];
         const worksTemp = workData.split('`');
@@ -192,10 +227,21 @@ const Works = {
         }
         worksArr.pop();
         this.setStudentList(worksArr);
-        console.log(worksArr);
       })
   },
-  bindHandle: function() {}
+  bindHandle: function() {
+    $('.teacher-works-searchbutton').bind('click', () => {
+      eventHandle.searchButtonClickHandle();
+    });
+    $('.teacher-work-list').bind('click', event => {
+      const target = event.target || event.srcElement;
+      if (target.className === 'list-table-teacherwork') {
+        eventHandle.deleteWorkHandle($(target).attr('workid'));
+      } else {
+
+      }
+    })
+  }
 }
 
 export default (tokenObj) => {

@@ -4192,7 +4192,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Author: liruihao
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Date:   2018-05-07 15:53:01
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Last Modified by:   liruihao
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-09 21:54:06
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-09 22:15:53
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             */
 
 
@@ -4230,6 +4230,18 @@ var eventHandle = {
         Works.getWorkList(Works.searchObj);
       }
     });
+  },
+  goMarkWork: function goMarkWork(target) {
+    var parentNode = target.parentNode;
+    var detailToken = Object.assign({}, Works.tokenObj, {
+      workid: $(parentNode).attr('workid')
+    });
+    var studentInfo = {
+      stuClassName: $(parentNode).find('td').get(0).innerHTML,
+      stuNameID: $(parentNode).find('td').get(1).innerHTML
+    };
+    Works.teacherRoute.changeRoute('markwork');
+    (0, _teacherMarkwork2.default)(detailToken, studentInfo);
   }
 };
 
@@ -4285,7 +4297,10 @@ var Works = {
     this.getClassesOptions();
     this.getTypesOptions();
     this.getWorkList();
-    this.bindHandle();
+    if (firDO) {
+      this.bindHandle();
+      firDO = false;
+    }
   },
   initDate: function initDate() {
     var _this = this;
@@ -4458,8 +4473,6 @@ var Works = {
     });
   },
   bindHandle: function bindHandle() {
-    var _this5 = this;
-
     $('.teacher-works-searchbutton').bind('click', function () {
       eventHandle.searchButtonClickHandle();
     });
@@ -4470,12 +4483,7 @@ var Works = {
         eventHandle.deleteWorkHandle($(target).attr('workid'));
       } else {
         // 详情
-        var parentNode = target.parentNode;
-        var detailToken = Object.assign({}, _this5.tokenObj, {
-          workid: $(parentNode).attr('workid')
-        });
-        _this5.teacherRoute.changeRoute('markwork');
-        (0, _teacherMarkwork2.default)(detailToken);
+        eventHandle.goMarkWork(target);
       }
     });
   }
@@ -4502,17 +4510,18 @@ var firDO = true; /*
                    * @Author: liruihao
                    * @Date:   2018-05-09 21:26:12
                    * @Last Modified by:   liruihao
-                   * @Last Modified time: 2018-05-09 21:46:00
+                   * @Last Modified time: 2018-05-09 23:08:32
                    */
 
-var setView = function setView(workDetail) {
-  var detailHTML = '\n    <div class="rightbody-title">\u5B66\u751F\u4F5C\u4E1A\u6279\u6539/\u67E5\u770B</div>\n      <div class="workdetail-title">' + workDetail.title + '</div>\n      <div class="workdetail-info">\n          <div class="workdetail-typeid">\u4F5C\u4E1A\u7C7B\u578B: ' + workDetail.typeid + '</div>\n          <div class="workdetail-member">\u6210\u5458: ' + workDetail.member + '</div>\n          <div class="workdetail-submittime">\u63D0\u4EA4\u65E5\u671F\uFF1A' + workDetail.time + '</div>\n      </div>\n    <div class="workdetail-body">' + workDetail.body + '</div>\n    <div class="workdetail-levelbox">\n      <div class="workdetail-level"><span>\u8001\u5E08\u8BC4\u5206\uFF1A</span>' + workDetail.level + '</div>\n      <div class="workdetail-levelsay"><span>\u8001\u5E08\u8BC4\u8BED\uFF1A</span>' + workDetail.levelsay + '</div>\n    </div>\n    ';
+var setView = function setView(workDetail, studentInfo) {
+  var detailHTML = '\n    <div class="rightbody-title">\u5B66\u751F\u4F5C\u4E1A\u6279\u6539/\u67E5\u770B</div>\n      <div class="teacher-mark-box">\n      \t<div class="teacher-mark-stuinfo">\n      \t   <div>\u8BE5\u751F\u73ED\u7EA7: ' + studentInfo.stuClassName + '</div>\n      \t   <div>\u8BE5\u751F\u59D3\u540D/\u5B66\u53F7: ' + studentInfo.stuNameID + '</div>\n      \t</div>\n      \t<div class="teacher-mark-markbody">\n          <div class="teacher-mark-input">\n            <label>\u4F5C\u4E1A\u5206\u6570</label>\n            <input type="text" class="teacher-mark-level"/>\n          </div>\n          <div class="teacher-mark-textarea">\n            <label>\u4F5C\u4E1A\u8BC4\u8BED</label>\n            <textarea type="text" class="teacher-mark-comment"/>\n          </div>\n          <div>\n      \t</div>\n      </div>\n      <div class="workdetail-title">' + workDetail.title + '</div>\n      <div class="workdetail-info">\n          <div class="workdetail-typeid">\u4F5C\u4E1A\u7C7B\u578B: ' + workDetail.typeid + '</div>\n          <div class="workdetail-member">\u6210\u5458: ' + workDetail.member + '</div>\n          <div class="workdetail-submittime">\u63D0\u4EA4\u65E5\u671F\uFF1A' + workDetail.time + '</div>\n      </div>\n    <div class="workdetail-body">' + workDetail.body + '</div>\n    ';
   $('.teacher-workdetail').html(detailHTML);
 };
 
 var MarkWork = {
-  init: function init(detailToken) {
+  init: function init(detailToken, studentInfo) {
     this.detailToken = detailToken;
+    this.studentInfo = studentInfo;
     this.defaultWorkDetail();
   },
   defaultWorkDetail: function defaultWorkDetail() {
@@ -4530,14 +4539,13 @@ var MarkWork = {
         level: detailTemp[6] === ' ' ? '暂无' : detailTemp[6],
         levelsay: detailTemp[7] === ' ' ? '暂无' : detailTemp[7]
       };
-      setView(_this.workDetail);
-      console.log(detailTemp, _this.workDetail);
+      setView(_this.workDetail, _this.studentInfo);
     });
   }
 };
 
-exports.default = function (detailToken) {
-  MarkWork.init(detailToken);
+exports.default = function (detailToken, studentInfo) {
+  MarkWork.init(detailToken, studentInfo);
 };
 
 /***/ })

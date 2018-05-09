@@ -2,7 +2,7 @@
  * @Author: liruihao
  * @Date:   2018-05-09 21:26:12
  * @Last Modified by:   liruihao
- * @Last Modified time: 2018-05-09 21:46:00
+ * @Last Modified time: 2018-05-09 23:08:32
  */
 
 import {
@@ -11,9 +11,26 @@ import {
 
 let firDO = true;
 
-const setView = (workDetail) => {
+const setView = (workDetail, studentInfo) => {
   const detailHTML = `
     <div class="rightbody-title">学生作业批改/查看</div>
+      <div class="teacher-mark-box">
+      	<div class="teacher-mark-stuinfo">
+      	   <div>该生班级: ${studentInfo.stuClassName}</div>
+      	   <div>该生姓名/学号: ${studentInfo.stuNameID}</div>
+      	</div>
+      	<div class="teacher-mark-markbody">
+          <div class="teacher-mark-input">
+            <label>作业分数</label>
+            <input type="text" class="teacher-mark-level"/>
+          </div>
+          <div class="teacher-mark-textarea">
+            <label>作业评语</label>
+            <textarea type="text" class="teacher-mark-comment"/>
+          </div>
+          <div>
+      	</div>
+      </div>
       <div class="workdetail-title">${workDetail.title}</div>
       <div class="workdetail-info">
           <div class="workdetail-typeid">作业类型: ${workDetail.typeid}</div>
@@ -21,17 +38,14 @@ const setView = (workDetail) => {
           <div class="workdetail-submittime">提交日期：${workDetail.time}</div>
       </div>
     <div class="workdetail-body">${workDetail.body}</div>
-    <div class="workdetail-levelbox">
-      <div class="workdetail-level"><span>老师评分：</span>${workDetail.level}</div>
-      <div class="workdetail-levelsay"><span>老师评语：</span>${workDetail.levelsay}</div>
-    </div>
     `;
   $('.teacher-workdetail').html(detailHTML);
 }
 
 const MarkWork = {
-  init: function(detailToken) {
+  init: function(detailToken, studentInfo) {
     this.detailToken = detailToken;
+    this.studentInfo = studentInfo;
     this.defaultWorkDetail();
   },
   defaultWorkDetail: function() {
@@ -48,12 +62,11 @@ const MarkWork = {
           level: detailTemp[6] === ' ' ? '暂无' : detailTemp[6],
           levelsay: detailTemp[7] === ' ' ? '暂无' : detailTemp[7]
         }
-        setView(this.workDetail);
-        console.log(detailTemp, this.workDetail);
+        setView(this.workDetail, this.studentInfo);
       })
   }
 }
 
-export default (detailToken) => {
-  MarkWork.init(detailToken);
+export default (detailToken, studentInfo) => {
+  MarkWork.init(detailToken, studentInfo);
 }

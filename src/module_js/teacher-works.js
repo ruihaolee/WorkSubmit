@@ -2,7 +2,7 @@
  * @Author: liruihao
  * @Date:   2018-05-07 15:53:01
  * @Last Modified by:   liruihao
- * @Last Modified time: 2018-05-09 21:54:06
+ * @Last Modified time: 2018-05-09 22:15:53
  */
 import {
   fetchAPI
@@ -44,6 +44,18 @@ const eventHandle = {
           Works.getWorkList(Works.searchObj);
         }
       });
+  },
+  goMarkWork: function(target) {
+    const parentNode = target.parentNode;
+    const detailToken = Object.assign({}, Works.tokenObj, {
+      workid: $(parentNode).attr('workid')
+    });
+    const studentInfo = {
+      stuClassName: $(parentNode).find('td').get(0).innerHTML,
+      stuNameID: $(parentNode).find('td').get(1).innerHTML
+    };
+    Works.teacherRoute.changeRoute('markwork');
+    markWork(detailToken, studentInfo);
   }
 };
 
@@ -97,7 +109,10 @@ const Works = {
     this.getClassesOptions();
     this.getTypesOptions();
     this.getWorkList();
-    this.bindHandle();
+    if (firDO) {
+      this.bindHandle();
+      firDO = false;
+    }
   },
   initDate: function() {
     $('#teacher-rangedate').DatePicker({
@@ -241,12 +256,7 @@ const Works = {
         eventHandle.deleteWorkHandle($(target).attr('workid'));
       } else {
         // 详情
-        const parentNode = target.parentNode;
-        const detailToken = Object.assign({}, this.tokenObj, {
-          workid: $(parentNode).attr('workid')
-        });
-        this.teacherRoute.changeRoute('markwork');
-        markWork(detailToken);
+        eventHandle.goMarkWork(target);
       }
     });
   }

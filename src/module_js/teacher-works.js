@@ -2,11 +2,12 @@
  * @Author: liruihao
  * @Date:   2018-05-07 15:53:01
  * @Last Modified by:   liruihao
- * @Last Modified time: 2018-05-09 00:58:42
+ * @Last Modified time: 2018-05-09 21:54:06
  */
 import {
   fetchAPI
 } from '../pub_funcs/fetchApi.js';
+import markWork from './teacher-markwork.js';
 
 let firDO = true;
 
@@ -28,7 +29,6 @@ const eventHandle = {
     searchObj.datefrom = Works.startDate;
     searchObj.dateto = Works.endDate;
     Works.searchObj = searchObj;
-    // console.log(searchObj);
     Works.getWorkList(searchObj);
   },
   deleteWorkHandle: function(workid) {
@@ -43,8 +43,7 @@ const eventHandle = {
           alert('删除成功');
           Works.getWorkList(Works.searchObj);
         }
-      })
-    console.log(workToken);
+      });
   }
 };
 
@@ -88,8 +87,9 @@ const getClasses = (coursesArr, isActive = true, yearsArr) => {
 }
 
 const Works = {
-  init: function(tokenObj) {
+  init: function(tokenObj, teacherRoute) {
     this.tokenObj = tokenObj;
+    this.teacherRoute = teacherRoute;
     this.initDate();
     this.startDate = Date.getBeforeDate(365);
     this.endDate = Date.getBeforeDate(0);
@@ -125,7 +125,8 @@ const Works = {
           <td>${work.className}</td>
           <td>${work.studentName}/${work.studentID}</td>
           <td>${work.workTitle}</td>
-          <td>${work.level === ' ' ? '暂无' : work.level}</td>
+          <td>${work.level === ' ' 
+          ? '暂无' : work.level}</td>
           <td>${work.size}</td>
           <td>${work.submitTime}</td>
           <td>
@@ -236,14 +237,21 @@ const Works = {
     $('.teacher-work-list').bind('click', event => {
       const target = event.target || event.srcElement;
       if (target.className === 'list-table-teacherwork') {
+        // 删除
         eventHandle.deleteWorkHandle($(target).attr('workid'));
       } else {
-
+        // 详情
+        const parentNode = target.parentNode;
+        const detailToken = Object.assign({}, this.tokenObj, {
+          workid: $(parentNode).attr('workid')
+        });
+        this.teacherRoute.changeRoute('markwork');
+        markWork(detailToken);
       }
-    })
+    });
   }
 }
 
-export default (tokenObj) => {
-  Works.init(tokenObj);
+export default (tokenObj, teacherRoute) => {
+  Works.init(tokenObj, teacherRoute);
 }

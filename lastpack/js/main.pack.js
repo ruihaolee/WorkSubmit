@@ -258,6 +258,14 @@ var teacherCheckFunc = {
     $('.teacher-works').css({
       display: 'block'
     });
+  },
+  markwork: function markwork() {
+    $('.teacher-rightbox').css({
+      display: 'none'
+    });
+    $('.teacher-workdetail').css({
+      display: 'block'
+    });
   }
 };
 
@@ -803,7 +811,7 @@ var LeftContainer = {
         break;
       case 'works':
         Teacher.teacherRoute.changeRoute('works');
-        (0, _teacherWorks2.default)(TokenObj);
+        (0, _teacherWorks2.default)(TokenObj, Teacher.teacherRoute);
         break;
       default:
         break;
@@ -852,6 +860,7 @@ var Teacher = function () {
       this.teacherRoute.route('class', _routerView.teacherCheckFunc.class);
       this.teacherRoute.route('students', _routerView.teacherCheckFunc.students);
       this.teacherRoute.route('works', _routerView.teacherCheckFunc.works);
+      this.teacherRoute.route('markwork', _routerView.teacherCheckFunc.markwork);
     }
   }, {
     key: 'routeBack',
@@ -4173,13 +4182,17 @@ var _regenerator2 = _interopRequireDefault(_regenerator);
 
 var _fetchApi = __webpack_require__(0);
 
+var _teacherMarkwork = __webpack_require__(29);
+
+var _teacherMarkwork2 = _interopRequireDefault(_teacherMarkwork);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /*
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Author: liruihao
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Date:   2018-05-07 15:53:01
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Last Modified by:   liruihao
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-09 00:58:42
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-09 21:54:06
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             */
 
 
@@ -4203,7 +4216,6 @@ var eventHandle = {
     searchObj.datefrom = Works.startDate;
     searchObj.dateto = Works.endDate;
     Works.searchObj = searchObj;
-    // console.log(searchObj);
     Works.getWorkList(searchObj);
   },
   deleteWorkHandle: function deleteWorkHandle(workid) {
@@ -4218,7 +4230,6 @@ var eventHandle = {
         Works.getWorkList(Works.searchObj);
       }
     });
-    console.log(workToken);
   }
 };
 
@@ -4264,8 +4275,9 @@ var getClasses = function getClasses(coursesArr) {
 };
 
 var Works = {
-  init: function init(tokenObj) {
+  init: function init(tokenObj, teacherRoute) {
     this.tokenObj = tokenObj;
+    this.teacherRoute = teacherRoute;
     this.initDate();
     this.startDate = Date.getBeforeDate(365);
     this.endDate = Date.getBeforeDate(0);
@@ -4446,20 +4458,86 @@ var Works = {
     });
   },
   bindHandle: function bindHandle() {
+    var _this5 = this;
+
     $('.teacher-works-searchbutton').bind('click', function () {
       eventHandle.searchButtonClickHandle();
     });
     $('.teacher-work-list').bind('click', function (event) {
       var target = event.target || event.srcElement;
       if (target.className === 'list-table-teacherwork') {
+        // 删除
         eventHandle.deleteWorkHandle($(target).attr('workid'));
-      } else {}
+      } else {
+        // 详情
+        var parentNode = target.parentNode;
+        var detailToken = Object.assign({}, _this5.tokenObj, {
+          workid: $(parentNode).attr('workid')
+        });
+        _this5.teacherRoute.changeRoute('markwork');
+        (0, _teacherMarkwork2.default)(detailToken);
+      }
     });
   }
 };
 
-exports.default = function (tokenObj) {
-  Works.init(tokenObj);
+exports.default = function (tokenObj, teacherRoute) {
+  Works.init(tokenObj, teacherRoute);
+};
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _fetchApi = __webpack_require__(0);
+
+var firDO = true; /*
+                   * @Author: liruihao
+                   * @Date:   2018-05-09 21:26:12
+                   * @Last Modified by:   liruihao
+                   * @Last Modified time: 2018-05-09 21:46:00
+                   */
+
+var setView = function setView(workDetail) {
+  var detailHTML = '\n    <div class="rightbody-title">\u5B66\u751F\u4F5C\u4E1A\u6279\u6539/\u67E5\u770B</div>\n      <div class="workdetail-title">' + workDetail.title + '</div>\n      <div class="workdetail-info">\n          <div class="workdetail-typeid">\u4F5C\u4E1A\u7C7B\u578B: ' + workDetail.typeid + '</div>\n          <div class="workdetail-member">\u6210\u5458: ' + workDetail.member + '</div>\n          <div class="workdetail-submittime">\u63D0\u4EA4\u65E5\u671F\uFF1A' + workDetail.time + '</div>\n      </div>\n    <div class="workdetail-body">' + workDetail.body + '</div>\n    <div class="workdetail-levelbox">\n      <div class="workdetail-level"><span>\u8001\u5E08\u8BC4\u5206\uFF1A</span>' + workDetail.level + '</div>\n      <div class="workdetail-levelsay"><span>\u8001\u5E08\u8BC4\u8BED\uFF1A</span>' + workDetail.levelsay + '</div>\n    </div>\n    ';
+  $('.teacher-workdetail').html(detailHTML);
+};
+
+var MarkWork = {
+  init: function init(detailToken) {
+    this.detailToken = detailToken;
+    this.defaultWorkDetail();
+  },
+  defaultWorkDetail: function defaultWorkDetail() {
+    var _this = this;
+
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworkdetail', this.detailToken).then(function (detail) {
+      var detailTemp = detail.split('`');
+      detailTemp.pop();
+      _this.workDetail = {
+        time: detailTemp[0],
+        typeid: detailTemp[1],
+        title: detailTemp[2],
+        body: detailTemp[3],
+        member: detailTemp[4] === 'null' ? '无' : detailTemp[4],
+        level: detailTemp[6] === ' ' ? '暂无' : detailTemp[6],
+        levelsay: detailTemp[7] === ' ' ? '暂无' : detailTemp[7]
+      };
+      setView(_this.workDetail);
+      console.log(detailTemp, _this.workDetail);
+    });
+  }
+};
+
+exports.default = function (detailToken) {
+  MarkWork.init(detailToken);
 };
 
 /***/ })

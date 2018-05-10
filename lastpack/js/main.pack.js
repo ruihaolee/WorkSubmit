@@ -4510,12 +4510,26 @@ var firDO = true; /*
                    * @Author: liruihao
                    * @Date:   2018-05-09 21:26:12
                    * @Last Modified by:   liruihao
-                   * @Last Modified time: 2018-05-09 23:08:32
+                   * @Last Modified time: 2018-05-10 19:40:25
                    */
 
+var eventHandle = {
+  markClickHandle: function markClickHandle() {
+    var markObject = {
+      level: $('.teacher-mark-level').val(),
+      comment: $('.teacher-mark-comment').val()
+    };
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/markwork', Object.assign({}, MarkWork.detailToken, markObject)).then(function (result) {
+      result === '0' ? alert('批改失败') : alert('批改成功');
+    });
+  }
+};
+
 var setView = function setView(workDetail, studentInfo) {
-  var detailHTML = '\n    <div class="rightbody-title">\u5B66\u751F\u4F5C\u4E1A\u6279\u6539/\u67E5\u770B</div>\n      <div class="teacher-mark-box">\n      \t<div class="teacher-mark-stuinfo">\n      \t   <div>\u8BE5\u751F\u73ED\u7EA7: ' + studentInfo.stuClassName + '</div>\n      \t   <div>\u8BE5\u751F\u59D3\u540D/\u5B66\u53F7: ' + studentInfo.stuNameID + '</div>\n      \t</div>\n      \t<div class="teacher-mark-markbody">\n          <div class="teacher-mark-input">\n            <label>\u4F5C\u4E1A\u5206\u6570</label>\n            <input type="text" class="teacher-mark-level"/>\n          </div>\n          <div class="teacher-mark-textarea">\n            <label>\u4F5C\u4E1A\u8BC4\u8BED</label>\n            <textarea type="text" class="teacher-mark-comment"/>\n          </div>\n          <div>\n      \t</div>\n      </div>\n      <div class="workdetail-title">' + workDetail.title + '</div>\n      <div class="workdetail-info">\n          <div class="workdetail-typeid">\u4F5C\u4E1A\u7C7B\u578B: ' + workDetail.typeid + '</div>\n          <div class="workdetail-member">\u6210\u5458: ' + workDetail.member + '</div>\n          <div class="workdetail-submittime">\u63D0\u4EA4\u65E5\u671F\uFF1A' + workDetail.time + '</div>\n      </div>\n    <div class="workdetail-body">' + workDetail.body + '</div>\n    ';
-  $('.teacher-workdetail').html(detailHTML);
+  var studentInfoHTML = '\n    <div>\u8BE5\u751F\u73ED\u7EA7: ' + studentInfo.stuClassName + '</div>\n    <div>\u8BE5\u751F\u59D3\u540D/\u5B66\u53F7: ' + studentInfo.stuNameID + '</div>\n  ';
+  var detailHTML = '\n    <div class="workdetail-title">' + workDetail.title + '</div>\n    <div class="workdetail-info">\n        <div class="workdetail-typeid">\u4F5C\u4E1A\u7C7B\u578B: ' + workDetail.typeid + '</div>\n        <div class="workdetail-member">\u6210\u5458: ' + workDetail.member + '</div>\n        <div class="workdetail-submittime">\u63D0\u4EA4\u65E5\u671F\uFF1A' + workDetail.time + '</div>\n    </div>\n    <div class="workdetail-body">' + workDetail.body + '</div>\n    ';
+  $('.teacher-mark-stuinfo').html(studentInfoHTML);
+  $('.teacher-mark-workdetail').html(detailHTML);
 };
 
 var MarkWork = {
@@ -4523,6 +4537,7 @@ var MarkWork = {
     this.detailToken = detailToken;
     this.studentInfo = studentInfo;
     this.defaultWorkDetail();
+    this.bindHandle();
   },
   defaultWorkDetail: function defaultWorkDetail() {
     var _this = this;
@@ -4540,6 +4555,11 @@ var MarkWork = {
         levelsay: detailTemp[7] === ' ' ? '暂无' : detailTemp[7]
       };
       setView(_this.workDetail, _this.studentInfo);
+    });
+  },
+  bindHandle: function bindHandle() {
+    $('.teacher-mark-button').bind('click', function () {
+      eventHandle.markClickHandle();
     });
   }
 };

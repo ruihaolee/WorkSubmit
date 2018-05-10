@@ -4510,7 +4510,7 @@ var firDO = true; /*
                    * @Author: liruihao
                    * @Date:   2018-05-09 21:26:12
                    * @Last Modified by:   liruihao
-                   * @Last Modified time: 2018-05-10 19:40:25
+                   * @Last Modified time: 2018-05-10 20:09:35
                    */
 
 var eventHandle = {
@@ -4528,6 +4528,8 @@ var eventHandle = {
 var setView = function setView(workDetail, studentInfo) {
   var studentInfoHTML = '\n    <div>\u8BE5\u751F\u73ED\u7EA7: ' + studentInfo.stuClassName + '</div>\n    <div>\u8BE5\u751F\u59D3\u540D/\u5B66\u53F7: ' + studentInfo.stuNameID + '</div>\n  ';
   var detailHTML = '\n    <div class="workdetail-title">' + workDetail.title + '</div>\n    <div class="workdetail-info">\n        <div class="workdetail-typeid">\u4F5C\u4E1A\u7C7B\u578B: ' + workDetail.typeid + '</div>\n        <div class="workdetail-member">\u6210\u5458: ' + workDetail.member + '</div>\n        <div class="workdetail-submittime">\u63D0\u4EA4\u65E5\u671F\uFF1A' + workDetail.time + '</div>\n    </div>\n    <div class="workdetail-body">' + workDetail.body + '</div>\n    ';
+  $('.teacher-mark-level').val(workDetail.level);
+  $('.teacher-mark-comment').val(workDetail.levelsay);
   $('.teacher-mark-stuinfo').html(studentInfoHTML);
   $('.teacher-mark-workdetail').html(detailHTML);
 };
@@ -4537,13 +4539,17 @@ var MarkWork = {
     this.detailToken = detailToken;
     this.studentInfo = studentInfo;
     this.defaultWorkDetail();
-    this.bindHandle();
+    if (firDO) {
+      this.bindHandle();
+      firDO = false;
+    }
   },
   defaultWorkDetail: function defaultWorkDetail() {
     var _this = this;
 
     (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworkdetail', this.detailToken).then(function (detail) {
       var detailTemp = detail.split('`');
+      console.log(detailTemp);
       detailTemp.pop();
       _this.workDetail = {
         time: detailTemp[0],
@@ -4551,8 +4557,8 @@ var MarkWork = {
         title: detailTemp[2],
         body: detailTemp[3],
         member: detailTemp[4] === 'null' ? '无' : detailTemp[4],
-        level: detailTemp[6] === ' ' ? '暂无' : detailTemp[6],
-        levelsay: detailTemp[7] === ' ' ? '暂无' : detailTemp[7]
+        level: detailTemp[6],
+        levelsay: detailTemp[7]
       };
       setView(_this.workDetail, _this.studentInfo);
     });

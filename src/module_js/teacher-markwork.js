@@ -2,7 +2,7 @@
  * @Author: liruihao
  * @Date:   2018-05-09 21:26:12
  * @Last Modified by:   liruihao
- * @Last Modified time: 2018-05-10 19:40:25
+ * @Last Modified time: 2018-05-10 20:09:35
  */
 
 import {
@@ -38,6 +38,8 @@ const setView = (workDetail, studentInfo) => {
     </div>
     <div class="workdetail-body">${workDetail.body}</div>
     `;
+  $('.teacher-mark-level').val(workDetail.level);
+  $('.teacher-mark-comment').val(workDetail.levelsay);
   $('.teacher-mark-stuinfo').html(studentInfoHTML);
   $('.teacher-mark-workdetail').html(detailHTML);
 }
@@ -47,12 +49,16 @@ const MarkWork = {
     this.detailToken = detailToken;
     this.studentInfo = studentInfo;
     this.defaultWorkDetail();
-    this.bindHandle();
+    if (firDO) {
+      this.bindHandle();
+      firDO = false;
+    }
   },
   defaultWorkDetail: function() {
     fetchAPI('http://222.24.63.100:9138/cms/getworkdetail', this.detailToken)
       .then(detail => {
         const detailTemp = detail.split('`');
+        console.log(detailTemp);
         detailTemp.pop();
         this.workDetail = {
           time: detailTemp[0],
@@ -60,8 +66,8 @@ const MarkWork = {
           title: detailTemp[2],
           body: detailTemp[3],
           member: detailTemp[4] === 'null' ? '无' : detailTemp[4],
-          level: detailTemp[6] === ' ' ? '暂无' : detailTemp[6],
-          levelsay: detailTemp[7] === ' ' ? '暂无' : detailTemp[7]
+          level: detailTemp[6],
+          levelsay: detailTemp[7]
         }
         setView(this.workDetail, this.studentInfo);
       })

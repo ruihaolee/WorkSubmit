@@ -258,6 +258,14 @@ var teacherCheckFunc = {
     $('.teacher-works').css({
       display: 'block'
     });
+  },
+  markwork: function markwork() {
+    $('.teacher-rightbox').css({
+      display: 'none'
+    });
+    $('.teacher-workdetail').css({
+      display: 'block'
+    });
   }
 };
 
@@ -803,7 +811,7 @@ var LeftContainer = {
         break;
       case 'works':
         Teacher.teacherRoute.changeRoute('works');
-        (0, _teacherWorks2.default)(TokenObj);
+        (0, _teacherWorks2.default)(TokenObj, Teacher.teacherRoute);
         break;
       default:
         break;
@@ -852,6 +860,7 @@ var Teacher = function () {
       this.teacherRoute.route('class', _routerView.teacherCheckFunc.class);
       this.teacherRoute.route('students', _routerView.teacherCheckFunc.students);
       this.teacherRoute.route('works', _routerView.teacherCheckFunc.works);
+      this.teacherRoute.route('markwork', _routerView.teacherCheckFunc.markwork);
     }
   }, {
     key: 'routeBack',
@@ -3200,7 +3209,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /*
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Author: liruihao02
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Date:   2018-04-13
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified by:   liruihao02
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified by:   liruihao
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Last Modified time: 2018-04-21
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             */
 
@@ -3264,7 +3273,7 @@ var WritingWork = {
     this.studentRoute = studentRoute;
     // this.defaultSearch();
     this.initDate();
-    this.startDate = Date.getBeforeDate(7);
+    this.startDate = Date.getBeforeDate(365);
     this.endDate = Date.getBeforeDate(0);
     if (firDO) {
       this.bindHandle();
@@ -3278,7 +3287,7 @@ var WritingWork = {
 
     $('#rangedate').DatePicker({
       type: 'rangedate',
-      startDate: moment().subtract(1, 'week'),
+      startDate: moment().subtract(1, 'year'),
       endDate: moment(),
       dateChange: function dateChange(startDate, endDate) {
         _this.startDate = startDate.replace(/\./g, '-');
@@ -4167,45 +4176,396 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _regenerator = __webpack_require__(3);
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 var _fetchApi = __webpack_require__(0);
 
-var firDO = true; /*
-                   * @Author: liruihao
-                   * @Date:   2018-05-07 15:53:01
-                   * @Last Modified by:   liruihao
-                   * @Last Modified time: 2018-05-07 21:06:46
-                   */
+var _teacherMarkwork = __webpack_require__(29);
+
+var _teacherMarkwork2 = _interopRequireDefault(_teacherMarkwork);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Author: liruihao
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Date:   2018-05-07 15:53:01
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified by:   liruihao
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-09 22:15:53
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            */
 
 
-var eventHandle = {};
+var firDO = true;
+
+var eventHandle = {
+  searchButtonClickHandle: function searchButtonClickHandle() {
+    var searchObj = {};
+    if ($('.teacher-searchworks-selectclass').val() !== 'total') {
+      searchObj.classid = $('.teacher-searchworks-selectclass').val();
+    }
+    if ($('.teacher-searchworks-worktype').val() !== 'total') {
+      searchObj.typeid = $('.teacher-searchworks-worktype').val();
+    }
+    if ($('.teacher-searchworks-stuid').val().trim()) {
+      searchObj.sid = $('.teacher-searchworks-stuid').val().trim();
+    }
+    if ($('.teacher-searchworks-stuname').val().trim()) {
+      searchObj.name = $('.teacher-searchworks-stuname').val().trim();
+    }
+    searchObj.datefrom = Works.startDate;
+    searchObj.dateto = Works.endDate;
+    Works.searchObj = searchObj;
+    Works.getWorkList(searchObj);
+  },
+  deleteWorkHandle: function deleteWorkHandle(workid) {
+    var workToken = Object.assign({}, Works.tokenObj, {
+      workid: workid
+    });
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/delwork', workToken).then(function (result) {
+      if (result === '0') {
+        alert('删除失败');
+      } else if (result === '1') {
+        alert('删除成功');
+        Works.getWorkList(Works.searchObj);
+      }
+    });
+  },
+  goMarkWork: function goMarkWork(target) {
+    var parentNode = target.parentNode;
+    var detailToken = Object.assign({}, Works.tokenObj, {
+      workid: $(parentNode).attr('workid')
+    });
+    var studentInfo = {
+      stuClassName: $(parentNode).find('td').get(0).innerHTML,
+      stuNameID: $(parentNode).find('td').get(1).innerHTML
+    };
+    Works.teacherRoute.changeRoute('markwork');
+    (0, _teacherMarkwork2.default)(detailToken, studentInfo);
+  }
+};
+
+var getClasses = function getClasses(coursesArr) {
+  var isActive = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  var yearsArr = arguments[2];
+
+  var infoObjArr = [];
+  var fetchUrl = isActive ? 'http://222.24.63.100:9138/cms/getactiveclass' : 'http://222.24.63.100:9138/cms/getclassbyyear';
+  if (isActive) {
+    coursesArr.forEach(function (courseid) {
+      infoObjArr.push({
+        courseid: courseid
+      });
+    });
+  } else {
+    coursesArr.forEach(function (courseid) {
+      yearsArr.forEach(function (yearid) {
+        infoObjArr.push({
+          courseid: courseid,
+          yearid: yearid
+        });
+      });
+    });
+  }
+  return infoObjArr.map(function (infoObj) {
+    return (0, _fetchApi.fetchAPI)(fetchUrl, Object.assign({}, Works.tokenObj, infoObj)).then(function (classesData) {
+      if (classesData === '0') {
+        return [];
+      }
+      var classesTemp = classesData.split('`');
+      var classes = [];
+      for (var i = 0; i < classesTemp.length; i = i + 2) {
+        classes.push({
+          classID: classesTemp[i],
+          className: classesTemp[i + 1],
+          isActive: isActive
+        });
+      }
+      return classes;
+    });
+  });
+};
 
 var Works = {
-  init: function init(tokenObj) {
+  init: function init(tokenObj, teacherRoute) {
     this.tokenObj = tokenObj;
+    this.teacherRoute = teacherRoute;
     this.initDate();
-    this.startDate = Date.getBeforeDate(7);
+    this.startDate = Date.getBeforeDate(365);
     this.endDate = Date.getBeforeDate(0);
-    this.bindHandle();
+    this.searchObj = {};
+    this.getClassesOptions();
+    this.getTypesOptions();
+    this.getWorkList();
+    if (firDO) {
+      this.bindHandle();
+      firDO = false;
+    }
   },
   initDate: function initDate() {
     var _this = this;
 
     $('#teacher-rangedate').DatePicker({
       type: 'rangedate',
-      startDate: moment().subtract(1, 'week'),
+      startDate: moment().subtract(1, 'year'),
       endDate: moment(),
       dateChange: function dateChange(startDate, endDate) {
         _this.startDate = startDate.replace(/\./g, '-');
         _this.endDate = endDate.replace(/\./g, '-');
-        // this.defaultSearch();
       }
     });
   },
-  bindHandle: function bindHandle() {}
+  setSearchOptions: function setSearchOptions(isClasses, optionData) {
+    var optionsHTML = optionData.map(function (option) {
+      return isClasses ? '<option value=' + option.classID + '>' + option.className + '(' + (option.isActive ? '活动' : '非活动') + ')</option>' : '<option value=' + option.workid + '>' + option.workname + '(' + option.coursename + ')</option>';
+    });
+    optionsHTML.unshift('<option value="total">全部</option>');
+    var selectClassName = isClasses ? '.teacher-searchworks-selectclass' : '.teacher-searchworks-worktype';
+    $(selectClassName).html(optionsHTML.join(''));
+  },
+  setStudentList: function setStudentList(worksArr) {
+    var worksHTMLArr = worksArr.map(function (work) {
+      return '\n        <tr class="list-table-row teacher-work-row" workid=' + work.workID + '>\n          <td>' + work.className + '</td>\n          <td>' + work.studentName + '/' + work.studentID + '</td>\n          <td>' + work.workTitle + '</td>\n          <td>' + (work.level === ' ' ? '暂无' : work.level) + '</td>\n          <td>' + work.size + '</td>\n          <td>' + work.submitTime + '</td>\n          <td>\n            <span class=\'list-table-teacherwork\' workid=' + work.workID + '>\u5220\u9664</span>\n          </td>\n        </tr>\n      ';
+    });
+    $('.teacher-work-list').html(worksHTMLArr.join(''));
+  },
+  getClassesOptions: function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+      var _this2 = this;
+
+      var coursesArr, yearsArr, activeClassPromises, unactiveClassPromises, totalClassPromises;
+      return _regenerator2.default.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              coursesArr = [];
+              yearsArr = [];
+              _context.next = 4;
+              return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getcourseinfo', this.tokenObj).then(function (coursesData) {
+                var coursesTempArr = coursesData.split('`');
+                for (var i = 0; i < coursesTempArr.length; i = i + 3) {
+                  coursesArr.push(coursesTempArr[i]);
+                }
+              });
+
+            case 4:
+              _context.next = 6;
+              return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getyearinfo', this.tokenObj).then(function (yearsData) {
+                var yearsTemp = yearsData.split('`');
+                for (var i = 0; i < yearsTemp.length; i = i + 2) {
+                  yearsArr.push(yearsTemp[i]);
+                }
+              });
+
+            case 6:
+              activeClassPromises = getClasses(coursesArr);
+              unactiveClassPromises = getClasses(coursesArr, false, yearsArr);
+              totalClassPromises = activeClassPromises.concat(unactiveClassPromises);
+
+              Promise.all(totalClassPromises).then(function (classesArr) {
+                var totalClasses = [];
+                classesArr.forEach(function (classes) {
+                  totalClasses = totalClasses.concat(classes);
+                });
+                _this2.setSearchOptions(true, totalClasses);
+              });
+
+            case 10:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    }));
+
+    function getClassesOptions() {
+      return _ref.apply(this, arguments);
+    }
+
+    return getClassesOptions;
+  }(),
+  getTypesOptions: function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
+      var _this3 = this;
+
+      var courseArr;
+      return _regenerator2.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              courseArr = [];
+              _context2.next = 3;
+              return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getcourseinfo', this.tokenObj).then(function (courseData) {
+                var courseTemp = courseData.split('`');
+                for (var i = 0; i < courseTemp.length; i = i + 3) {
+                  courseArr.push({
+                    courseid: courseTemp[i],
+                    coursename: courseTemp[i + 1]
+                  });
+                }
+              });
+
+            case 3:
+              Promise.all(courseArr.map(function (courseInfo) {
+                var courseid = courseInfo.courseid,
+                    coursename = courseInfo.coursename;
+
+                return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworktype', Object.assign({}, _this3.tokenObj, {
+                  courseid: courseid
+                })).then(function (workType) {
+                  var worktypeInfos = [];
+                  if (workType === '0') return worktypeInfos;
+                  var worksTemp = workType.split('`');
+                  for (var i = 0; i < worksTemp.length; i = i + 2) {
+                    worktypeInfos.push({
+                      coursename: coursename,
+                      workid: worksTemp[i],
+                      workname: worksTemp[i + 1]
+                    });
+                  }
+                  return worktypeInfos;
+                });
+              })).then(function (worktypeInfoArr) {
+                var totalworktypeInfoArr = [];
+                worktypeInfoArr.forEach(function (typeInfos) {
+                  totalworktypeInfoArr = totalworktypeInfoArr.concat(typeInfos);
+                });
+                _this3.setSearchOptions(false, totalworktypeInfoArr);
+              });
+
+            case 4:
+            case 'end':
+              return _context2.stop();
+          }
+        }
+      }, _callee2, this);
+    }));
+
+    function getTypesOptions() {
+      return _ref2.apply(this, arguments);
+    }
+
+    return getTypesOptions;
+  }(),
+  getWorkList: function getWorkList() {
+    var _this4 = this;
+
+    var searchObj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/searchallwork', Object.assign({}, this.tokenObj, searchObj)).then(function (workData) {
+      var worksArr = [];
+      var worksTemp = workData.split('`');
+      for (var i = 0; i < worksTemp.length; i = i + 9) {
+        worksArr.push({
+          className: worksTemp[i],
+          studentID: worksTemp[i + 1],
+          studentName: worksTemp[i + 2],
+          workID: worksTemp[i + 3],
+          submitTime: worksTemp[i + 4],
+          typeID: worksTemp[i + 5],
+          workTitle: worksTemp[i + 6],
+          size: worksTemp[i + 7],
+          level: worksTemp[i + 8]
+        });
+      }
+      worksArr.pop();
+      _this4.setStudentList(worksArr);
+    });
+  },
+  bindHandle: function bindHandle() {
+    $('.teacher-works-searchbutton').bind('click', function () {
+      eventHandle.searchButtonClickHandle();
+    });
+    $('.teacher-work-list').bind('click', function (event) {
+      var target = event.target || event.srcElement;
+      if (target.className === 'list-table-teacherwork') {
+        // 删除
+        eventHandle.deleteWorkHandle($(target).attr('workid'));
+      } else {
+        // 详情
+        eventHandle.goMarkWork(target);
+      }
+    });
+  }
 };
 
-exports.default = function (tokenObj) {
-  Works.init(tokenObj);
+exports.default = function (tokenObj, teacherRoute) {
+  Works.init(tokenObj, teacherRoute);
+};
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _fetchApi = __webpack_require__(0);
+
+var firDO = true; /*
+                   * @Author: liruihao
+                   * @Date:   2018-05-09 21:26:12
+                   * @Last Modified by:   liruihao
+                   * @Last Modified time: 2018-05-10 19:40:25
+                   */
+
+var eventHandle = {
+  markClickHandle: function markClickHandle() {
+    var markObject = {
+      level: $('.teacher-mark-level').val(),
+      comment: $('.teacher-mark-comment').val()
+    };
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/markwork', Object.assign({}, MarkWork.detailToken, markObject)).then(function (result) {
+      result === '0' ? alert('批改失败') : alert('批改成功');
+    });
+  }
+};
+
+var setView = function setView(workDetail, studentInfo) {
+  var studentInfoHTML = '\n    <div>\u8BE5\u751F\u73ED\u7EA7: ' + studentInfo.stuClassName + '</div>\n    <div>\u8BE5\u751F\u59D3\u540D/\u5B66\u53F7: ' + studentInfo.stuNameID + '</div>\n  ';
+  var detailHTML = '\n    <div class="workdetail-title">' + workDetail.title + '</div>\n    <div class="workdetail-info">\n        <div class="workdetail-typeid">\u4F5C\u4E1A\u7C7B\u578B: ' + workDetail.typeid + '</div>\n        <div class="workdetail-member">\u6210\u5458: ' + workDetail.member + '</div>\n        <div class="workdetail-submittime">\u63D0\u4EA4\u65E5\u671F\uFF1A' + workDetail.time + '</div>\n    </div>\n    <div class="workdetail-body">' + workDetail.body + '</div>\n    ';
+  $('.teacher-mark-stuinfo').html(studentInfoHTML);
+  $('.teacher-mark-workdetail').html(detailHTML);
+};
+
+var MarkWork = {
+  init: function init(detailToken, studentInfo) {
+    this.detailToken = detailToken;
+    this.studentInfo = studentInfo;
+    this.defaultWorkDetail();
+    this.bindHandle();
+  },
+  defaultWorkDetail: function defaultWorkDetail() {
+    var _this = this;
+
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworkdetail', this.detailToken).then(function (detail) {
+      var detailTemp = detail.split('`');
+      detailTemp.pop();
+      _this.workDetail = {
+        time: detailTemp[0],
+        typeid: detailTemp[1],
+        title: detailTemp[2],
+        body: detailTemp[3],
+        member: detailTemp[4] === 'null' ? '无' : detailTemp[4],
+        level: detailTemp[6] === ' ' ? '暂无' : detailTemp[6],
+        levelsay: detailTemp[7] === ' ' ? '暂无' : detailTemp[7]
+      };
+      setView(_this.workDetail, _this.studentInfo);
+    });
+  },
+  bindHandle: function bindHandle() {
+    $('.teacher-mark-button').bind('click', function () {
+      eventHandle.markClickHandle();
+    });
+  }
+};
+
+exports.default = function (detailToken, studentInfo) {
+  MarkWork.init(detailToken, studentInfo);
 };
 
 /***/ })

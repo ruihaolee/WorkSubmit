@@ -661,6 +661,7 @@ tbody > tr {
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
+      text-indent: 15px;
     }
 }
 
@@ -691,6 +692,7 @@ tbody > tr {
       border: 1px solid #ccc;
       border-radius: 5px;
       font-size: 15px;
+      text-indent: 15px;
     }
 }
 .teacher-datepicker-content {
@@ -723,7 +725,7 @@ tbody > tr {
       left: -10%;
     }
 }
-.teacher-works-searchbutton{
+.teacher-works-searchbutton {
     position: absolute;
     width: 399px;
     height: 40px;
@@ -738,4 +740,93 @@ tbody > tr {
     z-index: 999;
     left: 24.5%;
     transition: all 0.5s;
+}
+.teacher-works-searchbutton:hover {
+  background-color: #6BC30D;
+  color: #fff;
+}
+
+.teacher-mark-box {
+    margin-top: 20px;
+  .teacher-mark-stuinfo {
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 0 120px;
+    >div {
+      float: left;
+      margin-right: 40px;
+      font-size: 17px;
+      font-weight: bold;
+      color: #999;
+    }
+  }
+}
+
+.teacher-mark-markbody {
+    box-sizing: border-box;
+    padding: 0 120px;
+    margin-top: 10px;
+  .teacher-mark-input {
+    label {
+      font-family: Microsoft YaHei;
+      font-size: 17px;
+      font-weight: bold;
+      line-height: 40px;
+      display: inline-block;
+      color: #C62F3F;
+      margin-right: 30px;
+    }
+    input {
+min-width: 300px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px;
+    color: #C62F3F;
+    text-align: center;
+    }
+  }
+}
+.teacher-mark-textarea {
+  margin-top: 10px;
+  label {
+    font-family: Microsoft YaHei;
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 40px;
+    display: inline-block;
+    color: #C62F3F;
+    margin-right: 30px;
+    position: relative;
+    bottom: 131px;
+  }
+  textarea {
+    width: 60%;
+    min-width: 600px;
+    min-height: 150px;
+    box-sizing: border-box;
+    padding: 15px;
+    resize: none;
+    font-size: 18px;
+    color: #C62F3F;
+  }
+}
+
+.teacher-mark-button {
+    width: 250px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border: 1px solid #ededed;
+    font-size: 18px;
+    border-radius: 5px;
+    background-color: #ededed;
+    cursor: pointer;
+    transition: all .3s;
+    z-index: 999;
+    margin-left: 102px;
+}
+.teacher-mark-button:hover {
+  background-color: #6BC30D;
+  color: #fff;
 }

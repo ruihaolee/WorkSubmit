@@ -603,6 +603,13 @@
       </div>
   </div>
 </div>
+<script language="javascript">
+    //防止页面后退
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
+</script>
 <script type="text/javascript" src="./js/lib.min.js"></script>
 <script type="text/javascript" src="./public/editormd/src/editormd.js"></script>
 <script type="text/javascript" src='./editor/ueditor.config.js'></script>

@@ -149,6 +149,7 @@ var Router = function () {
   }, {
     key: 'refresh',
     value: function refresh() {
+      console.log(document.location.hash);
       this.routeCall[this.nowKey] && this.routeCall[this.nowKey]();
     }
   }, {

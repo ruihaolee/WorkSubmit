@@ -3567,21 +3567,36 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /*
  * @Author: liruihao02
  * @Date:   2018-04-21
- * @Last Modified by:   liruihao02
+ * @Last Modified by:   liruihao
  * @Last Modified time: 2018-04-28
  */
 var firDO = true;
 
+var setCourseOptions = function setCourseOptions(courseArr) {
+  var courseOptionsHTML = courseArr.map(function (courseObj) {
+    return '<option value=' + courseObj.courseID + '>' + courseObj.courseName + '</option>';
+  });
+  $('.teacher-createworktype-select').html(courseOptionsHTML.join(''));
+};
+
 var setView = function setView(viewData, type) {
   var dataHTMLArr = null;
-  var targetEle = type === 'years' ? $('.teacher-yearsclass-list') : $('.teacher-courses-list');
+  var targetEle = null;
+  // const targetEle = type === 'years' ? $('.teacher-yearsclass-list') : $('.teacher-courses-list');
   if (type === 'years') {
+    targetEle = $('.teacher-yearsclass-list');
     dataHTMLArr = viewData.map(function (year) {
       return '\n        <tr class="list-table-row">\n          <td>' + year.yearID + '</td>\n          <td>' + year.yearName + '</td>\n          <td>\n            <span class=\'list-table-teachdeleteyear\' yearid=' + year.yearID + '>\u5220\u9664</span>\n          </td>\n        </tr>\n      ';
     });
   } else if (type === 'courses') {
+    targetEle = $('.teacher-courses-list');
     dataHTMLArr = viewData.map(function (course) {
       return '\n        <tr class="list-table-row">\n          <td>' + course.courseID + '</td>\n          <td>' + course.courseName + '</td>\n          <td>' + (course.isShare === '1' ? '是' : '否') + '</td>\n          <td>\n            <span class=\'list-table-teachdeletecourse\' courseid=' + course.courseID + '>\u5220\u9664</span>\n          </td>\n        </tr>\n      ';
+    });
+  } else if (type === 'worktypes') {
+    targetEle = $('.teacher-worktypes-list');
+    dataHTMLArr = viewData.map(function (worktype) {
+      return '\n        <tr class="list-table-row">\n          <td>' + worktype.workname + '</td>\n          <td>' + worktype.workid + '</td>\n          <td>' + worktype.courseName + '</td>\n          <td>\n            <span class=\'list-table-teachdeletecourse\' courseid=' + worktype.workid + '>\u5220\u9664</span>\n          </td>\n        </tr>\n      ';
     });
   }
 
@@ -3611,13 +3626,15 @@ var CourseYears = {
           yearName: yearsTemp[i + 1]
         });
       }
-      console.log(yearsArr);
+      // console.log(yearsArr);
       setView(yearsArr, 'years');
     });
   },
   getCourse: function getCourse() {
+    var _this = this;
+
     (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getcourseinfo', this.tokenObj).then(function (coursesData) {
-      console.log(coursesData);
+      // console.log(coursesData);
       var coursesTemp = coursesData.split('`');
       var coursesArr = [];
       for (var i = 0; i < coursesTemp.length; i = i + 3) {
@@ -3627,12 +3644,43 @@ var CourseYears = {
           isShare: coursesTemp[i + 2]
         });
       }
-      console.log(coursesArr);
+      _this.getWorkTypes(coursesArr);
+      setCourseOptions(coursesArr);
       setView(coursesArr, 'courses');
     });
   },
+  getWorkTypes: function getWorkTypes(courseArr) {
+    var _this2 = this;
+
+    Promise.all(courseArr.map(function (courseInfo) {
+      var courseID = courseInfo.courseID,
+          courseName = courseInfo.courseName;
+
+      return (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getworktype', Object.assign({}, _this2.tokenObj, {
+        courseid: courseID
+      })).then(function (workType) {
+        var worktypeInfos = [];
+        if (workType === '0') return worktypeInfos;
+        var worksTemp = workType.split('`');
+        for (var i = 0; i < worksTemp.length; i = i + 2) {
+          worktypeInfos.push({
+            courseName: courseName,
+            workid: worksTemp[i],
+            workname: worksTemp[i + 1]
+          });
+        }
+        return worktypeInfos;
+      });
+    })).then(function (worktypeInfoArr) {
+      var totalworktypeInfoArr = [];
+      worktypeInfoArr.forEach(function (typeInfos) {
+        totalworktypeInfoArr = totalworktypeInfoArr.concat(typeInfos);
+      });
+      setView(totalworktypeInfoArr, 'worktypes');
+    });
+  },
   createYearCourse: function createYearCourse(type) {
-    var _this = this;
+    var _this3 = this;
 
     var creInfo = {};
     var creatUrl = type === 'year' ? 'http://222.24.63.100:9138/cms/addyear' : 'http://222.24.63.100:9138/cms/addcourse';
@@ -3651,12 +3699,12 @@ var CourseYears = {
         alert('\u521B\u5EFA' + (type === 'year' ? '年级' : '课程') + '\u5931\u8D25');
       } else if (result === '1') {
         $('.teacher-newyear-input').val('');
-        type === 'year' ? _this.getYears() : _this.getCourse();
+        type === 'year' ? _this3.getYears() : _this3.getCourse();
       }
     });
   },
   deleteYearCourse: function deleteYearCourse(itemID, type) {
-    var _this2 = this;
+    var _this4 = this;
 
     var deleteUrl = type === 'year' ? 'http://222.24.63.100:9138/cms/delyear' : 'http://222.24.63.100:9138/cms/delcourse';
     var delIDObj = type === 'year' ? {
@@ -3668,26 +3716,26 @@ var CourseYears = {
       if (result === '0') {
         alert('删除失败');
       } else if (result === '1') {
-        type === 'year' ? _this2.getYears() : _this2.getCourse();
+        type === 'year' ? _this4.getYears() : _this4.getCourse();
         alert('删除成功');
       }
     });
   },
   bindHandle: function bindHandle() {
-    var _this3 = this;
+    var _this5 = this;
 
     $('.teacher-createyear-button').bind('click', function () {
-      _this3.createYearCourse('year');
+      _this5.createYearCourse('year');
     });
     $('.teacher-createcourse-button').bind('click', function () {
-      _this3.createYearCourse('course');
+      _this5.createYearCourse('course');
     });
     $('.teacher-courseyear-list').bind('click', function (event) {
       var target = event.target || event.srcElement;
       if (target.className === 'list-table-teachdeleteyear') {
-        _this3.deleteYearCourse($(target).attr('yearid'), 'year');
+        _this5.deleteYearCourse($(target).attr('yearid'), 'year');
       } else if (target.className === 'list-table-teachdeletecourse') {
-        _this3.deleteYearCourse($(target).attr('courseid'), 'course');
+        _this5.deleteYearCourse($(target).attr('courseid'), 'course');
       }
     });
   }

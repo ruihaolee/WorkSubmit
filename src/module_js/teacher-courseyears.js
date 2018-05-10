@@ -1,7 +1,7 @@
 /*
  * @Author: liruihao02
  * @Date:   2018-04-21
- * @Last Modified by:   liruihao02
+ * @Last Modified by:   liruihao
  * @Last Modified time: 2018-04-28
  */
 import {
@@ -11,10 +11,19 @@ import WorkDetail from './student-workdetail.js';
 
 let firDO = true;
 
+const setCourseOptions = courseArr => {
+  const courseOptionsHTML = courseArr.map(courseObj =>
+    `<option value=${courseObj.courseID}>${courseObj.courseName}</option>`
+  );
+  $('.teacher-createworktype-select').html(courseOptionsHTML.join(''));
+}
+
 const setView = (viewData, type) => {
   let dataHTMLArr = null;
-  const targetEle = type === 'years' ? $('.teacher-yearsclass-list') : $('.teacher-courses-list');
+  let targetEle = null;
+  // const targetEle = type === 'years' ? $('.teacher-yearsclass-list') : $('.teacher-courses-list');
   if (type === 'years') {
+    targetEle = $('.teacher-yearsclass-list');
     dataHTMLArr = viewData.map(year => {
       return `
         <tr class="list-table-row">
@@ -27,6 +36,7 @@ const setView = (viewData, type) => {
       `
     });
   } else if (type === 'courses') {
+    targetEle = $('.teacher-courses-list');
     dataHTMLArr = viewData.map(course => {
       return `
         <tr class="list-table-row">
@@ -35,6 +45,20 @@ const setView = (viewData, type) => {
           <td>${course.isShare === '1' ? '是' : '否'}</td>
           <td>
             <span class='list-table-teachdeletecourse' courseid=${course.courseID}>删除</span>
+          </td>
+        </tr>
+      `
+    });
+  } else if (type === 'worktypes') {
+    targetEle = $('.teacher-worktypes-list');
+    dataHTMLArr = viewData.map(worktype => {
+      return `
+        <tr class="list-table-row">
+          <td>${worktype.workname}</td>
+          <td>${worktype.workid}</td>
+          <td>${worktype.courseName}</td>
+          <td>
+            <span class='list-table-teachdeletecourse' courseid=${worktype.workid}>删除</span>
           </td>
         </tr>
       `
@@ -68,14 +92,14 @@ const CourseYears = {
             yearName: yearsTemp[i + 1]
           });
         }
-        console.log(yearsArr);
+        // console.log(yearsArr);
         setView(yearsArr, 'years');
       });
   },
   getCourse: function() {
     fetchAPI('http://222.24.63.100:9138/cms/getcourseinfo', this.tokenObj)
       .then(coursesData => {
-        console.log(coursesData);
+        // console.log(coursesData);
         const coursesTemp = coursesData.split('`');
         const coursesArr = [];
         for (let i = 0; i < coursesTemp.length; i = i + 3) {
@@ -85,9 +109,41 @@ const CourseYears = {
             isShare: coursesTemp[i + 2]
           });
         }
-        console.log(coursesArr);
+        this.getWorkTypes(coursesArr);
+        setCourseOptions(coursesArr);
         setView(coursesArr, 'courses');
       })
+  },
+  getWorkTypes: function(courseArr) {
+    Promise.all(courseArr.map(courseInfo => {
+        const {
+          courseID,
+          courseName
+        } = courseInfo;
+        return fetchAPI('http://222.24.63.100:9138/cms/getworktype', Object.assign({}, this.tokenObj, {
+            courseid: courseID
+          }))
+          .then(workType => {
+            const worktypeInfos = [];
+            if (workType === '0') return worktypeInfos;
+            const worksTemp = workType.split('`');
+            for (let i = 0; i < worksTemp.length; i = i + 2) {
+              worktypeInfos.push({
+                courseName,
+                workid: worksTemp[i],
+                workname: worksTemp[i + 1]
+              });
+            }
+            return worktypeInfos;
+          });
+      }))
+      .then(worktypeInfoArr => {
+        let totalworktypeInfoArr = [];
+        worktypeInfoArr.forEach(typeInfos => {
+          totalworktypeInfoArr = totalworktypeInfoArr.concat(typeInfos);
+        });
+        setView(totalworktypeInfoArr, 'worktypes');
+      });
   },
   createYearCourse: function(type) {
     let creInfo = {};

@@ -229,7 +229,7 @@
               </li>
               <li class="menu-li teacher-menu-li" name='courseyears'>
                 <i class='iconfont icon-similarproduct'></i>
-                <span>课程/年级信息管理</span>
+                <span>教学信息管理</span>
               </li>
               <li class="menu-li teacher-menu-li" name='class'>
                 <i class='iconfont icon-viewlist'></i>
@@ -292,7 +292,7 @@
               </div>
             </div>
             <div class="teacher-rightbox teacher-courseyears">
-              <div class="rightbody-title">课程／年级信息管理</div>
+              <div class="rightbody-title">年级／课程／作业类型</div>
               <div class="teacher-years-box">
                 <div class="teacher-createyear-box">
                   <div>
@@ -354,6 +354,41 @@
                         </tr>
                       </thead>
                       <tbody class="list-table-tbody teacher-courses-list teacher-courseyear-list"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="teacher-worktype-box">
+                <div class="teacher-createworktype-box">
+                  <div class="teacher-createworktype-selectbox">
+                    <label>课程名称</label>
+                    <select class="teacher-createworktype-select">
+                    </select>
+                  </div>
+                    <div class="teacher-createworktype-inputbox">
+                      <label>作业类型</label>
+                      <input type="text" class="teacher-createworktype-input"/>
+                    </div>
+                    <div class="teacher-createworktype-button">确认添加</div>
+                </div>
+                <div class="teacher-worktypes-listbox">
+                  <table class="list-table">
+                      <thead class="list-table-thead">
+                        <tr>
+                          <th>
+                            <span>作业类型名称</span>
+                          </th>
+                          <th>
+                            <span>作业类型ID</span>
+                          </th>
+                          <th>
+                            <span>所属课程</span>
+                          </th>
+                          <th>
+                            <span>删除</span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="list-table-tbody teacher-worktypes-list"></tbody>
                   </table>
                 </div>
               </div>

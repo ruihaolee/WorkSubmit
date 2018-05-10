@@ -3596,7 +3596,7 @@ var setView = function setView(viewData, type) {
   } else if (type === 'worktypes') {
     targetEle = $('.teacher-worktypes-list');
     dataHTMLArr = viewData.map(function (worktype) {
-      return '\n        <tr class="list-table-row">\n          <td>' + worktype.workname + '</td>\n          <td>' + worktype.workid + '</td>\n          <td>' + worktype.courseName + '</td>\n          <td>\n            <span class=\'list-table-teachdeletecourse\' courseid=' + worktype.workid + '>\u5220\u9664</span>\n          </td>\n        </tr>\n      ';
+      return '\n        <tr class="list-table-row">\n          <td>' + worktype.workname + '</td>\n          <td>' + worktype.workid + '</td>\n          <td>' + worktype.courseName + '</td>\n          <td>\n            <span class=\'list-table-teachdeleteworktype\' typeid=' + worktype.workid + '>\u5220\u9664</span>\n          </td>\n        </tr>\n      ';
     });
   }
 
@@ -3721,21 +3721,57 @@ var CourseYears = {
       }
     });
   },
-  bindHandle: function bindHandle() {
+  createWorkType: function createWorkType() {
     var _this5 = this;
 
+    var workTypeInfo = {
+      courseid: $('.teacher-createworktype-select').val(),
+      name: $('.teacher-createworktype-input').val()
+    };
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/addworktype', Object.assign({}, workTypeInfo, this.tokenObj)).then(function (result) {
+      if (result === '0') {
+        alert('创建作业类型失败');
+      } else if (result === '1') {
+        alert('创建作业类型成功');
+        _this5.getCourse();
+      }
+    });
+  },
+  deleteWorkType: function deleteWorkType(typeid) {
+    var _this6 = this;
+
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/delworktype', Object.assign({}, {
+      typeid: typeid
+    }, this.tokenObj)).then(function (result) {
+      if (result === '0') {
+        alert('删除作业类型失败');
+      } else if (result === '1') {
+        alert('删除作业类型成功');
+        _this6.getCourse();
+      }
+    });
+  },
+  bindHandle: function bindHandle() {
+    var _this7 = this;
+
     $('.teacher-createyear-button').bind('click', function () {
-      _this5.createYearCourse('year');
+      _this7.createYearCourse('year');
     });
     $('.teacher-createcourse-button').bind('click', function () {
-      _this5.createYearCourse('course');
+      _this7.createYearCourse('course');
+    });
+    $('.teacher-createworktype-button').bind('click', function () {
+      _this7.createWorkType();
     });
     $('.teacher-courseyear-list').bind('click', function (event) {
       var target = event.target || event.srcElement;
+      console.log(target.className);
       if (target.className === 'list-table-teachdeleteyear') {
-        _this5.deleteYearCourse($(target).attr('yearid'), 'year');
+        _this7.deleteYearCourse($(target).attr('yearid'), 'year');
       } else if (target.className === 'list-table-teachdeletecourse') {
-        _this5.deleteYearCourse($(target).attr('courseid'), 'course');
+        _this7.deleteYearCourse($(target).attr('courseid'), 'course');
+      } else if (target.className === 'list-table-teachdeleteworktype') {
+        _this7.deleteWorkType($(target).attr('typeid'));
       }
     });
   }

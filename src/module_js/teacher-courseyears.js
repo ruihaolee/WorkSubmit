@@ -58,7 +58,7 @@ const setView = (viewData, type) => {
           <td>${worktype.workid}</td>
           <td>${worktype.courseName}</td>
           <td>
-            <span class='list-table-teachdeletecourse' courseid=${worktype.workid}>删除</span>
+            <span class='list-table-teachdeleteworktype' typeid=${worktype.workid}>删除</span>
           </td>
         </tr>
       `
@@ -185,6 +185,34 @@ const CourseYears = {
         }
       });
   },
+  createWorkType: function() {
+    const workTypeInfo = {
+      courseid: $('.teacher-createworktype-select').val(),
+      name: $('.teacher-createworktype-input').val()
+    };
+    fetchAPI('http://222.24.63.100:9138/cms/addworktype', Object.assign({}, workTypeInfo, this.tokenObj))
+      .then(result => {
+        if (result === '0') {
+          alert('创建作业类型失败');
+        } else if (result === '1') {
+          alert('创建作业类型成功');
+          this.getCourse();
+        }
+      });
+  },
+  deleteWorkType: function(typeid) {
+    fetchAPI('http://222.24.63.100:9138/cms/delworktype', Object.assign({}, {
+        typeid
+      }, this.tokenObj))
+      .then(result => {
+        if (result === '0') {
+          alert('删除作业类型失败');
+        } else if (result === '1') {
+          alert('删除作业类型成功');
+          this.getCourse();
+        }
+      });
+  },
   bindHandle: function() {
     $('.teacher-createyear-button').bind('click', () => {
       this.createYearCourse('year');
@@ -192,12 +220,18 @@ const CourseYears = {
     $('.teacher-createcourse-button').bind('click', () => {
       this.createYearCourse('course');
     });
+    $('.teacher-createworktype-button').bind('click', () => {
+      this.createWorkType();
+    });
     $('.teacher-courseyear-list').bind('click', (event) => {
       const target = event.target || event.srcElement;
+      console.log(target.className);
       if (target.className === 'list-table-teachdeleteyear') {
         this.deleteYearCourse($(target).attr('yearid'), 'year');
       } else if (target.className === 'list-table-teachdeletecourse') {
         this.deleteYearCourse($(target).attr('courseid'), 'course');
+      } else if (target.className === 'list-table-teachdeleteworktype') {
+        this.deleteWorkType($(target).attr('typeid'));
       }
     });
   }

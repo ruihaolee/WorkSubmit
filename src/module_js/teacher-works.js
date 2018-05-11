@@ -2,7 +2,7 @@
  * @Author: liruihao
  * @Date:   2018-05-07 15:53:01
  * @Last Modified by:   liruihao
- * @Last Modified time: 2018-05-09 22:15:53
+ * @Last Modified time: 2018-05-11 20:23:42
  */
 import {
   fetchAPI
@@ -109,10 +109,19 @@ const Works = {
     this.getClassesOptions();
     this.getTypesOptions();
     this.getWorkList();
+    this.test();
     if (firDO) {
       this.bindHandle();
       firDO = false;
     }
+  },
+  test: function() {
+    fetchAPI('http://222.24.63.100:9138/cms/getclasscount', Object.assign({}, this.tokenObj, {
+        classid: '4'
+      }))
+      .then(data => {
+        console.log(data);
+      })
   },
   initDate: function() {
     $('#teacher-rangedate').DatePicker({

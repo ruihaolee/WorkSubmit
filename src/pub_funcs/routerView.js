@@ -90,6 +90,14 @@ const teacherCheckFunc = {
     $('.teacher-workdetail').css({
       display: 'block'
     });
+  },
+  workcount: () => {
+    $('.teacher-rightbox').css({
+      display: 'none'
+    });
+    $('.teacher-workcount').css({
+      display: 'block'
+    });
   }
 }
 

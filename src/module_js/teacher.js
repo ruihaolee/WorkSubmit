@@ -56,6 +56,9 @@ const LeftContainer = {
         Teacher.teacherRoute.changeRoute('works');
         teacherWorks(TokenObj, Teacher.teacherRoute);
         break;
+      case 'workcount':
+        Teacher.teacherRoute.changeRoute('workcount');
+        break;
       default:
         break;
     }
@@ -97,6 +100,7 @@ export default class Teacher {
     this.teacherRoute.route('students', teacherCheckFunc.students);
     this.teacherRoute.route('works', teacherCheckFunc.works);
     this.teacherRoute.route('markwork', teacherCheckFunc.markwork);
+    this.teacherRoute.route('workcount', teacherCheckFunc.workcount);
   }
 
   static routeBack() {

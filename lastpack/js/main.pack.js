@@ -149,7 +149,6 @@ var Router = function () {
   }, {
     key: 'refresh',
     value: function refresh() {
-      console.log(document.location.hash);
       this.routeCall[this.nowKey] && this.routeCall[this.nowKey]();
     }
   }, {
@@ -265,6 +264,14 @@ var teacherCheckFunc = {
       display: 'none'
     });
     $('.teacher-workdetail').css({
+      display: 'block'
+    });
+  },
+  workcount: function workcount() {
+    $('.teacher-rightbox').css({
+      display: 'none'
+    });
+    $('.teacher-workcount').css({
       display: 'block'
     });
   }
@@ -814,6 +821,9 @@ var LeftContainer = {
         Teacher.teacherRoute.changeRoute('works');
         (0, _teacherWorks2.default)(TokenObj, Teacher.teacherRoute);
         break;
+      case 'workcount':
+        Teacher.teacherRoute.changeRoute('workcount');
+        break;
       default:
         break;
     }
@@ -862,6 +872,7 @@ var Teacher = function () {
       this.teacherRoute.route('students', _routerView.teacherCheckFunc.students);
       this.teacherRoute.route('works', _routerView.teacherCheckFunc.works);
       this.teacherRoute.route('markwork', _routerView.teacherCheckFunc.markwork);
+      this.teacherRoute.route('workcount', _routerView.teacherCheckFunc.workcount);
     }
   }, {
     key: 'routeBack',
@@ -4277,7 +4288,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Author: liruihao
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Date:   2018-05-07 15:53:01
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             * @Last Modified by:   liruihao
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-09 22:15:53
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * @Last Modified time: 2018-05-11 20:23:42
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             */
 
 
@@ -4382,10 +4393,18 @@ var Works = {
     this.getClassesOptions();
     this.getTypesOptions();
     this.getWorkList();
+    this.test();
     if (firDO) {
       this.bindHandle();
       firDO = false;
     }
+  },
+  test: function test() {
+    (0, _fetchApi.fetchAPI)('http://222.24.63.100:9138/cms/getclasscount', Object.assign({}, this.tokenObj, {
+      classid: '4'
+    })).then(function (data) {
+      console.log(data);
+    });
   },
   initDate: function initDate() {
     var _this = this;

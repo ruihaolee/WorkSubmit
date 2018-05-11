@@ -257,6 +257,10 @@ input:focus {
   position: fixed;
   z-index: 999;
 }
+.admin-leftbody .admin-img {
+  position: relative;
+  bottom: 25px;
+}
 .admin-leftbody .admin-img .admin-imgbox {
   width: 80px;
   height: 80px;
@@ -280,7 +284,7 @@ input:focus {
 }
 .admin-leftbody .admin-menu {
   position: relative;
-  top: 120px;
+  top: 100px;
 }
 .admin-leftbody .admin-menu .menu-ul .menu-li {
   font-size: 15px;

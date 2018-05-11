@@ -1368,14 +1368,19 @@ tbody > tr {
   color: #C62F3F;
   margin-right: 30px;
 }
-.teacher-mark-markbody .teacher-mark-input input {
-  min-width: 300px;
+.teacher-mark-markbody .teacher-mark-input select {
+  background: url(http://ourjs.github.io/static/2015/arrow.png) right center no-repeat;
+  width: 315px;
   height: 40px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  overflow: hidden;
+  border: solid 1px #ccc;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  text-indent: 150px;
   font-size: 18px;
-  color: #C62F3F;
   text-align: center;
+  color: #C62F3F;
 }
 .teacher-mark-textarea {
   margin-top: 10px;

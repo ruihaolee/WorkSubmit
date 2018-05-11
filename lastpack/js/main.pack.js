@@ -3766,7 +3766,7 @@ var CourseYears = {
     });
     $('.teacher-courseyear-list').bind('click', function (event) {
       var target = event.target || event.srcElement;
-      console.log(target.className);
+      // console.log(target.className);
       if (target.className === 'list-table-teachdeleteyear') {
         _this7.deleteYearCourse($(target).attr('yearid'), 'year');
       } else if (target.className === 'list-table-teachdeletecourse') {
